@@ -1,4 +1,5 @@
 ﻿import { z } from 'zod'
+import type {RecordingState} from '../recorder-schema'
 const id = z.string().uuid()
 const base = { id, label: z.string().trim().min(1).max(160) }
 export const StepSchema = z.discriminatedUnion('type', [
@@ -50,6 +51,10 @@ export function exampleWorkflow():Workflow {
 export type Bridge = {
  list:()=>Promise<Workflow[]>; save:(w:Workflow)=>Promise<Workflow>; remove:(id:string)=>Promise<void>;
  status:()=>Promise<{dataPath:string;databasePath:string}>; dirty:(value:boolean)=>void
+ recordingStatus:()=>Promise<RecordingState>; recordingStart:(value:{url:string})=>Promise<RecordingState>;
+ recordingStop:()=>Promise<RecordingState>; recordingCancel:()=>Promise<RecordingState>;
+ recordingSave:(value:{sessionId:string;workflow:Workflow})=>Promise<Workflow>;
+ demoStart:()=>Promise<{url:string}>; demoReset:()=>Promise<void>
 }
 
 

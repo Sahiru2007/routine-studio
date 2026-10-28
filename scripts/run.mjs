@@ -2,6 +2,7 @@
 import { mkdirSync } from 'node:fs'
 import { resolve } from 'node:path'
 const root = resolve(import.meta.dirname, '..')
+await import('./build-extension.mjs')
 if (!/^E:/i.test(root)) throw Error('Routine Studio must stay on E:')
 for (const dir of ['temp','data','cache']) mkdirSync(resolve(root,'.runtime',dir),{recursive:true})
 const env = {...process.env, TEMP:resolve(root,'.runtime/temp'),TMP:resolve(root,'.runtime/temp'), electron_config_cache:'E:/AI/Cache/electron', PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD:'1'}

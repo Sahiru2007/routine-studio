@@ -9,7 +9,8 @@
     "skipLibCheck": true,
     "types": [
       "node",
-      "vite/client"
+      "vite/client",
+      "chrome"
     ],
     "allowImportingTsExtensions": true,
     "noEmit": true

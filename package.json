@@ -1,16 +1,19 @@
-﻿{
+{
   "name": "routine-studio",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "main": "out/main/index.js",
   "scripts": {
     "dev": "node scripts/run.mjs dev",
-    "build": "electron-vite build",
+    "build": "node scripts/build-extension.mjs && electron-vite build",
     "start": "node scripts/run.mjs preview",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "test:desktop": "node scripts/desktop-test.mjs"
+    "test:desktop": "node scripts/desktop-test.mjs",
+    "test:recording": "node scripts/recording-test.mjs",
+    "demo": "node packages/demo-site/server.ts",
+    "demo:reset": "node packages/demo-site/server.ts --reset"
   },
   "dependencies": {
     "@xyflow/react": "latest",
@@ -19,15 +22,16 @@
     "zod": "latest"
   },
   "devDependencies": {
+    "@types/chrome": "^0.3.7",
     "@types/node": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
     "@vitejs/plugin-react": "latest",
     "electron": "latest",
     "electron-vite": "latest",
-    "vite": "latest",
-    "vitest": "latest",
+    "playwright": "latest",
     "typescript": "latest",
-    "playwright": "latest"
+    "vite": "latest",
+    "vitest": "latest"
   }
 }

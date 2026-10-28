@@ -1,4 +1,4 @@
-param([int]$NativeProcessId,[ValidateSet('Keep editing','Discard changes')][string]$Choice,[string]$ScreenshotPath)
+param([int]$NativeProcessId,[ValidateSet('Keep editing','Discard changes','Cancel recording and close')][string]$Choice,[string]$ScreenshotPath,[string]$PromptText='Discard your unsaved workflow changes?')
 $ErrorActionPreference = 'Stop'
 Add-Type -AssemblyName UIAutomationClient
 Add-Type -AssemblyName UIAutomationTypes
@@ -10,6 +10,8 @@ using System.Runtime.InteropServices;
 public static class NativeDialogControl {
   [DllImport("user32.dll", CharSet=CharSet.Auto)]
   public static extern IntPtr SendMessage(IntPtr handle, uint message, IntPtr wParam, IntPtr lParam);
+  [DllImport("user32.dll")]
+  public static extern bool PrintWindow(IntPtr handle, IntPtr hdc, uint flags);
 }
 '@
 $deadline = [DateTime]::UtcNow.AddSeconds(20)
@@ -22,13 +24,19 @@ do {
       [System.Windows.Automation.PropertyCondition]::new([System.Windows.Automation.AutomationElement]::NameProperty,$Choice))
     if ($null -ne $button) {
       $message = $window.FindFirst([System.Windows.Automation.TreeScope]::Descendants,
-        [System.Windows.Automation.PropertyCondition]::new([System.Windows.Automation.AutomationElement]::NameProperty,'Discard your unsaved workflow changes?'))
+        [System.Windows.Automation.PropertyCondition]::new([System.Windows.Automation.AutomationElement]::NameProperty,$PromptText))
       if ($null -eq $message) { continue }
       if ($ScreenshotPath) {
-        $rect = $window.Current.BoundingRectangle
+        $dialogWindow = $window.FindFirst([System.Windows.Automation.TreeScope]::Descendants,
+          [System.Windows.Automation.PropertyCondition]::new([System.Windows.Automation.AutomationElement]::ControlTypeProperty,[System.Windows.Automation.ControlType]::Window))
+        if ($null -eq $dialogWindow) { throw 'Native dialog window not found for screenshot' }
+        $rect = $dialogWindow.Current.BoundingRectangle
         $bitmap = [System.Drawing.Bitmap]::new([int]$rect.Width,[int]$rect.Height)
         $graphics = [System.Drawing.Graphics]::FromImage($bitmap)
-        $graphics.CopyFromScreen([int]$rect.X,[int]$rect.Y,0,0,$bitmap.Size)
+        $hdc = $graphics.GetHdc()
+        try {
+          if (-not [NativeDialogControl]::PrintWindow([IntPtr]$dialogWindow.Current.NativeWindowHandle,$hdc,2)) { throw 'Native dialog screenshot failed' }
+        } finally { $graphics.ReleaseHdc($hdc) }
         $bitmap.Save($ScreenshotPath,[System.Drawing.Imaging.ImageFormat]::Png)
         $graphics.Dispose(); $bitmap.Dispose()
       }
