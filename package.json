@@ -1,6 +1,6 @@
 {
   "name": "routine-studio",
-  "version": "0.6.1",
+  "version": "0.7.0-rc.1",
   "private": true,
   "type": "module",
   "main": "out/main/index.js",
@@ -19,6 +19,7 @@
     "test:csv": "node scripts/batch-test.mjs --prepare-only",
     "test:batch": "node scripts/batch-test.mjs",
     "test:assistance": "node scripts/assistance-test.mjs",
+    "test:openai-assistance": "node scripts/openai-assistance-test.mjs",
     "test:packaged": "node scripts/packaged-test.mjs",
     "demo": "node packages/demo-site/server.ts",
     "demo:reset": "node packages/demo-site/server.ts --reset"
@@ -27,6 +28,7 @@
     "@xyflow/react": "latest",
     "css-tree": "^3.2.1",
     "csv-parse": "7.0.3",
+    "openai": "^6.9.1",
     "playwright": "^1.64.1",
     "react": "latest",
     "react-dom": "latest",

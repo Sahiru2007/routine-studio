@@ -9,7 +9,8 @@ import {startDemo} from '../../../packages/demo-site/server'
 import {Runner} from './runner'
 import {DataStore} from './data'
 import {Batches} from './batches'
-import {Assistance} from './assistance'
+import {Assistance} from './assistance-manager'
+import {SecureCredentialStore} from './credential-store'
 const root=resolve(app.getAppPath())
 const dataPath=resolve(process.env.ROUTINE_STUDIO_DATA || (app.isPackaged?'E:\\Routine Studio Data':join(root,'.runtime','data')))
 const browserPath=resolve(process.env.ROUTINE_STUDIO_BROWSER_PATH||process.env.PLAYWRIGHT_BROWSERS_PATH||'E:\\AI\\Caches\\ms-playwright')
@@ -33,7 +34,7 @@ app.whenReady().then(()=>{
  recorder=new Recorder(root,dataPath,store)
  runner=new Runner(root,dataPath,store,recorder)
  batches=new Batches(store,runner)
- assistance=new Assistance()
+ assistance=new Assistance({store,credentials:new SecureCredentialStore(dataPath)})
  if(process.env.ROUTINE_STUDIO_TEST==='1')Object.assign(globalThis,{studioTestBatches:batches})
  if(process.env.ROUTINE_STUDIO_TEST==='1')Object.assign(globalThis,{studioTestRunner:runner})
  if(process.env.ROUTINE_STUDIO_TEST==='1')Object.assign(globalThis,{studioTestRecorder:recorder})
@@ -45,7 +46,7 @@ app.whenReady().then(()=>{
  const trusted=(url:string)=> dev?url===dev||url===dev+'/':url===new URL('file:///'+entry.replaceAll('\\','/')).href
  const check=(event:Electron.IpcMainInvokeEvent|Electron.IpcMainEvent)=>{if(event.sender!==win.webContents||event.senderFrame!==win.webContents.mainFrame||!trusted(event.senderFrame.url))throw Error('Untrusted IPC sender')}
  for(const [name,handler] of Object.entries({
- assistanceStatus:()=>assistance.status(),assistanceCheck:()=>assistance.check(),assistanceRun:(value:unknown)=>assistance.run(value),assistanceCancel:()=>assistance.cancel(),assistanceCandidates:(value:unknown)=>recorder.candidates(value),
+ assistanceStatus:()=>assistance.status(),assistanceCheck:()=>assistance.check(),assistanceTest:(value:unknown)=>assistance.test(value),assistanceConfigure:(value:unknown)=>assistance.configure(value),assistanceKeySave:(value:unknown)=>assistance.saveKey(value),assistanceKeyRemove:()=>assistance.removeKey(),assistancePreview:(value:unknown)=>assistance.preview(value),assistanceRun:(value:unknown)=>assistance.run(value),assistanceCancel:()=>assistance.cancel(),assistanceCandidates:(value:unknown)=>recorder.candidates(value),
  runNotes:(value:unknown)=>data.notes(value),runNote:(value:unknown)=>data.note(value),
  batchPrepare:(value:unknown)=>batches.prepare(value),batchStart:(value:unknown)=>batches.start(value),batchStatus:(value:unknown)=>batches.detail(value),batchList:()=>batches.list(),batchPause:(value:unknown)=>batches.pause(value),batchResume:(value:unknown)=>batches.resume(value),batchStop:(value:unknown)=>batches.stop(value),batchApprove:(value:unknown)=>batches.approve(value),batchNote:(value:unknown)=>batches.note(value),batchRemaining:(value:unknown)=>batches.remaining(value),resultExport:(value:unknown)=>data.export(win,value,id=>batches.get({id}),id=>runner.get({runId:id})),
  dataImport:()=>data.import(win),dataList:()=>data.list('datasets'),dataSave:(value:unknown)=>data.save('datasets',value),dataDelete:(value:unknown)=>data.remove('datasets',value),mappingList:()=>data.list('mappings'),mappingSave:(value:unknown)=>data.save('mappings',value),mappingDelete:(value:unknown)=>data.remove('mappings',value),mappingPreview:(value:unknown)=>data.preview(value),
