@@ -5,15 +5,23 @@ export class WorkflowStore {
  constructor(path:string){
  this.db=new DatabaseSync(path);this.db.exec('PRAGMA foreign_keys=ON; PRAGMA journal_mode=WAL;')
  const version=Number((this.db.prepare('PRAGMA user_version').get() as {user_version:number}).user_version)
- if(version>1)throw Error('This database was created by a newer Routine Studio version.')
+ if(version>2){this.db.close();throw Error('This database was created by a newer Routine Studio version.')}
  if(version===0) {
  this.db.exec(`BEGIN;
  CREATE TABLE workflows(id TEXT PRIMARY KEY, document TEXT NOT NULL);
  CREATE TABLE revisions(workflow_id TEXT NOT NULL REFERENCES workflows(id) ON DELETE CASCADE, revision INTEGER NOT NULL, document TEXT NOT NULL, PRIMARY KEY(workflow_id,revision));
  PRAGMA user_version=1; COMMIT;`)
  }
+ if(version<2)this.db.exec(`BEGIN;
+ CREATE TABLE metadata(key TEXT PRIMARY KEY, value TEXT NOT NULL);
+ INSERT INTO metadata SELECT 'example-seeded','1' WHERE EXISTS(SELECT 1 FROM workflows);
+ PRAGMA user_version=2; COMMIT;`)
  }
- seed(){if(!this.db.prepare('SELECT id FROM workflows LIMIT 1').get())this.save(exampleWorkflow())}
+ seed(){
+ if(this.db.prepare("SELECT value FROM metadata WHERE key='example-seeded'").get())return
+ this.save(exampleWorkflow())
+ this.db.prepare("INSERT INTO metadata VALUES('example-seeded','1')").run()
+ }
  list():Workflow[]{return this.db.prepare('SELECT document FROM workflows').all().map(row=>WorkflowSchema.parse(JSON.parse(row.document as string))).sort((a,b)=>b.updatedAt.localeCompare(a.updatedAt))}
  save(value:unknown):Workflow {
  const w=WorkflowSchema.parse(value)
