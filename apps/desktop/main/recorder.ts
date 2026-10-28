@@ -83,12 +83,12 @@ export class Recorder{
  cpSync(join(this.root,'out','recorder-extension'),extension,{recursive:true})
  const script=readFileSync(join(extension,'background.js'),'utf8')
  writeFileSync(join(extension,'background.js'),'const STUDIO_CONFIG='+JSON.stringify({sessionId:id,token:this.token,endpoint})+';\n'+script)
- process.env.PLAYWRIGHT_BROWSERS_PATH='E:/AI/Caches/ms-playwright'
+ if(!process.env.PLAYWRIGHT_BROWSERS_PATH)throw Error('Chromium is not configured. Set ROUTINE_STUDIO_BROWSER_PATH to the E: Playwright browser directory.')
  const {chromium}=await import('playwright')
  const executable=chromium.executablePath();if(!/^E:[\\/]/i.test(executable))throw Error('Chromium must be installed on E:');this.executableUsed=executable
  const test=process.env.ROUTINE_STUDIO_TEST==='1'
  const context=await chromium.launchPersistentContext(profile,{channel:'chromium',headless:false,acceptDownloads:false,downloadsPath:join(this.dataPath,'downloads'),ignoreDefaultArgs:['--disable-extensions'],args:[
- '--disable-extensions-except='+extension,'--load-extension='+extension,'--disk-cache-dir='+join(this.dataPath,'automation-cache'),...(test?['--remote-debugging-port=0']:[])],env:{...process.env,TEMP:join(this.root,'.runtime','temp'),TMP:join(this.root,'.runtime','temp')}})
+ '--disable-extensions-except='+extension,'--load-extension='+extension,'--disk-cache-dir='+join(this.dataPath,'automation-cache'),...(test?['--remote-debugging-port=0']:[])],env:{...process.env,TEMP:join(this.dataPath,'temp'),TMP:join(this.dataPath,'temp')}})
  if(this.generation!==generation){await context.close();return this.status()}
  this.context=context
  this.context.on('close',()=>{if(this.generation===generation&&['starting','recording'].includes(this.current.state))this.interrupt('The dedicated browser closed unexpectedly. Review the captured actions or cancel and start again.')})
@@ -149,9 +149,9 @@ export class Recorder{
  this.checkInspection();if(this.inspectionBusy)throw Error('An inspection operation is already in progress');this.inspectionBusy=true
  try{
  if(!this.context||!this.originalPage||this.originalPage.isClosed()){
- await this.release();process.env.PLAYWRIGHT_BROWSERS_PATH='E:/AI/Caches/ms-playwright'
+ await this.release();if(!process.env.PLAYWRIGHT_BROWSERS_PATH)throw Error('Chromium is not configured on E:.')
  const {chromium}=await import('playwright');const profile=join(this.dataPath,'automation-profile');mkdirSync(profile,{recursive:true})
- const context=await chromium.launchPersistentContext(profile,{channel:'chromium',headless:false,acceptDownloads:false,downloadsPath:join(this.dataPath,'downloads'),args:['--disk-cache-dir='+join(this.dataPath,'automation-cache'),...(process.env.ROUTINE_STUDIO_TEST==='1'?['--remote-debugging-port=0']:[])],env:{...process.env,TEMP:join(this.root,'.runtime','temp'),TMP:join(this.root,'.runtime','temp')}})
+ const context=await chromium.launchPersistentContext(profile,{channel:'chromium',headless:false,acceptDownloads:false,downloadsPath:join(this.dataPath,'downloads'),args:['--disk-cache-dir='+join(this.dataPath,'automation-cache'),...(process.env.ROUTINE_STUDIO_TEST==='1'?['--remote-debugging-port=0']:[])],env:{...process.env,TEMP:join(this.dataPath,'temp'),TMP:join(this.dataPath,'temp')}})
  this.context=context;this.originalPage=context.pages()[0]??await context.newPage()
  for(const page of context.pages())if(page!==this.originalPage)await page.close()
  if(process.env.ROUTINE_STUDIO_TEST==='1')this.testPort=Number(readFileSync(join(profile,'DevToolsActivePort'),'utf8').split('\n')[0])
@@ -161,5 +161,5 @@ export class Recorder{
  }
  async inspect(value:unknown){this.checkInspection();if(this.inspectionBusy)throw Error('An inspection operation is already in progress');this.inspectionBusy=true;try{return await inspectPage(this.originalPage,value)}finally{this.inspectionBusy=false}}
  async candidates(requiredUrl:unknown){this.checkInspection();if(this.inspectionBusy)throw Error('An inspection operation is already in progress');this.inspectionBusy=true;try{return await inspectionCandidates(this.originalPage,requiredUrl)}finally{this.inspectionBusy=false}}
- async testInfo(){if(process.env.ROUTINE_STUDIO_TEST!=='1')throw Error('Unavailable');for(let i=0;i<200&&!this.context;i++)await new Promise(ok=>setTimeout(ok,50));const port=this.testPort??(this.context?Number(readFileSync(join(this.dataPath,'automation-profile','DevToolsActivePort'),'utf8').split('\n')[0]):null);return {port,raw:this.collector?.events??[],state:this.current.state,paths:{executable:this.executableUsed,profile:join(this.dataPath,'automation-profile'),cache:join(this.dataPath,'automation-cache'),downloads:join(this.dataPath,'downloads'),temp:join(this.root,'.runtime','temp')},browserVersion:this.context?.browser()?.version()}}
+ async testInfo(){if(process.env.ROUTINE_STUDIO_TEST!=='1')throw Error('Unavailable');for(let i=0;i<200&&!this.context;i++)await new Promise(ok=>setTimeout(ok,50));const port=this.testPort??(this.context?Number(readFileSync(join(this.dataPath,'automation-profile','DevToolsActivePort'),'utf8').split('\n')[0]):null);return {port,raw:this.collector?.events??[],state:this.current.state,paths:{executable:this.executableUsed,profile:join(this.dataPath,'automation-profile'),cache:join(this.dataPath,'automation-cache'),downloads:join(this.dataPath,'downloads'),temp:join(this.dataPath,'temp')},browserVersion:this.context?.browser()?.version()}}
 }

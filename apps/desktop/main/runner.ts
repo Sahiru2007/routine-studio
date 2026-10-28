@@ -48,7 +48,7 @@ export class Runner{
  try{await this.recorder.acquireExecution(!!owner)}catch(error){run.state='review';append(run,'warning','Start blocked: save/cancel recording and finish browser inspection first. No worker actions started.');this.persist();throw error}
  if(run.stopRequested||terminal(run.state)){this.recorder.releaseExecution();return this.records.get(run.id)}
  this.parentSeq=0;this.workerSeq=0;this.lastHeartbeat=Date.now();this.port=null
- const env={...process.env,ELECTRON_RUN_AS_NODE:'1',PLAYWRIGHT_BROWSERS_PATH:'E:/AI/Caches/ms-playwright',TEMP:join(this.root,'.runtime/temp'),TMP:join(this.root,'.runtime/temp')};delete (env as Record<string,unknown>).NODE_COMPILE_CACHE
+ const env={...process.env,ELECTRON_RUN_AS_NODE:'1',PLAYWRIGHT_BROWSERS_PATH:process.env.PLAYWRIGHT_BROWSERS_PATH,TEMP:join(this.dataPath,'temp'),TMP:join(this.dataPath,'temp')};delete (env as Record<string,unknown>).NODE_COMPILE_CACHE
  try{
  const child=fork(join(this.root,'out/main/worker.js'),[],{cwd:this.root,execPath:process.execPath,env,stdio:['ignore','ignore','ignore','ipc'],serialization:'json'});this.child=child
  if(!child.pid)throw Error('Worker PID unavailable');this.workflows.db.prepare("INSERT INTO metadata(key,value) VALUES('execution-worker-lease',?) ON CONFLICT(key) DO UPDATE SET value=excluded.value").run(JSON.stringify(Lease.parse({pid:child.pid,runId:run.id})))

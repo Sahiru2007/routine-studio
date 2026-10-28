@@ -29,7 +29,7 @@ async function askOrigin(origin:string){
 async function init(message:Extract<ReturnType<typeof ParentMessage.parse>,{type:'init'}>){
  plan=message.plan
  if(plan.runId!==message.runId)throw Error('Run mismatch')
- process.env.PLAYWRIGHT_BROWSERS_PATH='E:/AI/Caches/ms-playwright'
+ if(!process.env.PLAYWRIGHT_BROWSERS_PATH)throw Error('Chromium is not configured on E:.')
  if(!/^E:[\\/]/i.test(chromium.executablePath()))throw Error('Browser must remain on E:')
  for(const origin of plan.reviewedOrigins)approved.add(origin)
  const profile=join(message.storageRoot,'execution-profile');mkdirSync(profile,{recursive:true})

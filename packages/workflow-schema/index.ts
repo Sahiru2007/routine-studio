@@ -11,7 +11,7 @@ export type Bridge={
  dataImport:()=>Promise<Data|null>;dataList:()=>Promise<Data[]>;dataSave:(value:Data)=>Promise<Data>;dataDelete:(value:{id:string})=>Promise<void>;
  mappingList:()=>Promise<MapDocument[]>;mappingSave:(value:MapDocument)=>Promise<MapDocument>;mappingDelete:(value:{id:string})=>Promise<void>;mappingPreview:(value:MapDocument)=>Promise<Preview>;
  list:()=>Promise<Workflow[]>;save:(w:Workflow)=>Promise<Workflow>;remove:(id:string)=>Promise<void>;
- status:()=>Promise<{dataPath:string;databasePath:string}>;dirty:(value:boolean)=>void;
+ status:()=>Promise<{dataPath:string;databasePath:string;resourcePath:string;sampleCsvPath:string;packaged:boolean;browserPath:string;browserExecutable:string;browserReady:boolean}>;dirty:(value:boolean)=>void;
  recordingStatus:()=>Promise<RecordingState>;recordingStart:(value:{url:string})=>Promise<RecordingState>;
  recordingStop:()=>Promise<RecordingState>;recordingCancel:()=>Promise<RecordingState>;
  recordingSave:(value:{sessionId:string;workflow:Workflow})=>Promise<Workflow>;
