@@ -1,6 +1,10 @@
 # Routine Studio
 
-Project boundary: E:\projects\routine-studio. Preserve existing workflows/evidence; do not modify Browser Agent Lab or the portfolio. Milestones 4A (CSV preparation) and 4B (supervised sequential batches) are authorized beyond previous stop rules. The user's direct message authorizes commit and push **after successful verification**, superseding the attachment's no-commit/no-push wording for the final handoff only. No release, installer, paid service, model call, real-account interaction, unattended real-site use or automatic repair/reconciliation. Stop after this scope.
+Project boundary: E:\projects\routine-studio. Preserve existing workflows/evidence; do not modify Browser Agent Lab or the portfolio. Milestone 5 optional local configuration assistance is authorized beyond previous stop rules. Use only the existing loopback Ollama installation and already downloaded qwen3:8b-q4_K_M; no pull, cloud fallback, executable model output, autonomous repair or learning claim. Manual operation remains complete. The user's follow-up explicitly authorizes committing and pushing this verified Milestone 5 snapshot only. No release, installer, paid service, real-account interaction, unattended real-site use or automatic repair/reconciliation. Stop after Milestone 5.
+
+## Milestone 5 invariants
+
+Local assistance is opt-in, review-first and serialized. Only unauthenticated HTTP loopback origins are accepted and redirects are rejected. Context/output/time/request sizes are bounded; cancellation and duplicate prevention are mandatory. Do not persist full prompts/responses by default. Mapping suggestions use stable supplied IDs and never overwrite a binding without explicit review. Issue guidance cannot alter validation. Target assistance ranks locally extracted visible top-level descriptors only; never expose values, hidden/sensitive elements, HTML, cookies, arbitrary selectors, JavaScript, navigation or browser commands. Highlight is read-only and applying changes only an unsaved draft. Model output grants no execution authority.
 
 ## Architecture
 

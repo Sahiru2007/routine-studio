@@ -1,4 +1,21 @@
-# Milestones 4A/4B verification (current)
+# Milestone 5 verification (current)
+
+```powershell
+Set-Location -LiteralPath 'E:\projects\routine-studio'
+npm.cmd run typecheck
+npm.cmd test
+npm.cmd run build
+npm.cmd run test:assistance
+npm.cmd run test:batch
+```
+
+Focused tests cover loopback-only endpoints, redirect rejection, unavailable/malformed responses, strict unknown/duplicate-ID and unexpected-field rejection, injection-like headers, cancellation/duplicate requests and deterministic offline guidance. `test:assistance` uses actual Electron and the real inspection Chromium against a bounded local mock contract; it captures successful mapping/target and offline states under `artifacts/milestone-5`. It asserts saved mappings/history remain unchanged until explicit ordinary save, no execution worker starts, and highlighting changes no form data.
+
+The real-local sample is deliberately separate: start only the existing E: Ollama installation/model, run `node scripts/real-assistance-validation.mjs`, then stop that test-owned server. It made 3 of the allowed 8 inference requests, recorded exact limits/durations/outcomes in `real-local-results.json`, used synthetic descriptors only, and did not retry for favorable answers. Do not describe this sample as reliability evidence.
+
+The actual `test:batch` native dialog now selects `Keep app open` and `Stop batch and close` by verified accessible name/class/HWND. Cancel retained `paused_error`; Confirm/restart persisted `interrupted` with no running row. Screenshots: `artifacts/milestone-4/12-active-batch-close-cancel.png` and `13-active-batch-close-confirm.png`.
+
+## Historical Milestones 4A/4B verification
 
 Verified environment: interactive Windows, Node 24.22, Electron/Playwright bundled Chromium on E:. Use synthetic data only; close older app/demo windows. Native dialogs are driven through their actual HWND/accessible name and class—not mocked file responses.
 

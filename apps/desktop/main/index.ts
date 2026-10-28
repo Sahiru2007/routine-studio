@@ -9,6 +9,7 @@ import {startDemo} from '../../../packages/demo-site/server'
 import {Runner} from './runner'
 import {DataStore} from './data'
 import {Batches} from './batches'
+import {Assistance} from './assistance'
 const root=resolve(app.getAppPath())
 const dataPath=process.env.ROUTINE_STUDIO_DATA || join(root,'.runtime','data')
 if(!/^E:[\\/]/i.test(dataPath))throw Error('Application data must be on E:')
@@ -20,6 +21,7 @@ let store:WorkflowStore
 let recorder:Recorder
 let runner:Runner
 let batches:Batches
+let assistance:Assistance
 let demo:Awaited<ReturnType<typeof startDemo>>|null=null
 let quitting=false
 let dirty=false
@@ -28,6 +30,7 @@ app.whenReady().then(()=>{
  recorder=new Recorder(root,dataPath,store)
  runner=new Runner(root,dataPath,store,recorder)
  batches=new Batches(store,runner)
+ assistance=new Assistance()
  if(process.env.ROUTINE_STUDIO_TEST==='1')Object.assign(globalThis,{studioTestBatches:batches})
  if(process.env.ROUTINE_STUDIO_TEST==='1')Object.assign(globalThis,{studioTestRunner:runner})
  if(process.env.ROUTINE_STUDIO_TEST==='1')Object.assign(globalThis,{studioTestRecorder:recorder})
@@ -39,6 +42,7 @@ app.whenReady().then(()=>{
  const trusted=(url:string)=> dev?url===dev||url===dev+'/':url===new URL('file:///'+entry.replaceAll('\\','/')).href
  const check=(event:Electron.IpcMainInvokeEvent|Electron.IpcMainEvent)=>{if(event.sender!==win.webContents||event.senderFrame!==win.webContents.mainFrame||!trusted(event.senderFrame.url))throw Error('Untrusted IPC sender')}
  for(const [name,handler] of Object.entries({
+ assistanceStatus:()=>assistance.status(),assistanceCheck:()=>assistance.check(),assistanceRun:(value:unknown)=>assistance.run(value),assistanceCancel:()=>assistance.cancel(),assistanceCandidates:(value:unknown)=>recorder.candidates(value),
  runNotes:(value:unknown)=>data.notes(value),runNote:(value:unknown)=>data.note(value),
  batchPrepare:(value:unknown)=>batches.prepare(value),batchStart:(value:unknown)=>batches.start(value),batchStatus:(value:unknown)=>batches.detail(value),batchList:()=>batches.list(),batchPause:(value:unknown)=>batches.pause(value),batchResume:(value:unknown)=>batches.resume(value),batchStop:(value:unknown)=>batches.stop(value),batchApprove:(value:unknown)=>batches.approve(value),batchNote:(value:unknown)=>batches.note(value),batchRemaining:(value:unknown)=>batches.remaining(value),resultExport:(value:unknown)=>data.export(win,value,id=>batches.get({id}),id=>runner.get({runId:id})),
  dataImport:()=>data.import(win),dataList:()=>data.list('datasets'),dataSave:(value:unknown)=>data.save('datasets',value),dataDelete:(value:unknown)=>data.remove('datasets',value),mappingList:()=>data.list('mappings'),mappingSave:(value:unknown)=>data.save('mappings',value),mappingDelete:(value:unknown)=>data.remove('mappings',value),mappingPreview:(value:unknown)=>data.preview(value),

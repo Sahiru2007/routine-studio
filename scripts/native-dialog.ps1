@@ -1,4 +1,4 @@
-param([int]$NativeProcessId,[ValidateSet('Keep editing','Discard changes','Cancel recording and close')][string]$Choice,[string]$ScreenshotPath,[string]$PromptText='Discard your unsaved workflow changes?')
+param([int]$NativeProcessId,[ValidateSet('Keep editing','Discard changes','Cancel recording and close','Keep app open','Stop batch and close','Stop run and close')][string]$Choice,[string]$ScreenshotPath,[string]$PromptText='Discard your unsaved workflow changes?')
 $ErrorActionPreference = 'Stop'
 Add-Type -AssemblyName UIAutomationClient
 Add-Type -AssemblyName UIAutomationTypes

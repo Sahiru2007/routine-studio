@@ -1,5 +1,15 @@
 # Architecture
 
+## Milestone 5 — bounded local configuration assistance
+
+Electron main owns `Assistance`, the only Ollama client. Its origin parser permits unauthenticated `http` loopback (`127.0.0.1`, `localhost`, `::1`) only; credentials, paths, queries, remote hosts, TLS endpoints and redirects are rejected. The fixed existing model is `qwen3:8b-q4_K_M`. Requests are serialized with one `AbortController`, a 20-second deadline, 32 KiB request/context, 64 KiB transport response, 4096 context tokens and 700 output-token cap. There is no pull, server lifecycle management, cloud fallback, retry or prompt/response persistence.
+
+Strict shared Zod schemas cover mapping, explanation and target requests/results. Mapping output may reference only supplied stable input/column IDs, once per input. Target output may rank only supplied candidate IDs; unknown/duplicate IDs, extra fields or oversized text reject the whole response. Imported headers/page descriptors are untrusted prompt data. Model text cannot call IPC, mutate validation/readiness, run a browser or authorize execution.
+
+The existing recorder/inspection owner locally extracts at most 100 visible ordinary top-level descriptors from the required currently open page. It never reads input values and excludes hidden/password and recognized payment/authentication elements, full HTML, cookies, unrelated text, frames and shadow DOM. Candidate locators use only the existing enumerated locator schema. Highlighting calls existing read-only inspection. Applying a candidate changes only the renderer draft; saved revisions, raw evidence and run/batch snapshots remain immutable.
+
+Mapping and target UIs retain suggestions ephemerally. Individual acceptance is required, existing bindings use an explicit replacement action, and discarding restores the pre-suggestion mapping draft. Ordinary validation remains authoritative. Offline issue explanations use deterministic local guidance. Reduced-motion styling disables assistance-panel transitions/animation.
+
 ## Milestones 4A/4B — data preparation and sequential supervision
 
 `csv-parse` 7.0.3 runs in `out/main/csv-worker.js`, a Node worker thread separate from the renderer/main event loop. Main's native file dialog grants a single explicit import choice on E:. File bytes are bounded to 2 MiB, decoded with fatal UTF-8 handling, parsed without casting/evaluation/implicit trim, and validated by shared `packages/batch-schema`. Limits are 1000 data rows, 50 columns, 160-character nonblank/unique headers, 10000 characters/field and 100000 characters/record; parsing has a 10-second deadline. Structural/encoding/quoting/width errors fail the import without partial silent skips. Source UUIDs, CSV record numbers and physical line ranges persist; multiline fields preserve embedded newlines. No browser is opened for preparation/preview.
@@ -20,7 +30,7 @@ Native save dialogs restrict exports to explicit E: choices. Summaries are point
 
 The disposable demo adds two clearly labeled names: `DEMO-REJECT` returns a rejection without a customer; `DEMO-DELAY` persists one customer then delays its HTTP response 15 seconds. Runtime has no demo-data read/grader shortcut. Only independent verification code audits customer files to check exact creations/no repeats. Actual UI screenshots and optional short preparation videos are test artifacts on E:, never automatic runtime capture.
 
-Current scope: Milestones 0–4A/4B. CSV preparation and supervised sequential batches are authorized beyond earlier stop rules. Commit/push after verification follows the direct user request; no release. Model assistance, unattended real-site use, automatic reconciliation and installers remain outside scope. Earlier evidence is explicitly archived.
+Current completed scope: Milestones 0–5. Optional bounded local configuration assistance is implemented without execution authority; manual operation remains complete offline. The verified source snapshot is committed/pushed under explicit follow-up authorization. Unattended real-site use, automatic reconciliation, packaging/installers, signing and release publication remain outside the authorized scope. Earlier evidence is explicitly archived.
 
 ## Supervised execution (Milestone 3)
 

@@ -8,15 +8,17 @@ import {RecordingPanel} from './RecordingPanel'
 import {RunsPanel} from './RunsPanel'
 import {BatchPanel} from './BatchPanel'
 import {ConfigurationTools} from './ConfigurationTools'
+import type {AssistanceStatus} from '../../../packages/assistance-schema'
 declare global {interface Window {studio:Bridge}}
 function App(){
  const [recordingActive,setRecordingActive]=useState(false)
  const [runActive,setRunActive]=useState(false)
  const [dataDirty,setDataDirty]=useState(false),[dataReset,setDataReset]=useState(0),[batchActive,setBatchActive]=useState(false)
  const [library,setLibrary]=useState<Workflow[]>([]),[draft,setDraft]=useState<Workflow|null>(null),[baseline,setBaseline]=useState(''),[selected,setSelected]=useState(''),[view,setView]=useState('library'),[error,setError]=useState(''),[busy,setBusy]=useState(false),[status,setStatus]=useState({dataPath:'Loading…',databasePath:''})
+ const [modelStatus,setModelStatus]=useState<AssistanceStatus|null>(null)
  const [modal,setModal]=useState<{title:string;text:string;confirm:()=>void}|null>(null)
  const dirty=(!!draft&&JSON.stringify(draft)!==baseline)||dataDirty
- useEffect(()=>{window.studio.list().then(setLibrary).catch(e=>setError(e.message));window.studio.status().then(setStatus).catch(e=>setError(e.message))},[])
+ useEffect(()=>{window.studio.list().then(setLibrary).catch(e=>setError(e.message));window.studio.status().then(setStatus).catch(e=>setError(e.message));window.studio.assistanceStatus().then(setModelStatus).catch(e=>setError(e.message))},[])
  useEffect(()=>{window.studio.dirty(dirty)},[dirty])
  useEffect(()=>{
  if(!modal)return

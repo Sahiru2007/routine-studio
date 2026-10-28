@@ -3,7 +3,7 @@ import {randomBytes} from 'node:crypto'
 import {cpSync,mkdirSync,readFileSync,writeFileSync} from 'node:fs'
 import {join,resolve} from 'node:path'
 import type {BrowserContext,Worker,Page} from 'playwright'
-import {inspectionBanner,inspectPage} from './inspection'
+import {inspectionBanner,inspectPage,inspectionCandidates} from './inspection'
 import {z} from 'zod'
 import {EventCollector,normalize,RecordingDocument,RecordingStateSchema,StartRecording,SaveRecording,type RecordingState,type RecordingDocumentType} from '../../../packages/recorder-schema'
 import type {WorkflowStore} from './store'
@@ -160,5 +160,6 @@ export class Recorder{
  }finally{this.inspectionBusy=false}
  }
  async inspect(value:unknown){this.checkInspection();if(this.inspectionBusy)throw Error('An inspection operation is already in progress');this.inspectionBusy=true;try{return await inspectPage(this.originalPage,value)}finally{this.inspectionBusy=false}}
- testInfo(){if(process.env.ROUTINE_STUDIO_TEST!=='1')throw Error('Unavailable');return {port:this.testPort,raw:this.collector?.events??[],state:this.current.state,paths:{executable:this.executableUsed,profile:join(this.dataPath,'automation-profile'),cache:join(this.dataPath,'automation-cache'),downloads:join(this.dataPath,'downloads'),temp:join(this.root,'.runtime','temp')},browserVersion:this.context?.browser()?.version()}}
+ async candidates(requiredUrl:unknown){this.checkInspection();if(this.inspectionBusy)throw Error('An inspection operation is already in progress');this.inspectionBusy=true;try{return await inspectionCandidates(this.originalPage,requiredUrl)}finally{this.inspectionBusy=false}}
+ async testInfo(){if(process.env.ROUTINE_STUDIO_TEST!=='1')throw Error('Unavailable');for(let i=0;i<200&&!this.context;i++)await new Promise(ok=>setTimeout(ok,50));const port=this.testPort??(this.context?Number(readFileSync(join(this.dataPath,'automation-profile','DevToolsActivePort'),'utf8').split('\n')[0]):null);return {port,raw:this.collector?.events??[],state:this.current.state,paths:{executable:this.executableUsed,profile:join(this.dataPath,'automation-profile'),cache:join(this.dataPath,'automation-cache'),downloads:join(this.dataPath,'downloads'),temp:join(this.root,'.runtime','temp')},browserVersion:this.context?.browser()?.version()}}
 }

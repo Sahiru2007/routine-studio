@@ -1,6 +1,6 @@
 {
   "name": "routine-studio",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "private": true,
   "type": "module",
   "main": "out/main/index.js",
@@ -16,6 +16,7 @@
     "test:execution": "node scripts/execution-test.mjs",
     "test:csv": "node scripts/batch-test.mjs --prepare-only",
     "test:batch": "node scripts/batch-test.mjs",
+    "test:assistance": "node scripts/assistance-test.mjs",
     "demo": "node packages/demo-site/server.ts",
     "demo:reset": "node packages/demo-site/server.ts --reset"
   },

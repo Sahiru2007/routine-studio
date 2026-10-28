@@ -1,4 +1,22 @@
-# Milestones 4A/4B — current status
+# Milestone 5 — current status
+
+Milestone 5 optional local workflow configuration assistance is implemented on top of preserved Milestones 0–4. The user's follow-up explicitly authorized committing and pushing this verified snapshot to the existing repository; no release/publication artifact is produced. Version: 0.6.0.
+
+Actual results: typecheck/build pass; 69 focused tests in 9 files pass. Actual Electron assistance verification passes mapping acceptance/existing-binding protection/no-browser revalidation, discard restoration, supplied-ID-only target ranking, read-only highlighting, unsaved-only application and graceful offline/manual operation. The previously documented active-batch close gap is closed: actual native Cancel kept the app and paused-error batch; Confirm closed safely and restart persisted `interrupted` with no running row. The corrected full batch regression then passed every existing browser/worker/app interruption, uncertainty, origin, export and immutable-history check.
+
+Bounded real-local validation made exactly 3 inference requests to the already downloaded `qwen3:8b-q4_K_M`: header-only mapping 8348 ms, issue explanation 371 ms, supplied-candidate ranking 961 ms. All three passed strict output validation. This tiny synthetic sample does not establish reliable assistance; manual configuration remains authoritative. Evidence: `artifacts/milestone-5/real-local-results.json`, `electron-results.json`, and screenshots 01–03. The temporary server was stopped afterward.
+
+Limits: ordinary visible top-level descriptors only; heuristic sensitive-field exclusion cannot identify every secret. No frames/shadow DOM/custom widgets, model-generated selectors/code/commands, automatic repair/retry, learning from corrections, cloud inference or model download. Prompt/response content is not saved, but Ollama itself is an independently installed local process; review its own configuration/logging. Assistance UI and actual Windows checks were exercised; broad screen-reader/DPI coverage remains untested.
+
+## Clean handoff
+
+Milestone 5 is complete and preserved in the repository. Final checks completed on 28 October 2026 (Asia/Colombo): `npm.cmd run typecheck`, 69 focused tests in 9 files, production build, actual assistance, full batch, execution, configuration, recording and desktop suites. All passed. Five assistance/native-close screenshots were inspected. No suite was rerun for the documentation/publication handoff because no relevant code changed.
+
+Known issues remain the documented scope limits above. In addition, visible Milestone 5 identity currently uses a small CSS compatibility override while older long-form JSX text is migrated; this is cosmetic and covered by the production build, but should be simplified during a future UI cleanup. The local Ollama process is not managed by Routine Studio and was stopped after validation. No normal user data migration was added in Milestone 5.
+
+Exact next step: begin the next session by reading `AGENTS.md`, this file and `docs/NEXT_SESSION.md`, then confirm the branch is clean and synchronized. Do not begin packaging or Milestone 6 until the user separately authorizes that scope.
+
+## Historical Milestones 4A/4B status
 
 Routine Studio v0.5.0, verified on 28 October 2026 (Asia/Colombo). CSV preparation was completed and verified before connecting supervised batch execution. Existing recording, inspection, workflow editing, evidence and standalone execution remain available. The direct user request authorizes commit/push after successful checks, overriding the attachment's no-commit/no-push wording for the final handoff only. No release, installer, paid/model service, real account, unattended real-site work or automatic repair/reconciliation.
 
@@ -41,7 +59,7 @@ Supported execution remains one original tab and ordinary top-level HTML. No fra
 
 Uncertain outcomes were detected and persisted; automatic reconciliation was NOT established. Never-dispatched continuation does not prove prior writes correct. Independent investigation is required. PID reuse/permissions may conservatively block takeover rather than kill an unverified process. Completed configured steps or UI checks do not prove database correctness. Stop cannot undo changes. Row/total wall-clock budgets include pauses/approval waits.
 
-CSV is comma-separated UTF-8 only, with 2 MiB/1000 rows/50 columns/10000 characters per field/100000 per record bounds. Batch limits are 100 valid rows, 100 steps/row and an 8 MiB snapshot. History lists newest 200 summaries; retention/deeper history UI, secure erase, full screen-reader/DPI coverage and fresh-machine installer/distribution are deferred. Native file/legacy close dialogs were automated; a dedicated new active-batch native-close Cancel/Confirm test was not added. Browser/worker/app termination paths were exercised directly.
+CSV is comma-separated UTF-8 only, with 2 MiB/1000 rows/50 columns/10000 characters per field/100000 per record bounds. Batch limits are 100 valid rows, 100 steps/row and an 8 MiB snapshot. History lists newest 200 summaries; retention/deeper history UI, secure erase, full screen-reader/DPI coverage and fresh-machine installer/distribution are deferred. Native file/legacy close dialogs and the dedicated active-batch native-close Cancel/Confirm pair were automated. Browser/worker/app termination paths were exercised directly.
 
 Early verification-helper failures (Windows controls exposed as panes, a non-exact accessible-name selector, and a test that forgot to revalidate after a mapping edit) were corrected and rerun. They are not counted as passes. No known failing final check is hidden.
 

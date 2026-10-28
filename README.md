@@ -1,8 +1,8 @@
 # Routine Studio
 
-A local desktop application for recording, configuring and supervising browser workflows. Milestones 4A/4B add UTF-8 CSV import, explicit input mapping, resolved validation/preview, approved sequential batches, exception review, durable history and protected result exports. Earlier recording, inspection, editing and single-record execution remain available.
+A local desktop application for recording, configuring and supervising browser workflows. Milestone 5 adds optional, review-first local configuration assistance for CSV mappings, validation explanations and bounded target review. Recording, inspection, editing, single-record execution and supervised CSV batches remain available without Ollama.
 
-No account, paid API or model is required. Automatic reconciliation, unattended real-site use and installer packaging are not implemented. This handoff authorizes commit/push after verification; no release is published.
+No account, paid API or model is required. Assistance uses only an explicitly requested local `qwen3:8b-q4_K_M` through loopback Ollama; there is no cloud fallback, pull, autonomous repair or executable model output. Automatic reconciliation, unattended real-site use and installer packaging are not implemented. Milestone 5 source is published to the existing repository; no release is published.
 
 ## Setup and launch
 
@@ -26,6 +26,7 @@ npm.cmd run test:configuration
 npm.cmd run test:execution
 npm.cmd run test:csv
 npm.cmd run test:batch
+npm.cmd run test:assistance
 ```
 
 Desktop checks require an interactive Windows desktop. They drive real Electron/Chromium, the MV3 extension and OS dialogs, using isolated synthetic data under .runtime. Screenshots and JSON evidence appear in artifacts; recorder screenshots are under artifacts/milestone-1.
@@ -35,6 +36,16 @@ Default database: E:\projects\routine-studio\.runtime\data\workflows.sqlite. Set
 Close older Routine Studio windows before launching this updated build. Database migrations through v7 retain workflow format v2, raw evidence and run journals, adding datasets/mappings/batches and separate investigation notes while preserving IDs, revision numbers, immutable raw recordings and historical revision documents. A copied snapshot of existing local data was migrated in verification; the original was opened read-only. Structural limits reject unsafe documents, while ordinary incomplete configuration stays saveable and visibly labeled incomplete.
 
 See docs/STATUS.md for actual results and limitations, docs/ARCHITECTURE.md for process/storage boundaries, and docs/ROADMAP.md for later milestones. A signed installer and release distribution are not implemented.
+
+## Optional local configuration assistance (Milestone 5)
+
+Start the already installed Ollama server yourself with its existing E: model directory, then use **Check local Ollama** in Settings. The app connects only to `http://127.0.0.1:11434` by default and requires the exact existing `qwen3:8b-q4_K_M`; it never starts/reconfigures the server, pulls a model, follows redirects or falls back to cloud inference.
+
+In **CSV batches**, choose a dataset and saved workflow revision, then select **Suggest mappings locally**. By default the model receives only stable input IDs/names/schema descriptions and stable column IDs/header text. The sample-value checkbox is a separate explicit opt-in and sends at most three values of 200 characters per column—not the whole dataset. Review every pair; existing bindings display an explicit replacement action. Accepting changes only the unsaved mapping and ordinary **Validate & preview** still decides validity without browser execution. **Discard all suggestions** restores the pre-suggestion draft.
+
+In workflow validation, **Explain issue** sends only that issue and its bounded affected step/input metadata. Generated guidance is labeled and cannot clear an error, change readiness or alter a run. When Ollama is offline, deterministic guidance remains available. For a broken target, open the inspection browser/page yourself and request supplied candidates. Routine Studio extracts at most 100 visible top-level descriptors locally, excluding field values, hidden/sensitive auth/payment controls, HTML and cookies. The model may rank supplied IDs only. **Highlight only** performs the existing read-only inspection; **Apply to unsaved draft** neither saves nor dispatches anything. Save deliberately after ordinary validation.
+
+One request runs at a time. Cancel prevents a returned suggestion from being applied; malformed, oversized, timed-out, redirected and unknown-ID responses are rejected. Full prompts/responses are not stored. Headers/page text are untrusted data and model output grants no browser or execution authority. This is local configuration assistance, not autonomous repair, learning from corrections or guaranteed workflow understanding.
 
 ## Record your first workflow
 
