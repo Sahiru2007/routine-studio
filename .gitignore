@@ -4,3 +4,36 @@ out/
 artifacts/
 *.log
 
+# Local credentials and signing material
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+credentials*.json
+secrets*.json
+
+# Writable application state, imported data and browser evidence
+*.sqlite
+*.sqlite3
+*.sqlite-*
+*.db
+*.db-*
+recordings/
+browser-profile/
+automation-profile/
+execution-profile/
+userData/
+sessionData/
+imports/
+
+# Windows packages and generated distribution payloads
+*.exe
+*.msi
+*.msix
+*.appx
+*.blockmap
+*.7z
+
