@@ -23,5 +23,6 @@ jobs:
           npm_config_cache: ${{ runner.temp }}\npm-cache
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
       - run: npm run typecheck
+      - run: New-Item -ItemType Directory -Force .runtime
       - run: npm test
       - run: npm run build
