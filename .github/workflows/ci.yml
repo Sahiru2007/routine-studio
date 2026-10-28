@@ -12,8 +12,6 @@ jobs:
   verify:
     runs-on: windows-latest
     timeout-minutes: 20
-    env:
-      npm_config_cache: ${{ runner.temp }}\npm-cache
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -22,6 +20,7 @@ jobs:
           cache: npm
       - run: npm ci
         env:
+          npm_config_cache: ${{ runner.temp }}\npm-cache
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
       - run: npm run typecheck
       - run: npm test
