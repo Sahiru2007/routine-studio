@@ -1,6 +1,6 @@
 {
   "name": "routine-studio",
-  "version": "0.3.0",
+  "version": "0.5.0",
   "private": true,
   "type": "module",
   "main": "out/main/index.js",
@@ -13,12 +13,16 @@
     "test:desktop": "node scripts/desktop-test.mjs",
     "test:recording": "node scripts/recording-test.mjs",
     "test:configuration": "node scripts/configuration-test.mjs",
+    "test:execution": "node scripts/execution-test.mjs",
+    "test:csv": "node scripts/batch-test.mjs --prepare-only",
+    "test:batch": "node scripts/batch-test.mjs",
     "demo": "node packages/demo-site/server.ts",
     "demo:reset": "node packages/demo-site/server.ts --reset"
   },
   "dependencies": {
     "@xyflow/react": "latest",
     "css-tree": "^3.2.1",
+    "csv-parse": "7.0.3",
     "react": "latest",
     "react-dom": "latest",
     "zod": "latest"

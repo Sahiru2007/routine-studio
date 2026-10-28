@@ -1,74 +1,60 @@
-# Milestone 2 verification (current)
+# Milestones 4A/4B verification (current)
 
-Milestones 0 and 1 are preserved. Current scope stops at configuration/read-only inspection; execution, replay and CSV batches are not implemented.
+Verified environment: interactive Windows, Node 24.22, Electron/Playwright bundled Chromium on E:. Use synthetic data only; close older app/demo windows. Native dialogs are driven through their actual HWND/accessible name and class—not mocked file responses.
 
 ```powershell
 Set-Location -LiteralPath 'E:\projects\routine-studio'
 npm.cmd run typecheck
 npm.cmd test
 npm.cmd run build
+# Dependency order: preparation first, then browser execution
+npm.cmd run test:csv
+npm.cmd run test:batch
+npm.cmd run test:execution
 npm.cmd run test:configuration
 npm.cmd run test:recording
 npm.cmd run test:desktop
+# Optional short real preparation walkthrough
+npm.cmd run test:csv -- --video
+# Only after all verification processes finish:
+npm.cmd start
 ```
 
-scripts/configuration-test.mjs creates isolated E: data. It first snapshots the existing normal database through a read-only SQLite connection, then launches actual Electron against the copy to test migration without touching the original. It also records a fresh synthetic workflow through the actual MV3 extension before configuration tests.
+## Actual preparation and batch checks
 
-The suite verifies CSS/label/role/attribute zero/one/multiple matches, required-page prompting without navigation, original-tab restriction even when another tab is active, temporary highlight removal and unchanged form values/layout. It asserts no POST, target-page navigation or customer creation. It tests UI blocking while recording; bind/unbind/shared-input rename/optional/length settings; deliberately added expected-text checks; safe invalid drafts across save/restart; linked issues; unchanged revision/timestamp; and exact raw recording bytes after all edits. Focused tests cover syntax/bounds, unknown-step preservation, input/expected-text semantics, v3 recorded-document migration and immutable evidence restoration.
+`scripts/batch-test.mjs --prepare-only` uses real Electron, the native Open dialog (including Cancel), the CSV worker, explicit UI mapping/save, resolved preview and restart/reopen. It asserts no browser worker, no customer creation and identical saved mapping content. Preparation-only verification additionally edits/saves a source cell, verifies unsaved navigation Cancel/discard, and exercises actual mapping/dataset deletion cancellation/confirmation. `--video` records the actual Electron page under `artifacts/milestone-4/walkthrough`; two short clips cover import/map/preview and reopen. Native OS file dialogs themselves are outside the page video; their controls are independently driven and their results asserted.
 
-Configuration evidence: artifacts/milestone-2/results.json. Screenshots in artifacts/milestone-2: 01-target-provenance.png, 02-one-match.png, 03-browser-highlight.png, 04-zero-matches.png, 05-multiple-matches.png, 06-explicit-check.png, 06-incomplete-draft.png, 07-configuration-ready.png and 08-inspection-blocked-recording.png. Inspect the visible validation states, rather than treating screenshots taken before async UI updates as proof.
+The full script then starts actual Chromium workers and audits only this project's disposable `demo/customers.json` from test code. Ten valid rows must create exactly ten customers with exact name/email/company in source order; every configured step has exactly one dispatch/completion event. Pause/resume holds dispatch and preserves ordering. Invalid source rows never get run records. Stop prevents queued rows, and explicitly acknowledged NEW remaining-only reviews exclude every previous dispatch and preserve unique customer emails.
 
-Configuration-ready asserts schema/configuration rules only. Real-site target meaning, future execution, arbitrary accessibility names, frames/shadow roots/custom widgets and database correctness are unverified/unsupported. CSS syntax validation does not prove locator meaning or long-term reliability. Expected-text/visibility rules are definitions, not executed assertions. Browser inspection does not automatically load a required page. Close older app builds before launching the migrated version.
+Rejection fixture: `DEMO-REJECT` creates nothing, causing the deliberate confirmation to fail. Default policy must pause; explicit Resume skips the failed row, while a reviewed continue setting advances automatically only after definite failure. Delay fixture: `DEMO-DELAY` writes one customer then delays response 15 seconds. The worker must mark the invoked action uncertain, pause even with continue enabled, never retry and never dispatch the later row. Actual browser close and worker kill are exercised, then the actual Electron main PID is killed/restarted. History remains honest; no browser starts automatically. Only the never-dispatched final row may enter a new acknowledged review after worker exit.
 
-The original desktop regression intentionally now expects safe incomplete configuration to be saveable. It still asserts missing-reference issues, reference protection, unsafe structural IPC rejection, step/ID persistence, save/restart, unsaved prompts and deletion. Earlier milestone instructions to stop at 0/1 are superseded; archived status files are historical only.
+An independent two-origin local fixture verifies that redirected destinations receive zero requests pending approval. Approval is scoped to one row; the next row must ask again. Denial prevents destination contact and stops further dispatch. Browser ownership checks reject recording, inspection and standalone preparation while a batch is paused. Source/workflow edits are compared against exact historical batch snapshot JSON. Native JSON/CSV exports are read back; unsafe title/input formulas must be prefixed in CSV while original inputs stay unchanged. Cancel must write nothing. A standalone deliberate assertion failure remains failed after adding an investigation note through the exception UI.
 
-## Recorder regression procedure (retained)
+Runtime does NOT read the demo file/database to decide success. The independent audit is a test grader only. Completed configured steps/checks never imply database correctness. Uncertain detection/persistence is not automatic reconciliation or exactly-once execution.
 
-Run from E:\projects\routine-studio on an interactive Windows desktop:
+## Focused tests / migration coverage
 
-```powershell
-npm.cmd run typecheck
-npm.cmd test
-npm.cmd run build
-npm.cmd run test:recording
-npm.cmd run test:desktop
-```
+62 tests in 8 files pass: BOM/commas/escaped quotes/multiline, string IDs/zeros/dates/formulas, UTF-8 and header/width/size errors, limits, explicit trim/constants/shared columns, actual-input validation/no samples, selected/excluded rows, snapshot source/workflow/value/limit consistency, immutable histories, main/worker sequence/session guards, dispatch-before-send, pause/error/uncertain/Stop transitions, row/total deadlines, restart prevention and alive prior-worker PID takeover blocking. Explicit v5→v7 migration checks preserve prior documents/revisions/run bytes. Existing v3/v4 raw/provenance migration tests and the actual existing-database read-only copy regression remain in place.
 
-Recording verification uses the actual Electron main/preload/UI, real MV3 extension, existing Playwright Chromium and an isolated local demo. It creates a unique .runtime/recording-test-* directory. No everyday browser profile is used. Sensitive test strings are synthetic. Artifacts are ignored by Git.
+## Evidence on E:
 
-## Assertions
+Directory: `E:\projects\routine-studio\artifacts\milestone-4` (ignored by Git).
 
-1. Click Record workflow → Start local demo site → Start recording. Wait for visible recording state, enabled Stop control and the browser's recording banner.
-2. Verify actual Chromium version and E: executable/profile/cache/download/temp paths.
-3. Reject unauthenticated, wrong-origin and session-mismatched transport requests; event count/content must remain unchanged. These are negative tests, not simulated successful capture.
-4. Perform real link clicks, sequential typing, ordinary text changes and customer submission across four document navigations. Assert exact normalized action order, final field values, semantic candidates and one submit action.
-5. Enter a synthetic password and payment value; assert neither they nor the hidden sentinel appears in raw events. Verify separately persisted raw data and saved workflow contain none of those values.
-6. Stop; assert the browser banner says stopped and its transport is closed. Interact/navigate again and assert raw events remain exactly unchanged. A separate case stops with a focused unblurred text field and verifies its final coalesced value. Another conceals the field's ancestor before flush and verifies that hidden value is excluded.
-7. Edit a captured value, convert it to an input, remove a captured step, save as a new draft, restart the whole app and compare the entire saved document. Verify raw events are separate and unchanged by review.
-8. Cancel another real recording and verify no workflow was added.
-9. Send the actual Chromium Browser.close command, wait for the app's visible interrupted state, then Cancel/restart. Disconnecting the Playwright client alone is not considered browser closure.
-10. Disable the actual extension through chrome://extensions; wait for the visible heartbeat-loss interruption, review warning and successful cancellation/restart.
-11. Close the app during an active recording. Use the actual native Cancel recording and close choice; confirm managed Chromium's test port closes and restart is idle with no added workflow.
-12. Rerun all Milestone 0 lifecycle checks: schema validation, SQLite migrations/revisions, stable references, reordering/deletion, unsaved navigation/native-close prompts and deletion across restart.
+- `preparation-results.json`, `results.json`: timestamps, isolated E: data paths, actual check names, batch ID and zero renderer errors.
+- `01-mapping-preview.png`: explicit bindings and no-action validation; `02-batch-review.png`: exact rows, values and origin/settings scope.
+- `03-paused-progress.png`, `04-live-progress.png`, `05-ten-completed.png`: real controls/progress and terminal counts.
+- `06-invalid-rows.png`: actionable invalid data; `07-paused-definite-failure.png`, `08-exception-detail.png`: paused failure and step evidence.
+- `09-paused-uncertain.png`: no-retry warning; `10-restart-history.png`: durable interrupted/completed/queued outcomes.
+- `11-origin-approval.png`: explicit held row destination.
+- `summary-*.json`, `summary-*.csv`: actual native result exports used for independent assertions.
+- `walkthrough/csv-import-map-preview.webm`, `walkthrough/csv-reopen-edit-delete.webm`: short real preparation/reopen/edit/delete captures; original page@*.webm files are retained.
 
-## Evidence
+Screenshots were inspected directly. Verification waits for actual lifecycle states/progress, not merely an async request being sent. On failure a screenshot is saved and the suite exits nonzero; stale failure screenshots from early helper/selector mistakes are not proof of a current defect. Those issues were corrected, not hidden by weaker assertions.
 
-Latest recorder results: artifacts/milestone-1/results.json. It records the exact data root, browser version/paths, passed assertions, filtered synthetic raw events and renderer errors. Milestone 0 evidence: artifacts/desktop-results.json.
+Existing evidence remains under `artifacts/milestone-1`, `milestone-2`, `milestone-3` and desktop artifact paths. Current regressions rerun actual recorder lifecycle/privacy/order, read-only inspection/configuration, raw evidence/no-op revisions, single-record execution/origin/uncertainty, native unsaved/deletion dialogs and E: paths. M3 verification is explicitly archived and its superseded stop rule does not apply.
 
-Recorder screenshots (under artifacts/milestone-1):
+## Acceptance and limitations
 
-- 01-ready.png — initial recording page and managed demo URL.
-- 02-recording.png — live app state and Stop/Cancel.
-- 03-browser-demo.png — real demo directory and browser recording banner.
-- 04-review.png — review heading and captured steps.
-- 04-review-input.png — edited values and converted input.
-- 05-reopened.png — persisted workflow in the existing editor after restart.
-- 06-interrupted.png — actual browser-closure recovery.
-- 07-extension-disconnected.png — extension-disconnection warning/partial review.
-- 08-shutdown-prompt.png — native unsaved-recording dialog, captured from its own HWND.
+Follow README's **Import and run a supervised CSV batch** walkthrough. Start the app-managed disposable demo at `http://127.0.0.1:4177` (do not run standalone on the same port). Standalone commands: `npm.cmd run demo`; stop it before `npm.cmd run demo:reset`. Import clean ten rows, map three inputs to a saved confirmed customer workflow, save, preview, review/approve/Start, inspect live results and reopen history. Independently inspect the demo directory/data. Use rejection/delay fixtures only on disposable local data.
 
-## Limits of the evidence
-
-Tests cover the local ordinary HTML demo, not arbitrary production sites. Selects, frames, shadow DOM, multiple tabs, uploads and custom widgets are explicitly unsupported; warning detection is best effort. Full screen-reader/DPI coverage, browser crashes under OS termination, IME, SPA navigation, packaged installers and fresh-machine installation have not been verified. Raw events remain in memory until Save; app/process crashes can lose unsaved recordings. Sensitive-field detection is heuristic, not a guarantee that arbitrary text is free of secrets. Profiles retain their own dedicated browser state on E:.
-
-See STATUS.md for the latest actual check results and any failures encountered during development. A test that times out or only checks renderer state must not be reported as successful Electron/extension verification.
+Limits and untested areas: comma-separated UTF-8 only; bounded files/rows/steps/snapshots; plaintext storage; shared browser/application state; one top-level tab and ordinary native HTML controls; no arbitrary-site reliability, frames/shadow DOM/custom widgets/upload/multi-tab, authentication/service-worker/WebSocket support, full screen-reader/DPI, secure erase/retention UI or installer. Active-batch native-close confirmation exists but its specific Cancel/Confirm pair was not separately automated; actual interruption/restart and legacy native close paths were tested. No real account, paid/model call, automatic reconciliation/repair or retry of uncertain writes. Future scope requires separate authorization.

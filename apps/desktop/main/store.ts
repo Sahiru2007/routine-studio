@@ -5,9 +5,9 @@ import {attachEvidence} from '../../../packages/recorder-schema/provenance'
 export class WorkflowStore {
  db:DatabaseSync
  constructor(path:string){
- this.db=new DatabaseSync(path);this.db.exec('PRAGMA foreign_keys=ON; PRAGMA journal_mode=WAL;')
+ this.db=new DatabaseSync(path);this.db.exec('PRAGMA foreign_keys=ON; PRAGMA journal_mode=WAL; PRAGMA synchronous=FULL;')
  const version=Number((this.db.prepare('PRAGMA user_version').get() as {user_version:number}).user_version)
- if(version>4){this.db.close();throw Error('This database was created by a newer Routine Studio version.')}
+ if(version>7){this.db.close();throw Error('This database was created by a newer Routine Studio version.')}
  if(version===0) {
  this.db.exec(`BEGIN;
  CREATE TABLE workflows(id TEXT PRIMARY KEY, document TEXT NOT NULL);
@@ -28,6 +28,9 @@ export class WorkflowStore {
  }
  this.db.exec('PRAGMA user_version=4; COMMIT')
  }catch(e){this.db.exec('ROLLBACK');throw e}}
+ if(version<5)this.db.exec('BEGIN; CREATE TABLE runs(id TEXT PRIMARY KEY, document TEXT NOT NULL); PRAGMA user_version=5; COMMIT;')
+ if(version<6)this.db.exec('BEGIN; CREATE TABLE datasets(id TEXT PRIMARY KEY,document TEXT NOT NULL); CREATE TABLE mappings(id TEXT PRIMARY KEY,document TEXT NOT NULL); CREATE TABLE batches(id TEXT PRIMARY KEY,document TEXT NOT NULL); PRAGMA user_version=6; COMMIT;')
+ if(version<7)this.db.exec('BEGIN; CREATE TABLE run_notes(id TEXT PRIMARY KEY,document TEXT NOT NULL); PRAGMA user_version=7; COMMIT;')
  }
  seed(){
  if(this.db.prepare("SELECT value FROM metadata WHERE key='example-seeded'").get())return
@@ -54,6 +57,7 @@ export class WorkflowStore {
  }catch(e){this.db.exec('ROLLBACK');throw e}
  }
  remove(id:string){this.db.prepare('DELETE FROM workflows WHERE id=?').run(id)}
+ assertSavedSnapshot(workflow:Workflow){const same=(raw:unknown)=>{try{return JSON.stringify(migrateWorkflow(raw))===JSON.stringify(workflow)}catch{return false}};const current=this.db.prepare('SELECT document FROM workflows WHERE id=?').get(workflow.id),revision=this.db.prepare('SELECT document FROM revisions WHERE workflow_id=? AND revision=?').get(workflow.id,workflow.revision);if([current,revision].some(r=>r&&same(JSON.parse(r.document as string))))return;for(const row of this.db.prepare('SELECT document FROM mappings').all())if(same(JSON.parse(row.document as string).workflow))return;throw Error('Choose an authentic saved workflow revision or reopen a saved mapping snapshot.')}
  close(){this.db.close()}
 }
 

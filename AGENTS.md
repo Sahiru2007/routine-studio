@@ -1,6 +1,6 @@
 # Routine Studio
 
-Project boundary: E:\projects\routine-studio. Preserve existing files. Do not modify Browser Agent Lab or the portfolio. Milestones 0–2 are authorized; stop after Milestone 2. The current request explicitly supersedes the earlier stop rule and conditionally authorizes a commit and push only after successful verification. No release publication, replay, CSV batches, paid services, model calls or installer work is authorized.
+Project boundary: E:\projects\routine-studio. Preserve existing workflows/evidence; do not modify Browser Agent Lab or the portfolio. Milestones 4A (CSV preparation) and 4B (supervised sequential batches) are authorized beyond previous stop rules. The user's direct message authorizes commit and push **after successful verification**, superseding the attachment's no-commit/no-push wording for the final handoff only. No release, installer, paid service, model call, real-account interaction, unattended real-site use or automatic repair/reconciliation. Stop after this scope.
 
 ## Architecture
 
@@ -21,6 +21,10 @@ All project dependencies, downloads, caches, temporary files, application data, 
 - Actual Electron checks: npm.cmd run test:desktop
 - Actual Electron/extension/Chromium recording checks: npm.cmd run test:recording
 - Actual configuration/read-only inspection/migration checks: npm.cmd run test:configuration
+- Actual supervised worker/Chromium execution: npm.cmd run test:execution
+- CSV-only import/mapping/restart verification: npm.cmd run test:csv
+- Actual supervised batch verification: npm.cmd run test:batch
+- Optional short preparation video: npm.cmd run test:csv -- --video
 - Standalone disposable demo: npm.cmd run demo
 - Reset stopped standalone demo: npm.cmd run demo:reset
 
@@ -33,3 +37,15 @@ Workflow document v2 separates bounded structural draft validation from actionab
 Inspection is read-only, uses the original supported tab and top-level DOM, and is rejected during recording. Never automatically navigate, click, fill or submit. Require the user to open the required page. The bridge accepts bounded locator data, never arbitrary JavaScript or generic browser commands. Configuration-ready means schema/configuration checks passed, not tested execution or semantic target correctness. Explicit checks are deliberately added, never inferred. Samples are local plain text, not secrets storage.
 
 Inspect actual screenshots. Keep docs/STATUS.md and docs/VERIFICATION.md accurate. Renderer-only checks do not prove Electron IPC, extension capture or packaging. Verification uses isolated synthetic data and real Windows dialog controls. Assert visible lifecycle states; a client disconnect does not prove browser-process closure.
+
+## Milestone 3 invariants
+
+Main owns the durable run journal and dispatch. A separate bounded worker owns execution Chromium. Snapshot a saved revision and actual input values; never use samples as fallback. Require explicit Start and approval before contacting unreviewed navigation origins, including every redirect hop. Exactly one preferred target; no alternative fallback or automatic click retry. Persist dispatch before action and result afterward. Unfinished dispatches stay interrupted/uncertain after termination; never auto-resume. Pause applies between steps; Stop is not undo. All configured steps completed does not prove business/database success. Recording, inspection and execution share one exclusive manager lease. Execution uses its own E: profile. Run history persists plain-text values; never supply secrets.
+
+## Milestone 4 invariants
+
+Use maintained csv-parse in a background worker; preserve strings and whitespace unless explicit trim. Native file choices and all storage stay on E:. Import limits: 2 MiB, 1000 rows, 50 columns, 10000 characters/field, 100000 characters/record. Explicitly save/delete datasets/mappings; mapping and batch snapshots never silently follow live revision edits. Preview performs no browser actions.
+
+Reuse Runner/worker locator/check semantics. Concurrency 1; batch-wide browser reservation spans row gaps. Each row opens a fresh context/page using the intended persistent execution profile: cookies/login/application state are shared, not isolated. Persist dispatch and ownership lease before initialization; block takeover until prior worker PID is confirmed gone. No automatic row retry or restart. Uncertain outcomes always pause; Resume after definite failure skips that row. Remaining-only work needs confirmed worker exit, acknowledgment, a NEW immutable review and explicit approval; exclude every prior dispatched row. This is not exactly-once execution or automatic reconciliation.
+
+Export concise summaries only after explicit native choices. Protect CSV formula prefixes while keeping imported/historical values unchanged. Notes/acknowledgment never change outcomes. Independent test graders may read disposable demo files; runtime may not read them as a success shortcut.

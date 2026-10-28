@@ -1,83 +1,52 @@
-# Milestone 2 — current status
+# Milestones 4A/4B — current status
 
-Completed and verified on 28 October 2026 (Asia/Colombo), with final checks finishing at approximately 10:59. Milestones 0 and 1 are preserved. The current instruction supersedes the earlier stop-at-1 rule and conditionally authorizes a commit/push after successful checks. Stop after Milestone 2; no release, replay/execution, CSV batches, model calls, paid services or installer work is included.
+Routine Studio v0.5.0, verified on 28 October 2026 (Asia/Colombo). CSV preparation was completed and verified before connecting supervised batch execution. Existing recording, inspection, workflow editing, evidence and standalone execution remain available. The direct user request authorizes commit/push after successful checks, overriding the attachment's no-commit/no-push wording for the final handoff only. No release, installer, paid/model service, real account, unattended real-site work or automatic repair/reconciliation.
 
-## Implemented behavior
+## Implemented
 
-- Editor target review shows captured CSS/label/role/attribute alternatives and original recording UUID/event/page/candidate provenance. Preferred targets can be selected/edited independently. Original alternatives and provenance are restored from saved evidence on edits; immutable raw recordings are never rewritten.
-- Explicit read-only inspection opens the dedicated persistent Chromium profile without loading a workflow page. The user opens the required page. Check target reports zero/one/multiple top-level DOM matches, highlights up to 20 temporarily, and does not click, fill, submit, scroll or navigate the target page. Other tabs/frames/shadow DOM are excluded; inspection is blocked during starting/active/stopping recording. One match is explicitly not semantic proof.
-- Literal-to-input conversion, shared fill bindings, unbinding back to literal text, stable input renaming, required/optional flags, samples, Text/simple Email and character-bound validation. Referenced input removal is blocked with an explanation. Samples are local plain text, not secrets storage.
-- Deliberate assert-visible configuration supports an optional exact/contains expected-text condition. Matching is case sensitive after whitespace collapse/trim; visibility means a nonzero box, display not none and visibility not hidden/collapse, without opacity evaluation. These definitions are not executed and do not prove database correctness. Recording never adds checks automatically.
-- Persistent readiness summary, a Review validation shortcut, blocking issues versus review warnings, and issue buttons that select steps/focus inputs without navigation. Configuration-ready explicitly means schema/configuration checks passed; execution remains untested.
-- Safely representable incomplete drafts can be saved/reopened. Unsupported/malformed legacy step JSON is retained in bounded wrappers; no steps are silently dropped. Unsafe structural corruption (wrong field types, duplicate IDs, oversized/unsupported document versions) is rejected.
-- Workflow format v2 and explicit database migration v4 preserve valid workflow/step/input IDs, timestamps and revision numbers. Latest workflow metadata is upgraded; original recording and historical revision bytes stay unchanged. No-op saves retain the saved revision/timestamp; only content changes create a revision.
+- Background UTF-8/BOM CSV parser with strict quoting/encoding/width/header/size limits. Strings/zeros/long IDs/dates/formula-like text are preserved; whitespace trims only by explicit mapping choice. Native file cancellation is safe.
+- Explicit saved-workflow snapshots, stable-input column/constant/shared-column mapping, actual-value validation without sample fallback, source record/physical-line references, 20-row preview/filtering and resolved steps. Preview performs no browser actions. Datasets/mappings save/delete locally with unsaved-change and deletion protection; saved mappings own private source/workflow copies.
+- Immutable approved batch snapshots of exact included/excluded records, resolved inputs, origins and bounded settings. Concurrency 1 reuses the verified Runner/worker, unique-target and assertion semantics. Batch-wide browser reservation blocks recording/inspection/standalone competition even between rows.
+- Pause/Resume/Stop, default pause-on-error, explicit continue-after-definite-failure, mandatory pause on uncertain/interrupted outcomes. No click/assertion/row retry. Stop is not rollback. Only never-dispatched rows can enter a NEW acknowledged remaining-only review after confirmed worker exit; previous dispatched/completed/failed/uncertain rows are excluded.
+- SQLite migrations v6/v7 preserve previous workflow/recording/revision/run bytes, adding datasets/mappings/batches and independent run notes. Durable row/step history and exception filters distinguish outcomes; notes never change them. Startup starts nothing and marks unfinished work interrupted/uncertain. A persisted PID lease blocks takeover while a prior worker is alive/unconfirmed.
+- Native JSON/CSV summary exports. Formula-protected CSV transformation affects exports only. Profiles, cookies, raw HTML and unmapped source columns are not exported. Plaintext storage is explained.
+- Six synthetic CSV fixtures and labeled disposable demo rejection/delayed-response controls. Runtime never reads demo data as a business-success shortcut.
 
 ## Actual results
 
 | Check | Result |
 | --- | --- |
-| TypeScript | PASS |
-| Focused tests | PASS: 30 tests in 4 files |
-| Production build | PASS: extension, Electron main, preload and renderer |
-| Actual Electron configuration suite | PASS: existing-data migration copy, all four locator strategies, zero/one/multiple matches, original-tab restriction, temporary highlight removal, input/check/invalid-draft persistence, no-op revisions/evidence and inspection blocked during recording |
-| Read-only behavior | PASS: unchanged form input values and bounding box; zero POSTs or target-page navigation; zero demo customers created |
-| Required page not open | PASS: app asks to open the required page; browser URL remains unchanged |
-| Bind/unbind/shared inputs | PASS: sample restored on unbind; two fills share the same stable ID; renamed input and optional/max-length settings survive save/restart |
-| Explicit checks | PASS: recorded workflow initially contains zero checks; exactly one check is added by explicit UI action, with persisted expected text |
-| Invalid drafts | PASS: invalid URL and input name show linked errors; safe save/restart preserves all 7 steps and bindings |
-| Immutable evidence / revisions | PASS: original raw document bytes unchanged after target/input/check edits; unchanged save retains full document and revision count |
-| Existing workflows | PASS: live normal database snapshotted through a read-only connection and the copy migrated in actual Electron; IDs/content/revision history preserved. It predates the recordings table; a separate explicit v3 recorded-workflow fixture verifies raw-byte preservation and provenance backfill. |
-| Recording regressions | PASS: actual Electron/MV3/Chromium flow, navigation/order/typing, privacy exclusion, review/save/restart, Cancel, browser closure, extension disable and shutdown |
-| Desktop regressions | PASS: actual isolated Electron/IPC, stable step edits/references/reorder, unsafe structural rejection, unsaved Cancel/Discard including real native dialog, deletion Cancel/confirm across restart |
-| Renderer exceptions | None in final suites |
-| Screenshot inspection | Inspected target provenance, all match counts, actual browser highlight/banner, explicit check definition, incomplete/ready validation panels and recording-blocked inspection |
-| Git whitespace | PASS, with normal Windows LF/CRLF notices |
+| TypeScript / production build | PASS: main, CSV background worker, browser execution worker, preload, renderer and MV3 extension |
+| Focused tests | PASS: 62 tests in 8 files, including parser/mapping/bounds, snapshot linkage/immutability, migration preservation, deadlines, PID takeover guard and dispatch/state prevention |
+| Actual CSV preparation | PASS: native Cancel/import, mapping, resolved no-action preview, explicit save/restart/reopen, future source-cell edits, unsaved Cancel/discard and deletion confirmations |
+| Ten valid rows | PASS: actual Electron → worker → Chromium, one row at a time; independent demo-file audit found exactly ten correct ordered customers, no extras |
+| Invalid/excluded rows | PASS: one valid/two invalid fixture; exactly one row run, invalid records absent from dispatch/run records |
+| Pause/Resume / Stop | PASS: no repeated step dispatch, preserved ordering; queued rows not run after Stop; explicitly approved remaining-only work excluded previous dispatches and produced no duplicates |
+| Definite failures | PASS: intentional demo rejection created no customer; failed explicit check paused by default; explicit Resume skipped that row; reviewed continue policy advanced without retry |
+| Uncertain submissions | PASS: demo write followed by delayed response paused even with continue enabled; no retry or next row |
+| Browser/worker/app interruption | PASS: actual Chromium closure, worker termination after a real write, actual Electron main termination/restart; durable honest states and no automatic resume |
+| Remaining work after restart | PASS: independent investigation/acknowledgment and new review ran only the never-dispatched final row; completed/uncertain writes were not repeated |
+| Historical snapshots | PASS: source/workflow edits did not alter prior batch plans; original recording/raw revision regressions preserved |
+| Unexpected origins | PASS: independent local destination received zero requests while held; approval was required again for the next row; denial prevented contact and stopped dispatch |
+| Exports / notes | PASS: actual native JSON save, CSV save/cancel; JSON matched persisted outcomes; unsafe title/input CSV cells gained an apostrophe, original strings unchanged; standalone note/filter retained its original assertion failure |
+| Existing regressions | PASS: actual single execution, configuration/read-only inspection/migration, MV3 recording/privacy/lifecycle, desktop/native unsaved/deletion checks |
+| Screenshots/video | Actual mapping, validation, review, live/paused/failed/uncertain progress, exception timelines, origin approval and restart history inspected; short real CSV preparation/reopen videos recorded on E: |
+| Storage | E: dependency/cache/parser/browser/profile/data/temp/artifact paths; existing Chromium/FFmpeg reused, no browser download |
 
-Resolved development failures were test expectations/setup issues: the existing-data snapshot initially assumed a recordings table, but the actual normal database was older; the test now checks its schema and migrates the copy. Inspection startup initially read the test-only CDP port before launch completed; the test now waits for the actual browser-open result. Earlier Milestone 0 expectations rejected incomplete configuration; they were updated for the explicitly requested saveable-draft behavior while retaining unsafe-structure rejection and missing-reference/unsaved/deletion assertions. No failed attempt is counted as evidence of a supported capability.
+Machine evidence: `artifacts/milestone-4/preparation-results.json`, `results.json`, screenshots and `walkthrough/*.webm`. Earlier Milestone 3 stop instructions and local-only handoff are historical in STATUS-MILESTONE-3-ARCHIVE.md and VERIFICATION-MILESTONE-3-ARCHIVE.md, not current restrictions. Earlier archives remain intact.
 
-## Evidence and E: storage
+## Limits / unresolved scope
 
-- Configuration: E:\projects\routine-studio\artifacts\milestone-2\results.json
-- Final isolated configuration data: E:\projects\routine-studio\.runtime\configuration-test-1793165331109
-- Recorder regression: E:\projects\routine-studio\artifacts\milestone-1\results.json
-- Desktop regression: E:\projects\routine-studio\artifacts\desktop-results.json
-- Browser reused: E:\AI\Caches\ms-playwright\chromium-1248\chrome-win64\chrome.exe
-- Profiles/cache/downloads/session copies remain under the selected E: application-data root. Test temp is .runtime/temp. npm/Electron caches remain on E:.
+Supported execution remains one original tab and ordinary top-level HTML. No frames/shadow DOM, multi-tab/popup flow, upload, arbitrary widgets, dialogs, secret storage, service-worker/WebSocket flows or arbitrary production-site reliability claim. Execution profile/session/application state is shared across rows; no row isolation or exactly-once guarantee. All imported cells and historical actual inputs are plaintext; use synthetic/nonsecret data only.
 
-No original normal-data file was modified by the migration verification; it used SQLite backup through a read-only source connection. Test copies and artifacts are retained on E: and ignored by Git. No browser download was needed. The focused CSS parser dependency and types were installed with npm/temp caches on E:.
+Uncertain outcomes were detected and persisted; automatic reconciliation was NOT established. Never-dispatched continuation does not prove prior writes correct. Independent investigation is required. PID reuse/permissions may conservatively block takeover rather than kill an unverified process. Completed configured steps or UI checks do not prove database correctness. Stop cannot undo changes. Row/total wall-clock budgets include pauses/approval waits.
 
-Screenshots under E:\projects\routine-studio\artifacts\milestone-2:
+CSV is comma-separated UTF-8 only, with 2 MiB/1000 rows/50 columns/10000 characters per field/100000 per record bounds. Batch limits are 100 valid rows, 100 steps/row and an 8 MiB snapshot. History lists newest 200 summaries; retention/deeper history UI, secure erase, full screen-reader/DPI coverage and fresh-machine installer/distribution are deferred. Native file/legacy close dialogs were automated; a dedicated new active-batch native-close Cancel/Confirm test was not added. Browser/worker/app termination paths were exercised directly.
 
-- 01-target-provenance.png
-- 02-one-match.png
-- 03-browser-highlight.png
-- 04-zero-matches.png
-- 05-multiple-matches.png
-- 06-explicit-check.png
-- 06-incomplete-draft.png
-- 07-configuration-ready.png
-- 08-inspection-blocked-recording.png
+Early verification-helper failures (Windows controls exposed as panes, a non-exact accessible-name selector, and a test that forgot to revalidate after a mapping edit) were corrected and rerun. They are not counted as passes. No known failing final check is hidden.
 
-The final validation screenshots show visible blocking/review sections and the readiness qualifier. Long property panels scroll; the summary/shortcut keeps validation discoverable. Browser highlighting is visibly distinct from red recording status.
+## Acceptance / next milestone
 
-## Launch and walkthrough
+Run `npm.cmd run build` then `npm.cmd start` in E:\projects\routine-studio. Start/reset the app-managed disposable demo at port 4177. Configure a saved customer workflow with three inputs and deliberately add the visible saved-message check. Import `fixtures/csv/customers-ten.csv`, save dataset/mapping, validate, review included/excluded rows and limits, explicitly approve/Start, inspect progress/history and independently inspect the customer directory. Try missing-values/rejection/delay fixtures only on the disposable demo. README and VERIFICATION contain exact commands and artifact paths.
 
-Close any older Routine Studio build before launching the updated app.
-
-```powershell
-Set-Location -LiteralPath 'E:\projects\routine-studio'
-npm.cmd run build
-npm.cmd start
-```
-
-Open a recorded draft → select a step → choose/edit Preferred target → Open inspection browser and manually open Required page URL → Check target → configure/share inputs → deliberately add assert-visible/expected text if wanted → Review validation → Save. README.md includes full setup/demo commands; VERIFICATION.md includes all repeatable checks.
-
-## Limitations and next scope
-
-Inspection covers the original supported tab and top-level DOM only. It includes hidden matches, rejects more than 2000 matches and highlights at most 20. Role/name candidates use a bounded native/ARIA-label matcher, not a complete accessibility-tree implementation. Locators can become stale on dynamic/changed sites. Page identity compares origin/path/query and ignores fragments; recorded URLs omitted queries, so manually adjust Required page URL when necessary. A match does not prove meaning or application/database correctness. Visibility/text checks are configuration only. No replay/execution exists.
-
-Input samples and browser profiles are not secrets stores. Sensitive-field detection remains heuristic. Incomplete drafts intentionally remain saveable, while structurally unsafe documents fail validation. Arbitrary custom widgets, frames/shadow DOM, SPA navigation, IME, OS-level kill/crash recovery, fresh-machine install and installer packaging are not claimed. Full screen-reader/DPI coverage and production-site locator reliability were not tested.
-
-Proposed Milestone 3: local CSV parsing, column-to-input mapping, required/optional/text validation and preview/error review. This needs separate authorization and must not add execution/batches implicitly. Stop here after Milestone 2.
-
-Earlier Milestone 0/1 status, stale launch claims and superseded stop rules are retained only in STATUS-MILESTONE-1-ARCHIVE.md, explicitly marked historical; they are not current instructions.
+Suggested next milestone: user-assisted investigation/reconciliation design and better retention/accessibility coverage, separately authorized. No automatic repair, retry of uncertain writes or next milestone was started. The verified build is open for review on the normal E: data root (approximately 13:35 Asia/Colombo, 28 October 2026), after every verification process finished. Launch stderr is empty. A read-only before/after SHA-256 audit confirmed exact workflow/revision/recording bytes across migration to database v7; see artifacts/milestone-4/normal-data-preservation.json. No workflow/batch was automatically started.

@@ -27,6 +27,10 @@ export class Recorder{
  private closing:Promise<void>=Promise.resolve()
  private originalPage:Page|null=null
  private inspectionBusy=false
+ private executionOwned=false
+ private batchReserved=false
+ private executionGuard=()=>true
+ setExecutionGuard(guard:()=>boolean){this.executionGuard=guard}
  constructor(private root:string,private dataPath:string,private store:WorkflowStore){}
  status(){return RecordingStateSchema.parse({...this.current,eventCount:this.collector?.events.length??0,targets:this.collector?.events.flatMap(e=>e.payload.type==='click'||e.payload.type==='fill'?[e.payload.target]:[])??[]})}
  private warn(message:string){if(!this.current.warnings.includes(message)&&this.current.warnings.length<100)this.current.warnings.push(message)}
@@ -63,6 +67,8 @@ export class Recorder{
  }
  async start(value:unknown){
  const {url}=StartRecording.parse(value)
+ if(!this.executionGuard())throw Error('Previous execution worker is still alive/unconfirmed; recording is blocked.')
+ if(this.executionOwned||this.batchReserved)throw Error('Recording is blocked while execution/batch owns the managed browser/profile.')
  if(this.inspectionBusy)throw Error('Wait for target inspection to finish before starting recording.')
  if(['starting','recording','stopping','review','interrupted'].includes(this.current.state))throw Error('Finish or cancel the current recording first.')
  this.current.state='starting'
@@ -134,7 +140,11 @@ export class Recorder{
  private closeChannel(){if(this.monitor){clearInterval(this.monitor);this.monitor=null}this.server?.closeAllConnections();this.server?.close();this.server=null;this.token=''}
  private async release(){this.generation++;this.closeChannel();const context=this.context;this.context=null;this.originalPage=null;this.worker=null;this.testPort=null;const previous=this.closing;this.closing=(async()=>{await previous;if(context)await context.close().catch(()=>{})})();await this.closing}
  async shutdown(){this.current.state='cancelled';await this.release();this.collector=null;this.review=null}
- private checkInspection(){if(['starting','recording','stopping'].includes(this.current.state))throw Error('Target inspection is blocked while recording is active. Stop recording first.')}
+ private checkInspection(){if(!this.executionGuard())throw Error('Previous execution worker is still alive/unconfirmed; inspection is blocked.');if(this.executionOwned||this.batchReserved)throw Error('Inspection is blocked while execution/batch owns the managed browser/profile.');if(['starting','recording','stopping'].includes(this.current.state))throw Error('Target inspection is blocked while recording is active. Stop recording first.')}
+ reserveBatch(){if(!this.executionGuard())throw Error('Previous execution worker must be confirmed stopped.');if(this.batchReserved||this.executionOwned||this.inspectionBusy||['starting','recording','stopping','review','interrupted'].includes(this.current.state))throw Error('Finish recording/inspection/execution before starting a batch.');this.batchReserved=true}
+ releaseBatch(){this.batchReserved=false}
+ async acquireExecution(batch=false){if(!this.executionGuard())throw Error('Previous execution worker must be confirmed stopped.');if(this.batchReserved&&!batch||this.executionOwned||this.inspectionBusy||['starting','recording','stopping','review','interrupted'].includes(this.current.state))throw Error('Save/cancel recording and finish inspection before execution. Only one managed browser owner is allowed.');this.executionOwned=true;await this.release()}
+ releaseExecution(){this.executionOwned=false}
  async openInspection(){
  this.checkInspection();if(this.inspectionBusy)throw Error('An inspection operation is already in progress');this.inspectionBusy=true
  try{

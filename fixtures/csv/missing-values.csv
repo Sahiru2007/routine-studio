@@ -1,0 +1,4 @@
+name,email,company
+Valid Example,valid@example.test,Example
+,missing-name@example.test,Example
+Missing email,,Example
