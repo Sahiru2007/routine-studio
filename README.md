@@ -6,7 +6,7 @@ Version `0.7.0-rc.1` adds optional OpenAI API assistance alongside **No AI assis
 
 In **Settings & status**, choose a provider, review the exact example payload, and save the disclosure consent. OpenAI keys may remain session-only or be persisted using Windows DPAPI; there is no plaintext fallback and keys are never returned to the renderer. Credential and compatibility tests are separate explicit actions and may incur charges against the user's API account. Requests use strict structured Responses API output, `store:false`, no tools, bounded time/output, no automatic retry, and no fallback to another provider. `store:false` is not a claim of zero retention.
 
-The release includes an unsigned installer and unpacked application ZIP. Chromium remains an external dependency. Same-machine verification is not clean-machine qualification; SmartScreen, antivirus, and broad Windows distribution behavior remain pending.
+The release includes `Routine-Studio-Setup-0.7.0-rc.1-unsigned.exe`, `Routine-Studio-0.7.0-rc.1-win-x64.zip`, and `SHA256SUMS.txt`. Chromium remains an external dependency. The installer and executable are unsigned. Same-machine verification is not clean-machine qualification; SmartScreen, antivirus, and broad Windows distribution behavior remain pending.
 
 ## Historical Milestone 6B unsigned Windows installer candidate
 

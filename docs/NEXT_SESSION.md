@@ -4,7 +4,7 @@ Current target: `0.7.0-rc.1`. Preserve all Milestone 0–7 data and evidence. Op
 
 Milestone 7 architecture pointers: `apps/desktop/main/assistance-manager.ts` owns provider selection and serialization; `credential-store.ts` owns Windows DPAPI persistence; `packages/assistance-schema/index.ts` validates settings, requests, responses and accounting; `AssistanceSettings.tsx` owns disclosure/consent/preview/tests; `scripts/openai-assistance-test.mjs` is the actual Electron loopback-mock verification. Release output is under `artifacts/release/0.7.0-rc.1` and remains ignored by Git.
 
-Exact next step if publication is incomplete: confirm a clean exact source commit, build the unpacked app and unsigned installer, create the application ZIP and `SHA256SUMS.txt`, run focused packaged/offline/manual/provider-mock checks, push, wait for CI, then publish one GitHub prerelease without changing repository visibility. Same-machine checks are not clean-machine verification.
+Exact next step if publication is incomplete: rebuild from the final documentation commit, confirm hashes, push, wait for CI, then publish one GitHub prerelease without changing repository visibility. Implementation, full packaged/offline/manual/browser verification, mocked provider checks, and focused installer install/uninstall are complete. Same-machine checks are not clean-machine verification.
 
 ## Historical Milestone 6B handoff
 
