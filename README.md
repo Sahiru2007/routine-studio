@@ -1,8 +1,31 @@
 # Routine Studio
 
+## Milestone 6B unsigned Windows installer candidate
+
+Build the offline assisted NSIS installer with maintained Electron Builder 26.0.12, following its [Windows](https://www.electron.build/v26/docs/win/) and [NSIS](https://www.electron.build/v26/docs/nsis/) configuration documentation:
+
+```powershell
+Set-Location -LiteralPath 'E:\projects\routine-studio'
+$env:npm_config_cache='E:\AI\Caches\npm'
+$env:TEMP='E:\AI\Downloads\Temp'
+$env:TMP='E:\AI\Downloads\Temp'
+$env:ELECTRON_BUILDER_CACHE='E:\AI\Caches\electron-builder'
+$env:electron_config_cache='E:\AI\Cache\electron'
+$env:PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD='1'
+npm.cmd run package:installer
+```
+
+Installer: `E:\projects\routine-studio\artifacts\milestone-6b\final\Routine-Studio-Setup-0.6.1-unsigned.exe`. SHA-256: `C1801425C47920C5658C0E20A2DABC45E0C5C924FFC5A9B24E4E688DFC8A3222`. It is unsigned, offline, per-user and not published. The assisted UI lets the user choose an E: destination; it creates no desktop/start-menu shortcut and does not launch the app after installation. The verified installation is `E:\AI\Downloads\Temp\Routine Studio 6B Installed With Spaces\Routine Studio.exe`.
+
+The packaged app defaults to `E:\Routine Studio Data`. Override it before launch with an absolute E: path: `$env:ROUTINE_STUDIO_DATA='E:\My Routine Studio Data'`. Configure compatible external Playwright Chromium with `$env:ROUTINE_STUDIO_BROWSER_PATH='E:\AI\Caches\ms-playwright'`. The app refuses non-E: storage and never silently falls back to C:. Chromium is not bundled, so the candidate is not fully self-contained. Missing Chromium is shown in Settings and leaves manual editing available; missing Ollama also leaves manual operation intact.
+
+First run: open Settings and confirm storage/browser readiness; start the disposable demo; record the customer form; convert fills to inputs and deliberately add a visible check; import `resources\app\fixtures\csv\packaged-customers.csv`; validate/review/start the three-row batch; inspect row evidence and independently inspect disposable demo records; export results. Values and browser state are plaintext—never use secrets. Supported browser scope remains one top-level tab with ordinary native HTML controls, not frames/shadow DOM/uploads/custom widgets/multi-tab flows.
+
+Same-machine install, 0.6.0→0.6.1 upgrade, full restart, uninstall, data retention and reinstall verification passed without a development server. Uninstall removes binaries and preserves application data; automatic data deletion is intentionally unavailable. Unsupported downgrades are not guaranteed. Windows may write normal per-user installer bookkeeping in system-managed locations, although no matching Add/Remove Programs entry was observed in this same-machine silent test. This is **not clean-machine verification**; SmartScreen/antivirus and prerequisite behavior remain pending on a clean Windows machine.
+
 A local desktop application for recording, configuring and supervising browser workflows. Milestone 5 adds optional, review-first local configuration assistance for CSV mappings, validation explanations and bounded target review. Recording, inspection, editing, single-record execution and supervised CSV batches remain available without Ollama.
 
-No account, paid API or model is required. Assistance uses only an explicitly requested local `qwen3:8b-q4_K_M` through loopback Ollama; there is no cloud fallback, pull, autonomous repair or executable model output. Automatic reconciliation, unattended real-site use and installer packaging are not implemented. Milestone 5 source is published to the existing repository; no release is published.
+No account, paid API or model is required. Assistance uses only an explicitly requested local `qwen3:8b-q4_K_M` through loopback Ollama; there is no cloud fallback, pull, autonomous repair or executable model output. Automatic reconciliation and unattended real-site use are not implemented. The installer is a local unsigned candidate; no release is published.
 
 ## Setup and launch
 
@@ -35,7 +58,7 @@ Default database: E:\projects\routine-studio\.runtime\data\workflows.sqlite. Set
 
 Close older Routine Studio windows before launching this updated build. Database migrations through v7 retain workflow format v2, raw evidence and run journals, adding datasets/mappings/batches and separate investigation notes while preserving IDs, revision numbers, immutable raw recordings and historical revision documents. A copied snapshot of existing local data was migrated in verification; the original was opened read-only. Structural limits reject unsafe documents, while ordinary incomplete configuration stays saveable and visibly labeled incomplete.
 
-See docs/STATUS.md for actual results and limitations, docs/ARCHITECTURE.md for process/storage boundaries, and docs/ROADMAP.md for later milestones. A signed installer and release distribution are not implemented.
+See docs/STATUS.md for actual results and limitations, docs/ARCHITECTURE.md for process/storage boundaries, and docs/NEXT_SESSION.md for exact acceptance steps. Signing, clean-machine qualification and release distribution are not implemented.
 
 ## Optional local configuration assistance (Milestone 5)
 

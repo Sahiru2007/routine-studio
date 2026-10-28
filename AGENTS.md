@@ -1,6 +1,14 @@
 # Routine Studio
 
-Project boundary: E:\projects\routine-studio. Preserve existing workflows/evidence; do not modify Browser Agent Lab or the portfolio. Milestone 5 optional local configuration assistance is authorized beyond previous stop rules. Use only the existing loopback Ollama installation and already downloaded qwen3:8b-q4_K_M; no pull, cloud fallback, executable model output, autonomous repair or learning claim. Manual operation remains complete. The user's follow-up explicitly authorizes committing and pushing this verified Milestone 5 snapshot only. No release, installer, paid service, real-account interaction, unattended real-site use or automatic repair/reconciliation. Stop after Milestone 5.
+Project boundary: E:\projects\routine-studio. Preserve existing workflows/evidence; do not modify Browser Agent Lab or the portfolio. Milestone 6B authorizes one unsigned Windows installer and isolated install/upgrade/uninstall verification beyond previous stop rules. Keep payloads, state, build/cache/temp and test installations on E:, preserve the normal database, and treat Chromium as an explicit external dependency. Windows-managed installer bookkeeping may use system locations. The current handoff explicitly authorizes a source checkpoint commit and push only; no signing purchase, clean-machine claim, paid service, model download/call, release or publication. Stop after Milestone 6B.
+
+## Milestone 6B invariants
+
+The assisted per-user NSIS installer allows an explicit E: destination and never starts the application automatically, creates shortcuts, downloads runtime dependencies or deletes application data on uninstall. Writable state remains under the configured absolute E: data root, separate from installed binaries. Upgrade must retain compatible workflows, immutable recordings, datasets, mappings, batches and run history; uninstall preserves data. Unsupported downgrades are not guaranteed. Chromium remains external and Ollama optional/unmanaged. The installer and application are unsigned. Same-machine lifecycle checks are not clean-machine verification.
+
+## Milestone 6A invariants
+
+Packaged resources are read-only. Writable databases, profiles, logs, caches, temp and exports use the configured absolute E: data root; never silently fall back to C:. The candidate includes production bundles, workers, extension and synthetic CSV samples, while excluding user data, source trees, profiles, logs, artifacts and caches. Use the existing E: Chromium only when explicitly configured and show readiness/missing setup honestly. Missing Chromium blocks browser features, not manual editing; missing Ollama never blocks manual operation. Same-machine verification is not clean-machine verification. The candidate is unsigned and unpacked, not an installer.
 
 ## Milestone 5 invariants
 

@@ -1,6 +1,40 @@
-# Next session handoff
+# Next session handoff — after Milestone 6B
 
-Milestone 5 is complete and published to the existing source repository after explicit follow-up authorization. Preserve application data and verification evidence. Do not start Milestone 6 or packaging without separate authorization.
+Milestone 6B is complete and the current handoff authorizes a source-only checkpoint push. Preserve normal data, ignored installer/baseline artifacts, isolated test databases/backups and screenshots. Do not sign, publish or start another milestone without separate authorization.
+
+## Milestone 6B acceptance handoff
+
+- Installer: `E:\projects\routine-studio\artifacts\milestone-6b\final\Routine-Studio-Setup-0.6.1-unsigned.exe`
+- SHA-256: `C1801425C47920C5658C0E20A2DABC45E0C5C924FFC5A9B24E4E688DFC8A3222`
+- Verified install: `E:\AI\Downloads\Temp\Routine Studio 6B Installed With Spaces\Routine Studio.exe`
+- Isolated data: `E:\projects\routine-studio\.runtime\installer-test-data`
+- Pre-upgrade backup: `E:\projects\routine-studio\.runtime\installer-test-backups\before-upgrade-workflows.sqlite`
+- External Chromium: `E:\AI\Caches\ms-playwright\chromium-1248\chrome-win64\chrome.exe`
+
+The installer is unsigned, offline and per-user. Interactive setup must choose an E: destination. It creates no shortcuts and does not force a launch. Writable state stays in the configured E: data root, separate from installed resources; uninstall preserves it. Chromium is external. Ollama is optional/unmanaged and must not be contacted for acceptance.
+
+```powershell
+$env:ROUTINE_STUDIO_DATA='E:\Routine Studio Acceptance Data'
+$env:ROUTINE_STUDIO_BROWSER_PATH='E:\AI\Caches\ms-playwright'
+& 'E:\Path With Spaces\Routine Studio\Routine Studio.exe'
+```
+
+Installer architecture: `scripts/build-installer.mjs`; lifecycle verification: `scripts/installer-test.mjs`; storage/resources: `apps/desktop/main/index.ts`; migrations: `apps/desktop/main/store.ts`; actual evidence: ignored `artifacts/milestone-6b/installer-results.json` and screenshots 01–04. npm cache is `E:\AI\Caches\npm`, builder cache `E:\AI\Caches\electron-builder`, Electron cache `E:\AI\Cache\electron`. Windows may use normal system-managed registry/process/prefetch/installer bookkeeping. Unsupported downgrades are not guaranteed.
+
+No Windows Sandbox, Hyper-V, VirtualBox or VMware environment was available. Same-machine verification is not clean-machine verification. On a separately supplied clean Windows x64 VM/machine:
+
+1. Verify installer hash/AuthentiCode `NotSigned`; record SmartScreen/antivirus behavior without bypassing policy.
+2. Use interactive setup, confirm the destination chooser, install to an E: path containing spaces, and confirm no forced launch, shortcut, auto-start, telemetry or dependency download.
+3. Record Add/Remove Programs and other Windows-managed bookkeeping. Launch directly with fresh E: data; confirm resource/data paths, missing-Chromium guidance and manual operation without Ollama.
+4. Configure compatible E: Chromium; create/save/reopen a workflow; record/configure/check the disposable demo; import the packaged sample; execute a small batch; independently audit demo data and export.
+5. Back up the closed database. Verify a compatible earlier installation upgrades to 0.6.1 with workflows, recordings, datasets and history retained.
+6. Uninstall through Windows UI if registered (otherwise the installed uninstaller), confirm binaries are gone/data remains, reinstall and reopen retained data. Confirm all processes exit.
+
+After the authorized checkpoint, do not create accounts, download Windows images, install virtualization, alter system settings, purchase signing, use models, make further pushes or publish without explicit authorization.
+
+## Historical Milestone 6A handoff
+
+Milestone 6A is complete locally and intentionally uncommitted. Preserve the current working tree, normal data, ignored unpacked artifact and verification evidence. Do not build an installer, commit, push or publish without separate authorization.
 
 ## Start here
 
@@ -12,7 +46,7 @@ Read, in order:
 4. `docs/VERIFICATION.md`
 5. `docs/ROADMAP.md`
 
-Then inspect `git status --short --branch` and confirm `main` is clean and synchronized with `origin/main`. The exact next action is to review the proposed packaging scope below with the user; do not implement it until separately authorized.
+Then inspect `git status --short --branch` and `git diff --check`; do not reset the Milestone 6A changes. The exact next action is to review actual 6A results and obtain separate authorization for Milestone 6B.
 
 ## Launch commands
 
@@ -54,8 +88,8 @@ Manual recording, configuration, execution and CSV batching remain available whe
 
 ## Verification already completed
 
-Do not repeat these unless relevant code changes: typecheck; 69 focused tests; production build; actual assistance, full batch, execution, configuration, recording and desktop suites. Real-local validation used exactly three synthetic inference requests and the temporary server was stopped. See `artifacts/milestone-5` and `docs/VERIFICATION.md`.
+Milestone 6A added: typecheck; 69 focused tests; production/unpacked package build; direct copied-executable packaged suite covering recording, restart, CSV import, actual batch, independent data audit, export, missing dependencies, and clean shutdown. Do not repeat without relevant changes. See `artifacts/milestone-6a`, `packaged-results.json`, screenshots 01–05 and `SHA256SUMS.txt`.
 
-## Proposed packaging scope — not authorized
+## Historical proposal that led to completed Milestone 6B
 
-A separately authorized packaging milestone should remain Windows-local and reproducible: choose one documented Electron packaging tool/version; emit unsigned installer/portable artifacts only on E:; preserve `.runtime\data` across upgrades/uninstall choices; keep browser/model downloads out of the installer; verify first launch, upgrade, uninstall/data retention, E: cache/temp placement, native dialogs, sandbox/context isolation and offline operation on a clean Windows account or VM. Produce checksums and an artifact manifest. Code signing, GitHub Releases, auto-update, telemetry, store submission and public distribution should remain separate explicit decisions. Packaging must not broaden browser support, add model downloads or change uncertain-run recovery semantics.
+Milestone 6B selected Electron Builder/NSIS, defined E: data and retention behavior, and completed isolated same-machine install/upgrade/uninstall/reinstall checks. Clean Windows, SmartScreen/antivirus and signing/release decisions remain pending. GitHub Releases, auto-update, telemetry, store submission and public distribution remain separate explicit decisions. Packaging did not broaden browser support, add model downloads or change uncertain-run recovery semantics.

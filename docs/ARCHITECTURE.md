@@ -1,5 +1,21 @@
 # Architecture
 
+## Milestone 6B — unsigned assisted NSIS installer
+
+Electron Builder 26.0.12 wraps the existing production payload as a per-user offline NSIS installer. A stable `appId` identifies upgrades. The installer is assisted (`oneClick:false`), permits an explicit E: destination, does not request elevation, create shortcuts, launch after completion, publish, sign, auto-start, collect telemetry or download application/runtime dependencies. Installed resources remain read-only under `resources/app`; `ROUTINE_STUDIO_DATA` and the packaged E: default remain the only writable roots. Uninstall removes the application payload and deliberately leaves external application data intact. There is no automatic data-deletion option. Unsupported downgrades are not guaranteed.
+
+The installer build pins npm, Electron and Electron Builder caches/temp to E:. Normal Windows executable launch and installer mechanisms can write ordinary OS-managed process/prefetch/installer bookkeeping outside E:; the application payload, build inputs, test installation and user data remain on E:. The actual lifecycle test uses a separate synthetic database, creates workflow/revision/raw recording/dataset/mapping/batch/run history, closes and backs up SQLite, upgrades 0.6.0 to 0.6.1, restarts, uninstalls, confirms data retention, reinstalls and reopens the retained data. No suitable local Windows VM/Sandbox was available, so this remains same-machine—not clean-machine—evidence.
+
+## Milestone 6A — unsigned unpacked Windows candidate
+
+`@electron/packager` 20.1.1 produces an unpacked x64 Windows folder with ASAR disabled so production bundles, child/CSV workers, preload, MV3 extension and synthetic CSV resources remain directly auditable. Packaging prunes development dependencies and excludes source directories, docs, scripts, `.git`, `.runtime`, artifacts and caches. Playwright is a production runtime dependency, but its Chromium binary is deliberately external.
+
+`app.getAppPath()` is the read-only resource root (`resources/app` in this candidate). It resolves `out/main/worker.js`, `out/main/csv-worker.js`, `out/recorder-extension` and `fixtures/csv/packaged-customers.csv`. No runtime path depends on the source checkout. Application state resolves from `ROUTINE_STUDIO_DATA`, or `E:\Routine Studio Data` for a packaged default. The path must resolve to E: and be creatable; startup fails clearly otherwise. Electron user/session/log/crash paths, SQLite, profiles, caches, downloads, temp, recorder session copies and exports all live below that data root. Native exports default to `dataRoot/exports`, never application resources.
+
+`ROUTINE_STUDIO_BROWSER_PATH` selects the external E: Playwright browser directory and is exposed with resolved executable/readiness in the narrow status bridge. Missing Chromium is an actionable Not Ready state; browser operations then fail clearly, while the editor/persistence remains usable. Ollama remains optional and unmanaged. No browser/model is downloaded or bundled.
+
+The candidate was copied to an independent E: directory containing spaces and launched by its renamed executable. Actual packaged Electron used the extension, CSV worker, execution worker, external Chromium, demo resources and SQLite across restart. Source directories/dev servers were absent from the package and the built main bundle contained no hard-coded source checkout path. This is same-machine evidence, not clean-machine verification. The executable has no Authenticode signature.
+
 ## Milestone 5 — bounded local configuration assistance
 
 Electron main owns `Assistance`, the only Ollama client. Its origin parser permits unauthenticated `http` loopback (`127.0.0.1`, `localhost`, `::1`) only; credentials, paths, queries, remote hosts, TLS endpoints and redirects are rejected. The fixed existing model is `qwen3:8b-q4_K_M`. Requests are serialized with one `AbortController`, a 20-second deadline, 32 KiB request/context, 64 KiB transport response, 4096 context tokens and 700 output-token cap. There is no pull, server lifecycle management, cloud fallback, retry or prompt/response persistence.
@@ -30,7 +46,7 @@ Native save dialogs restrict exports to explicit E: choices. Summaries are point
 
 The disposable demo adds two clearly labeled names: `DEMO-REJECT` returns a rejection without a customer; `DEMO-DELAY` persists one customer then delays its HTTP response 15 seconds. Runtime has no demo-data read/grader shortcut. Only independent verification code audits customer files to check exact creations/no repeats. Actual UI screenshots and optional short preparation videos are test artifacts on E:, never automatic runtime capture.
 
-Current completed scope: Milestones 0–5. Optional bounded local configuration assistance is implemented without execution authority; manual operation remains complete offline. The verified source snapshot is committed/pushed under explicit follow-up authorization. Unattended real-site use, automatic reconciliation, packaging/installers, signing and release publication remain outside the authorized scope. Earlier evidence is explicitly archived.
+Current completed scope: Milestones 0–6B. Optional bounded local configuration assistance remains without execution authority and manual operation remains complete offline. The unsigned installer is locally verified on the same machine only. Unattended real-site use, automatic reconciliation, signing, clean-machine qualification and release publication remain outside the authorized scope. Earlier evidence is explicitly archived.
 
 ## Supervised execution (Milestone 3)
 

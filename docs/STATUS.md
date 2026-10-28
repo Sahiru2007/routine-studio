@@ -1,4 +1,24 @@
-# Milestone 5 — current status
+# Milestone 6B — unsigned Windows installer candidate
+
+Milestone 6B is complete and ready for the explicitly authorized source checkpoint. Electron Builder 26.0.12 produced an offline assisted per-user NSIS installer for Electron 45.0.0. It permits an explicit E: installation destination, does not request elevation, create shortcuts, force a post-install launch, delete application data, publish, sign, auto-start, enable telemetry or download runtime dependencies during installation. No model/Ollama activity, commit, push, release or publication occurred.
+
+Final installer: `E:\projects\routine-studio\artifacts\milestone-6b\final\Routine-Studio-Setup-0.6.1-unsigned.exe` (122,440,110 bytes). SHA-256: `C1801425C47920C5658C0E20A2DABC45E0C5C924FFC5A9B24E4E688DFC8A3222`. Authenticode status: `NotSigned`. Verified installation: `E:\AI\Downloads\Temp\Routine Studio 6B Installed With Spaces\Routine Studio.exe`. External Chromium: `E:\AI\Caches\ms-playwright\chromium-1248\chrome-win64\chrome.exe`. Isolated data: `E:\projects\routine-studio\.runtime\installer-test-data`.
+
+Actual lifecycle PASS: installed 0.6.0 into a path containing spaces without forced launch; direct installed executable used correct `resources/app` and E: data paths; real MV3 recording created an input-bound workflow and deliberate explicit check; packaged CSV import plus actual three-row Chromium batch created workflow/revision/raw-recording/dataset/mapping/batch/run history; the closed SQLite database was backed up before upgrade; 0.6.1 upgraded in place and retained all counts across full restart (2 workflows, 2 revisions, 1 recording, 1 dataset, 1 mapping, 1 batch, 3 runs); uninstall removed the executable and retained data; reinstall reopened compatible data. Missing Chromium showed actionable guidance. Manual persistence worked with missing Chromium and Ollama offline. The final metadata-only rebuild was installed over retained data and smoke-checked.
+
+Backup: `E:\projects\routine-studio\.runtime\installer-test-backups\before-upgrade-workflows.sqlite`, SHA-256 `AE20615D27E7912D6A7FD3D0B98CF0974BA3DA63583039BA88D5B219E6F97F60`. Evidence: ignored `artifacts/milestone-6b/installer-results.json` and inspected screenshots `01-installed-baseline-complete.png` through `04-final-reinstall-smoke.png`. All related test processes closed (0 active). The normal database was never opened or modified.
+
+Focused results after final source changes: typecheck PASS; 69 tests in 9 files PASS; production/installer build PASS; actual installer lifecycle PASS; final rebuild retention/metadata smoke PASS. Broad desktop/recording/configuration/execution/batch suites were not repeated because the installer lifecycle itself exercised installed Electron, MV3 recording, CSV/background worker, execution worker, Chromium, migration/restart and persistence. Early helper-only failures were corrected honestly: missing REVIEW wait, stale renderer workflow list before CSV selection, an incorrect `run_events` table assumption, the standalone-vs-batch run-list API distinction, and asynchronous NSIS self-cleanup wait.
+
+Limits: the installer and executable are unsigned and may trigger SmartScreen/antivirus warnings. Chromium is external, so the app is not self-contained. State/sample/actual values remain plaintext. No suitable Windows Sandbox, Hyper-V, VirtualBox or VMware environment was present; therefore these are same-machine checks, **not clean-machine verification**. Fresh Windows prerequisite/SmartScreen/antivirus/permissions matrices remain pending. Windows may write unavoidable OS-managed process, prefetch and installer bookkeeping outside E:; payloads, caches, test installation and data were kept on E:. No matching Add/Remove Programs entry was observed after the silent per-user test, while the installed uninstaller worked directly. Unsupported downgrade migrations are not guaranteed.
+
+Exact next step after this source checkpoint: preserve the ignored installer, backup and evidence. On a separately provided clean Windows x64 VM/machine, follow `docs/NEXT_SESSION.md` to verify interactive destination selection, OS prerequisite behavior, SmartScreen/antivirus, Add/Remove Programs registration, uninstall and retained-data reinstall. Do not purchase signing or publish without separate authorization.
+
+## Historical Milestone 6A status
+
+Milestone 6A produced and verified the unsigned unpacked x64 candidate with `@electron/packager` 20.1.1. Its same-machine recording/restart/CSV/batch/export checks passed; details and hashes remain in the earlier evidence under `artifacts/milestone-6a`.
+
+## Historical Milestone 5 status
 
 Milestone 5 optional local workflow configuration assistance is implemented on top of preserved Milestones 0–4. The user's follow-up explicitly authorized committing and pushing this verified snapshot to the existing repository; no release/publication artifact is produced. Version: 0.6.0.
 

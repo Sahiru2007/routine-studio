@@ -1,4 +1,22 @@
-# Milestone 5 verification (current)
+# Milestone 6B verification (current)
+
+Final installer: `E:\projects\routine-studio\artifacts\milestone-6b\final\Routine-Studio-Setup-0.6.1-unsigned.exe`; SHA-256 `C1801425C47920C5658C0E20A2DABC45E0C5C924FFC5A9B24E4E688DFC8A3222`; Authenticode `NotSigned`.
+
+```powershell
+Set-Location -LiteralPath 'E:\projects\routine-studio'
+$env:ELECTRON_BUILDER_CACHE='E:\AI\Caches\electron-builder'
+$env:npm_config_cache='E:\AI\Caches\npm'
+npm.cmd run package:installer
+node scripts/installer-test.mjs
+npm.cmd run typecheck
+npm.cmd test
+```
+
+Actual same-machine lifecycle PASS: install 0.6.0 to an E: path containing spaces/no forced launch; direct installed executable/resources; real MV3 recording and configured workflow; packaged CSV and actual three-row worker/Chromium batch; closed-database backup; 0.6.1 in-place upgrade and full restart with all workflow/revision/recording/dataset/mapping/batch/run counts unchanged; uninstall removed binaries and preserved data; reinstall reopened data; missing Chromium guidance and offline manual save; final metadata rebuild reinstall smoke. Screenshots 01–04 were inspected. Normal user data and Ollama were untouched. Typecheck and 69 tests pass. Broad suites were not repeated because this focused installed-app test exercised the changed packaging boundary.
+
+No suitable local Windows VM/Sandbox exists. These results are not clean-machine verification. Follow the clean Windows checklist in `docs/NEXT_SESSION.md`; record SmartScreen/antivirus, prerequisite and Add/Remove Programs behavior honestly.
+
+## Historical Milestone 5 verification
 
 ```powershell
 Set-Location -LiteralPath 'E:\projects\routine-studio'
