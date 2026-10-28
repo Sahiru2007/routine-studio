@@ -1,4 +1,14 @@
-# Milestone 6B — unsigned Windows installer candidate
+# Milestone 7 — OpenAI assistance release candidate
+
+Milestone 7 implementation is complete and release verification is in progress for `0.7.0-rc.1`. Routine Studio now offers explicit No AI, local Ollama, and OpenAI API assistance choices. Manual recording, configuration, execution, and CSV batching remain available without any provider. OpenAI uses the official JavaScript SDK Responses API with strict structured output, `store:false`, bounded output, no tools, `maxRetries:0`, user-triggered requests, cancellation, and no provider fallback. Suggestions remain review-only and cannot execute or silently alter saved data.
+
+Windows API-key persistence uses Electron `safeStorage`/DPAPI in the configured E: data root; session-only use is available and secure persistence fails closed. Keys are never returned over IPC or rendered. Settings provide cloud disclosure and consent, payload preview, remove/replace, and distinct credential/compatibility tests. Provider/model/duration/token accounting is shown when available; refusal, incomplete output, malformed IDs, authentication/rate errors, and cancellation stay honest.
+
+Actual checks so far: typecheck PASS; production build PASS; 74 tests in 10 files PASS; actual Electron mocked-provider verification PASS for DPAPI ciphertext/no plaintext disclosure, zero-request preview, distinct mocked official endpoint calls, strict stateless request shape, key removal/no fallback, No AI mode, manual save, and full restart. Screenshot `artifacts/milestone-7/01-openai-settings-mocked.png` was inspected. No real OpenAI or Ollama request, model load, model download, or real credential was used. Packaging, exact-commit hashes, CI, and GitHub prerelease publication remain pending at this point in the handoff.
+
+Limitations: this does not establish model quality or compatibility with every current/future model ID. `store:false` is not described as zero retention. Provider cancellation may not prevent charges for an already accepted request. Chromium remains external; the build is unsigned; clean-machine and broad Windows distribution checks remain pending. Assistance still has no execution authority and supported target context remains bounded top-level DOM metadata only.
+
+## Historical Milestone 6B — unsigned Windows installer candidate
 
 Milestone 6B is complete and ready for the explicitly authorized source checkpoint. Electron Builder 26.0.12 produced an offline assisted per-user NSIS installer for Electron 45.0.0. It permits an explicit E: installation destination, does not request elevation, create shortcuts, force a post-install launch, delete application data, publish, sign, auto-start, enable telemetry or download runtime dependencies during installation. No model/Ollama activity, commit, push, release or publication occurred.
 

@@ -1,6 +1,14 @@
 # Routine Studio
 
-## Milestone 6B unsigned Windows installer candidate
+## Milestone 7 release candidate
+
+Version `0.7.0-rc.1` adds optional OpenAI API assistance alongside **No AI assistance** and the existing loopback Ollama provider. Recording, editing, inspection, execution, and CSV batches remain fully manual and available without AI. OpenAI use is always user-triggered, review-only, disclosed before opt-in, and never receives browser authority. Automated verification uses a loopback mock only—no real provider requests or credentials.
+
+In **Settings & status**, choose a provider, review the exact example payload, and save the disclosure consent. OpenAI keys may remain session-only or be persisted using Windows DPAPI; there is no plaintext fallback and keys are never returned to the renderer. Credential and compatibility tests are separate explicit actions and may incur charges against the user's API account. Requests use strict structured Responses API output, `store:false`, no tools, bounded time/output, no automatic retry, and no fallback to another provider. `store:false` is not a claim of zero retention.
+
+The release includes an unsigned installer and unpacked application ZIP. Chromium remains an external dependency. Same-machine verification is not clean-machine qualification; SmartScreen, antivirus, and broad Windows distribution behavior remain pending.
+
+## Historical Milestone 6B unsigned Windows installer candidate
 
 Build the offline assisted NSIS installer with maintained Electron Builder 26.0.12, following its [Windows](https://www.electron.build/v26/docs/win/) and [NSIS](https://www.electron.build/v26/docs/nsis/) configuration documentation:
 
@@ -23,9 +31,9 @@ First run: open Settings and confirm storage/browser readiness; start the dispos
 
 Same-machine install, 0.6.0→0.6.1 upgrade, full restart, uninstall, data retention and reinstall verification passed without a development server. Uninstall removes binaries and preserves application data; automatic data deletion is intentionally unavailable. Unsupported downgrades are not guaranteed. Windows may write normal per-user installer bookkeeping in system-managed locations, although no matching Add/Remove Programs entry was observed in this same-machine silent test. This is **not clean-machine verification**; SmartScreen/antivirus and prerequisite behavior remain pending on a clean Windows machine.
 
-A local desktop application for recording, configuring and supervising browser workflows. Milestone 5 adds optional, review-first local configuration assistance for CSV mappings, validation explanations and bounded target review. Recording, inspection, editing, single-record execution and supervised CSV batches remain available without Ollama.
+A local desktop application for recording, configuring and supervising browser workflows. Milestone 7 provides optional, review-first No AI, local Ollama, or OpenAI API configuration assistance for CSV mappings, validation explanations and bounded target review.
 
-No account, paid API or model is required. Assistance uses only an explicitly requested local `qwen3:8b-q4_K_M` through loopback Ollama; there is no cloud fallback, pull, autonomous repair or executable model output. Automatic reconciliation and unattended real-site use are not implemented. The installer is a local unsigned candidate; no release is published.
+No account, paid API or model is required for manual operation. Ollama remains loopback-only and unmanaged. OpenAI is optional, requires the user's own API key and explicit consent, may incur charges, and never acts as a silent fallback. There is no model pull, autonomous repair or executable model output. Automatic reconciliation and unattended real-site use are not implemented.
 
 ## Setup and launch
 
@@ -50,6 +58,7 @@ npm.cmd run test:execution
 npm.cmd run test:csv
 npm.cmd run test:batch
 npm.cmd run test:assistance
+npm.cmd run test:openai-assistance
 ```
 
 Desktop checks require an interactive Windows desktop. They drive real Electron/Chromium, the MV3 extension and OS dialogs, using isolated synthetic data under .runtime. Screenshots and JSON evidence appear in artifacts; recorder screenshots are under artifacts/milestone-1.
@@ -60,7 +69,11 @@ Close older Routine Studio windows before launching this updated build. Database
 
 See docs/STATUS.md for actual results and limitations, docs/ARCHITECTURE.md for process/storage boundaries, and docs/NEXT_SESSION.md for exact acceptance steps. Signing, clean-machine qualification and release distribution are not implemented.
 
-## Optional local configuration assistance (Milestone 5)
+## Optional configuration assistance (Milestone 7)
+
+Select **No AI assistance**, **Local · Ollama**, or **Cloud · OpenAI API** in Settings. Before OpenAI can dispatch, save the cloud disclosure consent and configure a key. Use **Preview bounded example payload** without sending anything. Persistent keys use Windows DPAPI under the configured E: data root; session-only keys disappear at shutdown. Remove blocks future dispatch immediately. Provider/model/duration and token usage are shown when returned. Refusals, incomplete output, authentication/rate errors and cancellation are failures—not successful suggestions—and do not trigger fallback.
+
+For an optional live smoke test, supply your own non-production credential, understand possible charges and retention under your account terms, explicitly select **Test credentials** or **Test assistance compatibility…**, then remove the key. This project did not perform that test for this release candidate and does not claim live-model compatibility or quality.
 
 Start the already installed Ollama server yourself with its existing E: model directory, then use **Check local Ollama** in Settings. The app connects only to `http://127.0.0.1:11434` by default and requires the exact existing `qwen3:8b-q4_K_M`; it never starts/reconfigures the server, pulls a model, follows redirects or falls back to cloud inference.
 

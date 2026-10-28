@@ -1,5 +1,11 @@
 # Architecture
 
+## Milestone 7 assistance providers
+
+Electron main owns a single serialized `Assistance` manager behind the validated preload bridge. Provider adapters share the same strict commands and post-response supplied-ID validation. `none` dispatches nothing; Ollama remains loopback-only; OpenAI uses the official SDK Responses API with strict JSON schema, `store:false`, no tools, bounded time/output, `maxRetries:0`, and an `AbortSignal`. Provider changes and credential mutation are blocked while a request is active; there is no automatic provider fallback.
+
+Only bounded workflow issue/input/header/candidate metadata selected by an explicit user action is sent. The renderer shows a provider-specific disclosure and exact example payload. Output remains untrusted guidance requiring explicit acceptance; it cannot clear validation, save, inspect, record, or execute. Windows persistent credentials are encrypted by Electron `safeStorage`/DPAPI beneath the configured E: data root. The preload exposes save/remove/status operations but never returns key material; unavailable secure storage has no plaintext fallback.
+
 ## Milestone 6B — unsigned assisted NSIS installer
 
 Electron Builder 26.0.12 wraps the existing production payload as a per-user offline NSIS installer. A stable `appId` identifies upgrades. The installer is assisted (`oneClick:false`), permits an explicit E: destination, does not request elevation, create shortcuts, launch after completion, publish, sign, auto-start, collect telemetry or download application/runtime dependencies. Installed resources remain read-only under `resources/app`; `ROUTINE_STUDIO_DATA` and the packaged E: default remain the only writable roots. Uninstall removes the application payload and deliberately leaves external application data intact. There is no automatic data-deletion option. Unsupported downgrades are not guaranteed.

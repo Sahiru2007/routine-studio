@@ -2,11 +2,10 @@ import {build,Platform,Arch} from 'electron-builder'
 import {mkdirSync} from 'node:fs'
 import {resolve} from 'node:path'
 import {spawnSync} from 'node:child_process'
+import packageJson from '../package.json' with {type:'json'}
 
 const root=resolve(import.meta.dirname,'..')
-const label=process.env.ROUTINE_STUDIO_INSTALLER_LABEL||'final'
-if(!/^[a-z0-9-]+$/i.test(label))throw Error('Installer label must contain only letters, numbers, and hyphens.')
-const output=resolve(root,'artifacts','milestone-6b',label)
+const output=resolve(root,'artifacts','release',packageJson.version,'installer')
 const temp=resolve(root,'.runtime','installer-build-temp')
 for(const path of [output,temp])mkdirSync(path,{recursive:true})
 for(const path of [root,output,temp,process.env.ELECTRON_BUILDER_CACHE||''])if(path&&!/^E:[\\/]/i.test(path))throw Error('Installer source, output, temp, and cache must stay on E:')

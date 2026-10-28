@@ -2,9 +2,10 @@ import {packager} from '@electron/packager'
 import {mkdirSync} from 'node:fs'
 import {resolve} from 'node:path'
 import {spawnSync} from 'node:child_process'
+import packageJson from '../package.json' with {type:'json'}
 
 const root=resolve(import.meta.dirname,'..')
-const out=resolve(root,'artifacts','milestone-6a','package')
+const out=resolve(root,'artifacts','release',packageJson.version,'unpacked')
 if(!/^E:[\\/]/i.test(root)||!/^E:[\\/]/i.test(out))throw Error('Packaging source and output must stay on E:')
 for(const path of [out,resolve(root,'.runtime','temp')])mkdirSync(path,{recursive:true})
 const buildEnv={...process.env,TEMP:resolve(root,'.runtime','temp'),TMP:resolve(root,'.runtime','temp'),electron_config_cache:'E:/AI/Cache/electron',PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD:'1'}

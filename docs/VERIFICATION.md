@@ -1,4 +1,10 @@
-# Milestone 6B verification (current)
+# Milestone 7 verification (current)
+
+Verified on the same Windows machine with synthetic data and a loopback mock only: `npm.cmd run typecheck`; 74 tests in 10 files; production build; and `npm.cmd run test:openai-assistance`. The actual Electron test saved a fake key through Windows DPAPI, confirmed the credential file and rendered UI contained no plaintext key, previewed the exact bounded payload with zero requests, exercised distinct credential and structured compatibility requests against `/v1/models` and `/v1/responses`, checked `store:false`, strict schema, no tools, token accounting, removal/no fallback, No AI mode, manual persistence and full restart. Screenshot `artifacts/milestone-7/01-openai-settings-mocked.png` was inspected.
+
+Unit coverage includes provider persistence, official request shape, refusals, incomplete output, invented IDs, authentication/rate errors, in-flight cancellation, provider-change locking, key removal, session-only use and secure-storage fail-closed behavior. No real OpenAI/Ollama request, real key, model load, or model download occurred. A future optional live smoke test must be explicitly user-authorized and cannot be treated as reliability evidence. Packaged artifact and CI results are recorded here when completed.
+
+## Historical Milestone 6B verification
 
 Final installer: `E:\projects\routine-studio\artifacts\milestone-6b\final\Routine-Studio-Setup-0.6.1-unsigned.exe`; SHA-256 `C1801425C47920C5658C0E20A2DABC45E0C5C924FFC5A9B24E4E688DFC8A3222`; Authenticode `NotSigned`.
 

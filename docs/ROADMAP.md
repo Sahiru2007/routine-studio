@@ -1,5 +1,9 @@
 # Roadmap
 
+7. **Current release candidate:** optional No AI / local Ollama / OpenAI API assistance with secure Windows credential storage, explicit cloud consent and payload preview, bounded structured Responses API calls, honest accounting/errors, mocked verification, CI, and an unsigned prerelease. Assistance remains review-only and optional.
+
+Next proposed scope: clean-machine Windows qualification, accessibility/DPI coverage, and a signing/distribution decision. Do not add autonomous execution authority, silent provider fallback, real-provider CI, or automatic uncertain-run recovery.
+
 Milestones 0–6B are implemented. Milestone 6B adds an unsigned assisted offline NSIS installer with an explicit E: destination, data-preserving upgrade/uninstall/reinstall behavior and isolated same-machine lifecycle verification. Same-machine verification is not clean-machine verification.
 
 0. Local library/editor, validation, SQLite migrations/revisions and actual desktop checks.
