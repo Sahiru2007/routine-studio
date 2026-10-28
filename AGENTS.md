@@ -1,6 +1,6 @@
 # Routine Studio
 
-Project boundary: E:\projects\routine-studio. Preserve existing files. Do not modify Browser Agent Lab or the portfolio. Milestones 0 and 1 are authorized; stop after Milestone 1. Push or publish only when explicitly requested by the user. The Milestone 1 request conditionally authorizes a commit and push after successful verification; it does not authorize a release.
+Project boundary: E:\projects\routine-studio. Preserve existing files. Do not modify Browser Agent Lab or the portfolio. Milestones 0–2 are authorized; stop after Milestone 2. The current request explicitly supersedes the earlier stop rule and conditionally authorizes a commit and push only after successful verification. No release publication, replay, CSV batches, paid services, model calls or installer work is authorized.
 
 ## Architecture
 
@@ -20,9 +20,16 @@ All project dependencies, downloads, caches, temporary files, application data, 
 - Logic/persistence tests: npm.cmd test
 - Actual Electron checks: npm.cmd run test:desktop
 - Actual Electron/extension/Chromium recording checks: npm.cmd run test:recording
+- Actual configuration/read-only inspection/migration checks: npm.cmd run test:configuration
 - Standalone disposable demo: npm.cmd run demo
 - Reset stopped standalone demo: npm.cmd run demo:reset
 
-Reuse compatible Playwright Chromium at E:\AI\Caches\ms-playwright; otherwise setup.ps1 installs the required browser there. Persistent automation profiles, downloads and session-specific extension copies stay under the app data root on E:. Never use everyday browser profiles. Never capture password/hidden/known sensitive field values, full page HTML or cookies. Keep raw events separate from edited workflows. No replay, CSV execution, model calls or installer packaging in Milestone 1.
+Reuse compatible Playwright Chromium at E:\AI\Caches\ms-playwright; otherwise setup.ps1 installs the required browser there. Persistent automation profiles, downloads and session-specific extension copies stay under the app data root on E:. Never use everyday browser profiles. Never capture password/hidden/known sensitive field values, full page HTML or cookies. Keep immutable raw events separate from edited workflows.
+
+## Milestone 2 invariants
+
+Workflow document v2 separates bounded structural draft validation from actionable configuration issues. Safe incomplete drafts remain saveable; never drop unsupported/malformed steps silently. Database migration v4 preserves IDs/revisions and original raw recording/historical revision bytes. Only content changes create saved revisions. Original target alternatives/provenance remain immutable; preferred locators are editable separately.
+
+Inspection is read-only, uses the original supported tab and top-level DOM, and is rejected during recording. Never automatically navigate, click, fill or submit. Require the user to open the required page. The bridge accepts bounded locator data, never arbitrary JavaScript or generic browser commands. Configuration-ready means schema/configuration checks passed, not tested execution or semantic target correctness. Explicit checks are deliberately added, never inferred. Samples are local plain text, not secrets storage.
 
 Inspect actual screenshots. Keep docs/STATUS.md and docs/VERIFICATION.md accurate. Renderer-only checks do not prove Electron IPC, extension capture or packaging. Verification uses isolated synthetic data and real Windows dialog controls. Assert visible lifecycle states; a client disconnect does not prove browser-process closure.

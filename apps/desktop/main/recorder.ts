@@ -2,7 +2,8 @@ import {createServer,type Server} from 'node:http'
 import {randomBytes} from 'node:crypto'
 import {cpSync,mkdirSync,readFileSync,writeFileSync} from 'node:fs'
 import {join,resolve} from 'node:path'
-import type {BrowserContext,Worker} from 'playwright'
+import type {BrowserContext,Worker,Page} from 'playwright'
+import {inspectionBanner,inspectPage} from './inspection'
 import {z} from 'zod'
 import {EventCollector,normalize,RecordingDocument,RecordingStateSchema,StartRecording,SaveRecording,type RecordingState,type RecordingDocumentType} from '../../../packages/recorder-schema'
 import type {WorkflowStore} from './store'
@@ -24,6 +25,8 @@ export class Recorder{
  private testPort:number|null=null
  private executableUsed=''
  private closing:Promise<void>=Promise.resolve()
+ private originalPage:Page|null=null
+ private inspectionBusy=false
  constructor(private root:string,private dataPath:string,private store:WorkflowStore){}
  status(){return RecordingStateSchema.parse({...this.current,eventCount:this.collector?.events.length??0,targets:this.collector?.events.flatMap(e=>e.payload.type==='click'||e.payload.type==='fill'?[e.payload.target]:[])??[]})}
  private warn(message:string){if(!this.current.warnings.includes(message)&&this.current.warnings.length<100)this.current.warnings.push(message)}
@@ -60,6 +63,7 @@ export class Recorder{
  }
  async start(value:unknown){
  const {url}=StartRecording.parse(value)
+ if(this.inspectionBusy)throw Error('Wait for target inspection to finish before starting recording.')
  if(['starting','recording','stopping','review','interrupted'].includes(this.current.state))throw Error('Finish or cancel the current recording first.')
  this.current.state='starting'
  await this.release()
@@ -92,6 +96,7 @@ export class Recorder{
  if(test){const [port]=readFileSync(join(profile,'DevToolsActivePort'),'utf8').split('\n');this.testPort=Number(port)}
  this.current.state='recording';this.current.message='Recording the original tab. Use ordinary top-level forms; stop here to review.'
  const page=this.context.pages()[0]??await this.context.newPage()
+ this.originalPage=page
  page.on('close',()=>{if(this.current.state==='recording')this.interrupt('The recording tab closed. Review captured actions or cancel to restart.')})
  this.context.on('page',()=>{if(this.current.state==='recording')this.warn('Multiple tabs are unsupported. Only the original recording tab is captured.')})
  await page.goto(url,{waitUntil:'domcontentloaded',timeout:20000})
@@ -127,7 +132,23 @@ export class Recorder{
  await this.release();this.collector=null;this.review=null;this.current={state:'idle',sessionId:null,eventCount:0,warnings:[],message:'Recording saved as a new editable draft.',workflow:null};return saved
  }
  private closeChannel(){if(this.monitor){clearInterval(this.monitor);this.monitor=null}this.server?.closeAllConnections();this.server?.close();this.server=null;this.token=''}
- private async release(){this.generation++;this.closeChannel();const context=this.context;this.context=null;this.worker=null;this.testPort=null;const previous=this.closing;this.closing=(async()=>{await previous;if(context)await context.close().catch(()=>{})})();await this.closing}
+ private async release(){this.generation++;this.closeChannel();const context=this.context;this.context=null;this.originalPage=null;this.worker=null;this.testPort=null;const previous=this.closing;this.closing=(async()=>{await previous;if(context)await context.close().catch(()=>{})})();await this.closing}
  async shutdown(){this.current.state='cancelled';await this.release();this.collector=null;this.review=null}
+ private checkInspection(){if(['starting','recording','stopping'].includes(this.current.state))throw Error('Target inspection is blocked while recording is active. Stop recording first.')}
+ async openInspection(){
+ this.checkInspection();if(this.inspectionBusy)throw Error('An inspection operation is already in progress');this.inspectionBusy=true
+ try{
+ if(!this.context||!this.originalPage||this.originalPage.isClosed()){
+ await this.release();process.env.PLAYWRIGHT_BROWSERS_PATH='E:/AI/Caches/ms-playwright'
+ const {chromium}=await import('playwright');const profile=join(this.dataPath,'automation-profile');mkdirSync(profile,{recursive:true})
+ const context=await chromium.launchPersistentContext(profile,{channel:'chromium',headless:false,acceptDownloads:false,downloadsPath:join(this.dataPath,'downloads'),args:['--disk-cache-dir='+join(this.dataPath,'automation-cache'),...(process.env.ROUTINE_STUDIO_TEST==='1'?['--remote-debugging-port=0']:[])],env:{...process.env,TEMP:join(this.root,'.runtime','temp'),TMP:join(this.root,'.runtime','temp')}})
+ this.context=context;this.originalPage=context.pages()[0]??await context.newPage()
+ for(const page of context.pages())if(page!==this.originalPage)await page.close()
+ if(process.env.ROUTINE_STUDIO_TEST==='1')this.testPort=Number(readFileSync(join(profile,'DevToolsActivePort'),'utf8').split('\n')[0])
+ }
+ await this.context.addInitScript(inspectionBanner);await this.originalPage.evaluate(inspectionBanner);await this.originalPage.bringToFront()
+ }finally{this.inspectionBusy=false}
+ }
+ async inspect(value:unknown){this.checkInspection();if(this.inspectionBusy)throw Error('An inspection operation is already in progress');this.inspectionBusy=true;try{return await inspectPage(this.originalPage,value)}finally{this.inspectionBusy=false}}
  testInfo(){if(process.env.ROUTINE_STUDIO_TEST!=='1')throw Error('Unavailable');return {port:this.testPort,raw:this.collector?.events??[],state:this.current.state,paths:{executable:this.executableUsed,profile:join(this.dataPath,'automation-profile'),cache:join(this.dataPath,'automation-cache'),downloads:join(this.dataPath,'downloads'),temp:join(this.root,'.runtime','temp')},browserVersion:this.context?.browser()?.version()}}
 }

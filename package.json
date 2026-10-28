@@ -1,6 +1,6 @@
 {
   "name": "routine-studio",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
   "main": "out/main/index.js",
@@ -12,17 +12,20 @@
     "test": "vitest run",
     "test:desktop": "node scripts/desktop-test.mjs",
     "test:recording": "node scripts/recording-test.mjs",
+    "test:configuration": "node scripts/configuration-test.mjs",
     "demo": "node packages/demo-site/server.ts",
     "demo:reset": "node packages/demo-site/server.ts --reset"
   },
   "dependencies": {
     "@xyflow/react": "latest",
+    "css-tree": "^3.2.1",
     "react": "latest",
     "react-dom": "latest",
     "zod": "latest"
   },
   "devDependencies": {
     "@types/chrome": "^0.3.7",
+    "@types/css-tree": "^3.2.0",
     "@types/node": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",

@@ -1,4 +1,28 @@
-# Milestone 1 verification
+# Milestone 2 verification (current)
+
+Milestones 0 and 1 are preserved. Current scope stops at configuration/read-only inspection; execution, replay and CSV batches are not implemented.
+
+```powershell
+Set-Location -LiteralPath 'E:\projects\routine-studio'
+npm.cmd run typecheck
+npm.cmd test
+npm.cmd run build
+npm.cmd run test:configuration
+npm.cmd run test:recording
+npm.cmd run test:desktop
+```
+
+scripts/configuration-test.mjs creates isolated E: data. It first snapshots the existing normal database through a read-only SQLite connection, then launches actual Electron against the copy to test migration without touching the original. It also records a fresh synthetic workflow through the actual MV3 extension before configuration tests.
+
+The suite verifies CSS/label/role/attribute zero/one/multiple matches, required-page prompting without navigation, original-tab restriction even when another tab is active, temporary highlight removal and unchanged form values/layout. It asserts no POST, target-page navigation or customer creation. It tests UI blocking while recording; bind/unbind/shared-input rename/optional/length settings; deliberately added expected-text checks; safe invalid drafts across save/restart; linked issues; unchanged revision/timestamp; and exact raw recording bytes after all edits. Focused tests cover syntax/bounds, unknown-step preservation, input/expected-text semantics, v3 recorded-document migration and immutable evidence restoration.
+
+Configuration evidence: artifacts/milestone-2/results.json. Screenshots in artifacts/milestone-2: 01-target-provenance.png, 02-one-match.png, 03-browser-highlight.png, 04-zero-matches.png, 05-multiple-matches.png, 06-explicit-check.png, 06-incomplete-draft.png, 07-configuration-ready.png and 08-inspection-blocked-recording.png. Inspect the visible validation states, rather than treating screenshots taken before async UI updates as proof.
+
+Configuration-ready asserts schema/configuration rules only. Real-site target meaning, future execution, arbitrary accessibility names, frames/shadow roots/custom widgets and database correctness are unverified/unsupported. CSS syntax validation does not prove locator meaning or long-term reliability. Expected-text/visibility rules are definitions, not executed assertions. Browser inspection does not automatically load a required page. Close older app builds before launching the migrated version.
+
+The original desktop regression intentionally now expects safe incomplete configuration to be saveable. It still asserts missing-reference issues, reference protection, unsafe structural IPC rejection, step/ID persistence, save/restart, unsaved prompts and deletion. Earlier milestone instructions to stop at 0/1 are superseded; archived status files are historical only.
+
+## Recorder regression procedure (retained)
 
 Run from E:\projects\routine-studio on an interactive Windows desktop:
 

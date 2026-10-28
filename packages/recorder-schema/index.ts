@@ -1,5 +1,6 @@
 import {z} from 'zod'
-import {blankWorkflow,WorkflowSchema,type Workflow,type Step} from '../workflow-schema'
+import {blankWorkflow,WorkflowSchema,WorkflowDraftSchema,inputDefinition,type Workflow,type Step} from '../workflow-schema'
+import {attachEvidence} from './provenance'
 export const HttpUrl=z.url().max(2048).refine(v=>/^https?:/.test(v)&&!new URL(v).username&&!new URL(v).password,'Use an http/https URL without credentials')
 const short=z.string().max(160)
 export const FieldMetadata=z.object({tag:short,type:short,name:short,id:short,autocomplete:short,label:short,hidden:z.boolean()}).strict()
@@ -21,7 +22,7 @@ export const RecordingDocument=z.object({formatVersion:z.literal(1),id:z.uuid(),
  for(const e of r.events){if(e.sessionId!==r.id||e.sequence!==sequence+1||e.localSequence!==(locals.get(e.documentId)??0)+1)ctx.addIssue({code:'custom',message:'Invalid recording session or event order'});sequence=e.sequence;locals.set(e.documentId,e.localSequence)}
 })
 export type RecordingDocumentType=z.infer<typeof RecordingDocument>
-export const RecordingStateSchema=z.object({state:z.enum(['idle','starting','recording','stopping','review','cancelled','interrupted','error']),sessionId:z.uuid().nullable(),eventCount:z.number().int().nonnegative(),warnings:z.array(z.string()),message:z.string(),workflow:WorkflowSchema.nullable(),targets:z.array(TargetSchema).optional()}).strict()
+export const RecordingStateSchema=z.object({state:z.enum(['idle','starting','recording','stopping','review','cancelled','interrupted','error']),sessionId:z.uuid().nullable(),eventCount:z.number().int().nonnegative(),warnings:z.array(z.string()),message:z.string(),workflow:WorkflowDraftSchema.nullable(),targets:z.array(TargetSchema).optional()}).strict()
 export type RecordingState=z.infer<typeof RecordingStateSchema>
 export const StartRecording=z.object({url:HttpUrl}).strict()
 export const SaveRecording=z.object({sessionId:z.uuid(),workflow:WorkflowSchema}).strict()
@@ -43,10 +44,10 @@ export function normalize(events:RecordingEvent[]):Workflow{
  if(p.type==='fill'){const previous=steps.at(-1);if(previous?.type==='fill'&&previous.selector===p.target.selector){previous.value={kind:'literal',text:p.value};continue}
  steps.push({id:crypto.randomUUID(),type:'fill',label:('Fill '+label).slice(0,160),selector:p.target.selector,value:{kind:'literal',text:p.value}})
  }else steps.push({id:crypto.randomUUID(),type:'click',label:('Click '+label).slice(0,160),selector:p.target.selector})}
- return WorkflowSchema.parse({...workflow,steps})
+ return WorkflowDraftSchema.parse(attachEvidence({...workflow,steps},{id:events[0]?.sessionId??crypto.randomUUID(),events}))
 }
 export function convertFillToInput(w:Workflow,stepId:string):Workflow{
  const step=w.steps.find(s=>s.id===stepId);if(step?.type!=='fill'||step.value.kind!=='literal')throw Error('Choose a literal fill step')
  const id=crypto.randomUUID();let n=1;while(w.inputs.some(i=>i.name==='recorded_input_'+n))n++
- return WorkflowSchema.parse({...w,inputs:[...w.inputs,{id,name:'recorded_input_'+n,sample:step.value.text}],steps:w.steps.map(s=>s.id===stepId?{...step,value:{kind:'input',inputId:id}}:s)})
+ return WorkflowDraftSchema.parse({...w,inputs:[...w.inputs,{...inputDefinition('recorded_input_'+n,step.value.text),id}],steps:w.steps.map(s=>s.id===stepId?{...step,value:{kind:'input',inputId:id}}:s)})
 }

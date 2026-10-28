@@ -30,7 +30,7 @@ app.whenReady().then(()=>{
  const check=(event:Electron.IpcMainInvokeEvent|Electron.IpcMainEvent)=>{if(event.sender!==win.webContents||event.senderFrame!==win.webContents.mainFrame||!trusted(event.senderFrame.url))throw Error('Untrusted IPC sender')}
  for(const [name,handler] of Object.entries({
  list:()=>store.list(),save:(value:unknown)=>store.save(value),remove:(value:unknown)=>store.remove(IdSchema.parse(value)),status:()=>({dataPath,databasePath:join(dataPath,'workflows.sqlite')}),
- recordingStatus:()=>recorder.status(),recordingStart:(value:unknown)=>recorder.start(value),recordingStop:()=>recorder.stop(),recordingCancel:()=>recorder.cancel(),recordingSave:(value:unknown)=>recorder.save(value),
+ recordingStatus:()=>recorder.status(),recordingStart:(value:unknown)=>recorder.start(value),recordingStop:()=>recorder.stop(),recordingCancel:()=>recorder.cancel(),recordingSave:(value:unknown)=>recorder.save(value),inspectionOpen:()=>recorder.openInspection(),inspectionCheck:(value:unknown)=>recorder.inspect(value),
  demoStart:async()=>{if(!demo)demo=await startDemo(join(dataPath,'demo'),0);return {url:demo.url}},demoReset:()=>{if(!demo)throw Error('Start the demo first');demo.reset()}
  }))ipcMain.handle('studio:'+name,async(event,value)=>{check(event);try{return {ok:true,value:await handler(value)}}catch(error){return {ok:false,error:error instanceof Error?error.message:'Operation failed'}}})
  ipcMain.on('studio:dirty',(event,value)=>{check(event);if(typeof value==='boolean')dirty=value})

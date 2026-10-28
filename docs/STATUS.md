@@ -1,52 +1,68 @@
-# Milestone 1 status
+# Milestone 2 — current status
 
-Completed and verified on 28 October 2026, with the final recorder run at 10:26 Asia/Colombo. Milestone 0 functionality is preserved. The final user instruction conditionally authorizes committing and pushing this verified milestone; no release publication is authorized. No paid service, model call, replay, CSV execution, AI suggestion or installer work was added.
+Completed and verified on 28 October 2026 (Asia/Colombo), with final checks finishing at approximately 10:59. Milestones 0 and 1 are preserved. The current instruction supersedes the earlier stop-at-1 rule and conditionally authorizes a commit/push after successful checks. Stop after Milestone 2; no release, replay/execution, CSV batches, model calls, paid services or installer work is included.
 
-## Implemented
+## Implemented behavior
 
-- Dedicated Playwright Chromium with a persistent automation profile on E:, managed solely by Electron main. Reused the exact existing revision 1248 (Chromium 156.0.8078.4); no browser download was needed.
-- Manifest V3 worker and isolated content scripts, explicit app/browser recording indicators, Start/Stop/Cancel, final-field flush and review. Browser/tab closure, extension heartbeat loss and normal app shutdown have recovery/cleanup paths.
-- Session-bound event-only loopback channel: random bearer capability, exact extension origin, session UUID, strict shared schemas, body limits, contiguous event/document ordering and a 1000-event bound. No general-purpose local command server exists.
-- Ordinary top-level document navigation, native link/button clicks and text-like field changes. Final values are coalesced. A submit click plus submit event produces one action. Targets retain labels, role candidates, stable attributes, fieldset context and editable selectors. No assertions/success checks are generated.
-- Sensitive/password/hidden field exclusion before values are read, including fields hidden by ancestors before flush. Known authentication/payment metadata is also excluded and checked at worker/main schema boundaries. No full HTML, cookies or unrelated history is collected by the recorder.
-- Review edits/removal, literal-fill conversion into workflow inputs, and new-draft-only saving. Workflow IDs cannot overwrite an existing draft through recording-save. SQLite migration v3 stores immutable filtered raw events separately and atomically with the workflow/revision. Workflow deletion cascades raw recordings.
-- Isolated disposable customer directory, form, saved page and guide, with managed-demo controls plus standalone demo/reset commands. All demo data is synthetic and local.
+- Editor target review shows captured CSS/label/role/attribute alternatives and original recording UUID/event/page/candidate provenance. Preferred targets can be selected/edited independently. Original alternatives and provenance are restored from saved evidence on edits; immutable raw recordings are never rewritten.
+- Explicit read-only inspection opens the dedicated persistent Chromium profile without loading a workflow page. The user opens the required page. Check target reports zero/one/multiple top-level DOM matches, highlights up to 20 temporarily, and does not click, fill, submit, scroll or navigate the target page. Other tabs/frames/shadow DOM are excluded; inspection is blocked during starting/active/stopping recording. One match is explicitly not semantic proof.
+- Literal-to-input conversion, shared fill bindings, unbinding back to literal text, stable input renaming, required/optional flags, samples, Text/simple Email and character-bound validation. Referenced input removal is blocked with an explanation. Samples are local plain text, not secrets storage.
+- Deliberate assert-visible configuration supports an optional exact/contains expected-text condition. Matching is case sensitive after whitespace collapse/trim; visibility means a nonzero box, display not none and visibility not hidden/collapse, without opacity evaluation. These definitions are not executed and do not prove database correctness. Recording never adds checks automatically.
+- Persistent readiness summary, a Review validation shortcut, blocking issues versus review warnings, and issue buttons that select steps/focus inputs without navigation. Configuration-ready explicitly means schema/configuration checks passed; execution remains untested.
+- Safely representable incomplete drafts can be saved/reopened. Unsupported/malformed legacy step JSON is retained in bounded wrappers; no steps are silently dropped. Unsafe structural corruption (wrong field types, duplicate IDs, oversized/unsupported document versions) is rejected.
+- Workflow format v2 and explicit database migration v4 preserve valid workflow/step/input IDs, timestamps and revision numbers. Latest workflow metadata is upgraded; original recording and historical revision bytes stay unchanged. No-op saves retain the saved revision/timestamp; only content changes create a revision.
 
-## Actual check results
+## Actual results
 
 | Check | Result |
 | --- | --- |
-| TypeScript checks | PASS |
-| Focused tests | PASS: 21 tests in 3 files, including normalization/order, sensitive metadata, invalid/session mismatches, input conversion, migrations, atomic raw/workflow saving and rollback/cascade behavior |
-| Production build | PASS: MV3 extension, Electron main, preload and React renderer |
-| Actual Electron + extension + Chromium | PASS: 14 groups of assertions in scripts/recording-test.mjs |
-| Recording workflow | PASS: Start in app; real demo navigation, sequential typing, customer submission; exact normalized ordering; single submit action; Stop/review/input conversion/save/restart/reopen |
-| Privacy | PASS: synthetic password/payment/hidden sentinels absent from raw events and persisted documents; a field hidden by an ancestor before flush was excluded |
-| Stop | PASS: focused/unblurred final field flushed; browser banner changed to stopped; event listener closed; later real interactions/navigation left raw events unchanged |
-| Boundaries | PASS: unauthenticated, wrong-origin and wrong-session messages rejected; invalid reviews cannot overwrite an existing workflow or cross sessions |
-| Cancel/recovery | PASS: Cancel saved no workflow; actual Browser.close caused visible interruption; disabling the actual extension caused a visible heartbeat-loss interruption; cancellation allowed subsequent recording |
-| App shutdown | PASS: native unsaved-recording prompt exercised; managed Chromium closed; fresh app restarted idle without an extra workflow |
-| Milestone 0 regressions | PASS: complete existing Electron lifecycle suite, including real native close dialog, references/reorder/save/restart, deletion cancellation and deletion persistence |
-| Standalone demo/reset | PASS: documented npm commands launched/reset; HTTP directory/form/guide checked; only the demo process started for this check was stopped |
-| Setup script | PowerShell syntax PASS; fresh-machine npm ci/browser-install branch not run |
-| Screenshots | Inspected app recording/review/input conversion, real Chromium banner, reopened editor, actual interrupted states and native shutdown dialog |
-| Renderer exceptions | None in final recorder or Milestone 0 desktop runs |
+| TypeScript | PASS |
+| Focused tests | PASS: 30 tests in 4 files |
+| Production build | PASS: extension, Electron main, preload and renderer |
+| Actual Electron configuration suite | PASS: existing-data migration copy, all four locator strategies, zero/one/multiple matches, original-tab restriction, temporary highlight removal, input/check/invalid-draft persistence, no-op revisions/evidence and inspection blocked during recording |
+| Read-only behavior | PASS: unchanged form input values and bounding box; zero POSTs or target-page navigation; zero demo customers created |
+| Required page not open | PASS: app asks to open the required page; browser URL remains unchanged |
+| Bind/unbind/shared inputs | PASS: sample restored on unbind; two fills share the same stable ID; renamed input and optional/max-length settings survive save/restart |
+| Explicit checks | PASS: recorded workflow initially contains zero checks; exactly one check is added by explicit UI action, with persisted expected text |
+| Invalid drafts | PASS: invalid URL and input name show linked errors; safe save/restart preserves all 7 steps and bindings |
+| Immutable evidence / revisions | PASS: original raw document bytes unchanged after target/input/check edits; unchanged save retains full document and revision count |
+| Existing workflows | PASS: live normal database snapshotted through a read-only connection and the copy migrated in actual Electron; IDs/content/revision history preserved. It predates the recordings table; a separate explicit v3 recorded-workflow fixture verifies raw-byte preservation and provenance backfill. |
+| Recording regressions | PASS: actual Electron/MV3/Chromium flow, navigation/order/typing, privacy exclusion, review/save/restart, Cancel, browser closure, extension disable and shutdown |
+| Desktop regressions | PASS: actual isolated Electron/IPC, stable step edits/references/reorder, unsafe structural rejection, unsaved Cancel/Discard including real native dialog, deletion Cancel/confirm across restart |
+| Renderer exceptions | None in final suites |
+| Screenshot inspection | Inspected target provenance, all match counts, actual browser highlight/banner, explicit check definition, incomplete/ready validation panels and recording-blocked inspection |
+| Git whitespace | PASS, with normal Windows LF/CRLF notices |
 
-Resolved verification failures: an initial test read the test CDP port before startup had completed; it now waits for the visible recording state and enabled Stop control. A browser-close check originally disconnected an attached Playwright client instead of closing Chromium. The strengthened test now sends Browser.close and waits for the visible interrupted UI plus main state. Earlier native screen capture could include an overlapping window; PrintWindow now captures only the identified native dialog HWND. These earlier attempts are superseded by the final passing runs, not counted as evidence.
+Resolved development failures were test expectations/setup issues: the existing-data snapshot initially assumed a recordings table, but the actual normal database was older; the test now checks its schema and migrates the copy. Inspection startup initially read the test-only CDP port before launch completed; the test now waits for the actual browser-open result. Earlier Milestone 0 expectations rejected incomplete configuration; they were updated for the explicitly requested saveable-draft behavior while retaining unsafe-structure rejection and missing-reference/unsaved/deletion assertions. No failed attempt is counted as evidence of a supported capability.
 
-## Evidence and storage
+## Evidence and E: storage
 
-- Final recorder JSON: E:\projects\routine-studio\artifacts\milestone-1\results.json
-- Final recorder test root: E:\projects\routine-studio\.runtime\recording-test-1793163339939
-- Chromium executable: E:\AI\Caches\ms-playwright\chromium-1248\chrome-win64\chrome.exe
-- Normal persistent profile: E:\projects\routine-studio\.runtime\data\automation-profile
-- Browser cache/downloads/session extension copies: automation-cache, downloads and recorder-sessions beneath the app data root on E:.
-- Temporary files: E:\projects\routine-studio\.runtime\temp
-- npm/Electron caches remain on E: as documented below. Runtime, dependencies, caches, profiles, test data and screenshots are excluded from Git.
+- Configuration: E:\projects\routine-studio\artifacts\milestone-2\results.json
+- Final isolated configuration data: E:\projects\routine-studio\.runtime\configuration-test-1793165331109
+- Recorder regression: E:\projects\routine-studio\artifacts\milestone-1\results.json
+- Desktop regression: E:\projects\routine-studio\artifacts\desktop-results.json
+- Browser reused: E:\AI\Caches\ms-playwright\chromium-1248\chrome-win64\chrome.exe
+- Profiles/cache/downloads/session copies remain under the selected E: application-data root. Test temp is .runtime/temp. npm/Electron caches remain on E:.
 
-Screenshots under E:\projects\routine-studio\artifacts\milestone-1: 01-ready.png, 02-recording.png, 03-browser-demo.png, 04-review.png, 04-review-input.png, 05-reopened.png, 06-interrupted.png, 07-extension-disconnected.png and 08-shutdown-prompt.png. The final screenshots show the actual interrupted UI, rather than an earlier still-recording frame. Long review/editor panels scroll; long workflow titles now use available heading width. The graph can be zoomed when many nodes are visible.
+No original normal-data file was modified by the migration verification; it used SQLite backup through a read-only source connection. Test copies and artifacts are retained on E: and ignored by Git. No browser download was needed. The focused CSS parser dependency and types were installed with npm/temp caches on E:.
 
-## Commands, walkthrough and limits
+Screenshots under E:\projects\routine-studio\artifacts\milestone-2:
+
+- 01-target-provenance.png
+- 02-one-match.png
+- 03-browser-highlight.png
+- 04-zero-matches.png
+- 05-multiple-matches.png
+- 06-explicit-check.png
+- 06-incomplete-draft.png
+- 07-configuration-ready.png
+- 08-inspection-blocked-recording.png
+
+The final validation screenshots show visible blocking/review sections and the readiness qualifier. Long property panels scroll; the summary/shortcut keeps validation discoverable. Browser highlighting is visibly distinct from red recording status.
+
+## Launch and walkthrough
+
+Close any older Routine Studio build before launching the updated app.
 
 ```powershell
 Set-Location -LiteralPath 'E:\projects\routine-studio'
@@ -54,90 +70,14 @@ npm.cmd run build
 npm.cmd start
 ```
 
-Record workflow → Start local demo site → Start recording → demonstrate synthetic customer entry in the dedicated browser → Stop recording → review/edit/remove → Convert to workflow input if needed → Save recording as new draft. README.md contains setup, standalone demo/reset and a full walkthrough; VERIFICATION.md contains repeatable checks.
+Open a recorded draft → select a step → choose/edit Preferred target → Open inspection browser and manually open Required page URL → Check target → configure/share inputs → deliberately add assert-visible/expected text if wanted → Review validation → Save. README.md includes full setup/demo commands; VERIFICATION.md includes all repeatable checks.
 
-Supported scope is ordinary top-level HTTP/HTTPS document navigation, native clicks and text-like inputs/textarea in the original tab. Selects, frames, shadow DOM, multiple tabs, uploads and custom widgets are unsupported. Detection warnings are best effort; closed shadow roots and arbitrary dynamic widgets cannot be reliably detected. Query strings/fragments, SPA/history-only navigation and intermediate HTTP redirect chains are not recorded as separate navigations. IME and arbitrary production sites are unverified. Sensitive-field heuristics can have false positives and cannot identify every secret placed in an ordinary text field. Review captures before saving. Limit/disconnection may omit an unflushed final field. Raw recordings persist only after Save; abrupt process/OS termination can lose unsaved work. The dedicated Chromium profile persists its own browser state and is not a secrets store. No packaged installer or release is claimed.
+## Limitations and next scope
 
-Stop after Milestone 1. The next milestone is improved validation/locator review of recordings; replay and CSV/model features are not part of this work.
+Inspection covers the original supported tab and top-level DOM only. It includes hidden matches, rejects more than 2000 matches and highlights at most 20. Role/name candidates use a bounded native/ARIA-label matcher, not a complete accessibility-tree implementation. Locators can become stale on dynamic/changed sites. Page identity compares origin/path/query and ignores fragments; recorded URLs omitted queries, so manually adjust Required page URL when necessary. A match does not prove meaning or application/database correctness. Visibility/text checks are configuration only. No replay/execution exists.
 
----
+Input samples and browser profiles are not secrets stores. Sensitive-field detection remains heuristic. Incomplete drafts intentionally remain saveable, while structurally unsafe documents fail validation. Arbitrary custom widgets, frames/shadow DOM, SPA navigation, IME, OS-level kill/crash recovery, fresh-machine install and installer packaging are not claimed. Full screen-reader/DPI coverage and production-site locator reliability were not tested.
 
-# Historical Milestone 0 verification
+Proposed Milestone 3: local CSV parsing, column-to-input mapping, required/optional/text validation and preview/error review. This needs separate authorization and must not add execution/batches implicitly. Stop here after Milestone 2.
 
-Verified on 28 October 2026 (Asia/Colombo). Final desktop run completed at 09:57 local time. Milestone 0 draft functionality is working; the app is launched for review using its normal data directory. No recording, execution, model calls, pushes or publication were performed in this verification task.
-
-## Fixes and completed work
-
-- Investigated accessible-name failures: decorative symbols and the changing library count were included in button names. Navigation, creation, input/step addition, step selection and card actions now have explicit names. Desktop selectors use exact roles/names, with contextual workflow names for repeated card actions. No assertion was removed to obtain a pass.
-- Modal focus stays within the dialog; Escape cancels. Native close still uses the real Electron/Windows dialog.
-- Fixed example resurrection after deleting the last workflow. Database migration v2 adds a durable seed marker and preserves v1 documents. Deleted examples stay deleted after restart.
-- Workflow library, title/description editing, four supported steps, properties inspector, ordered step list, React Flow map, workflow input references, explicit save and visible unsaved status are implemented. SQLite stores validated format-v1 documents and saved revisions with stable IDs.
-- Added setup, architecture, roadmap and project instructions alongside this status report.
-
-## Checks and actual results
-
-| Check | Result |
-| --- | --- |
-| npm.cmd run typecheck | PASS |
-| npm.cmd test | PASS: 10 tests across schema/editing and SQLite migration/persistence suites |
-| npm.cmd run build | PASS: main, sandbox-compatible preload and renderer production bundles |
-| npm.cmd run test:desktop | PASS: actual Electron 45.0.0 production app, real preload/IPC and SQLite |
-| Create/edit/reorder/remove/save/reopen | PASS: intermediate order asserted in both directions; surviving step IDs and input references checked exactly |
-| Full process restart | PASS: exact saved document, revision, title, description, input IDs and steps preserved |
-| Invalid input references | PASS: understandable UI error; main IPC independently rejects missing reference; rejected save does not change saved revision |
-| Referenced input removal | PASS: blocked with an explanation; input remains intact; input rename preserves UUID reference |
-| Unsaved navigation | PASS: Cancel, Escape and confirmed discard; unsaved title preserved on cancel and lost on discard |
-| Native window close | PASS: actual Windows dialog, Keep editing and Discard changes; confirmed discard followed by full app restart |
-| Deletion cancellation | PASS: exact saved document retained, including after full restart |
-| Confirmed deletion | PASS: workflow absent after restart; last workflow/example deletion leaves library empty |
-| Example labeling | PASS: synthetic example explicitly marked never recorded or executed |
-| Renderer errors | None during final desktop run |
-| Screenshot inspection | Inspected library, example editor, validation error, both prompt types, reopened document, deletion prompt, empty library, settings and normal review launch |
-| Setup script | PowerShell syntax parsed successfully; fresh npm ci/setup was not rerun |
-| Git whitespace check | PASS; Git reports normal LF/CRLF conversion notices |
-
-The native dialog investigation found Windows exposes TaskDialog command links as Pane/CCCommandLink, without InvokePattern. The test helper checks the displayed choice, prompt text and native control class, then activates its real HWND. It targets Electron's actual process ID, rather than Playwright's Windows launcher PID. No dialog API is mocked.
-
-## E: storage evidence
-
-The final desktop run interrogated the Electron main process and asserted E: paths for the executable, userData, sessionData, logs, crashDumps, temporary directory, Chromium disk cache and Electron download cache. Runtime safety preferences were sandbox=true, contextIsolation=true, nodeIntegration=false; window.require was unavailable.
-
-- Electron executable: E:\projects\routine-studio\node_modules\electron\dist\electron.exe
-- Electron download archive/cache: E:\AI\Cache\electron
-- Effective npm cache reported by npm config get cache: E:\AI\Caches\npm (environment override; project .npmrc also points to E:).
-- Default review database: E:\projects\routine-studio\.runtime\data\workflows.sqlite
-- Test temp: E:\projects\routine-studio\.runtime\temp
-- Final isolated test database root: E:\projects\routine-studio\.runtime\desktop-test-1793161638661
-- Machine-readable evidence: E:\projects\routine-studio\artifacts\desktop-results.json
-
-No runtime/browser download occurred during verification. A pre-existing Electron 40 cache on C: dated 17 October was inspected and preserved; this task's Electron 45 archive resides on E:. These checks verify configured and observed application paths, not a system-wide filesystem trace of Windows internals.
-
-## Screenshots on E:
-
-All files are under E:\projects\routine-studio\artifacts:
-
-1. 01-library.png
-2. 02-example-editor.png
-3. 03-invalid-reference.png
-4. 04-discard-prompt.png
-5. 05-native-close-prompt.png (actual OS dialog and desktop window)
-6. 06-reopened-after-restart.png
-7. 07-delete-prompt.png
-8. 08-empty-after-deletion-restart.png
-9. 09-settings.png
-10. 10-review-launch.png (normal app launched for user review)
-
-Screenshots show readable controls, inspector and workflow map, clear example/status text and honest empty states. Long step/input panels scroll; the validation banner can cause outer-window scrolling. Native close uses Windows' own light-themed dialog. A full screen-reader/contrast audit and exhaustive DPI/window-size matrix were not performed.
-
-## Review launch and limitations
-
-The production app was launched with npm.cmd start and its live window/executable path verified. The library contains the synthetic Customer entry example in normal storage; verification deletions affected isolated test databases only. No existing user workflow was deleted. Test databases and screenshots are retained on E: and ignored by Git.
-
-```powershell
-Set-Location -LiteralPath 'E:\projects\routine-studio'
-npm.cmd start
-```
-
-For a rebuild first run npm.cmd run build. Exact setup and verification commands are in README.md. Signed installer creation, packaged installation, automatic updates, crash recovery, history UI and secrets storage are not implemented or verified. SQLite currently runs synchronously for bounded draft documents. Production execution from the local build and IPC are verified; this is not proof of installer/packaging behavior. Windows UI automation checks require an interactive desktop and English native dialog labels.
-
-Proposed Milestone 1: explicit recording sessions in a separate Playwright Chromium profile plus a Manifest V3 recorder extension, with validated event import. Never reuse the everyday browser profile. Milestone 1 is not started; stop here for review.
+Earlier Milestone 0/1 status, stale launch claims and superseded stop rules are retained only in STATUS-MILESTONE-1-ARCHIVE.md, explicitly marked historical; they are not current instructions.

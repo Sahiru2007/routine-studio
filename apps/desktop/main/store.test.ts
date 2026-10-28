@@ -20,7 +20,7 @@ describe('SQLite persistence and migrations',()=>{
  db.exec('CREATE TABLE workflows(id TEXT PRIMARY KEY,document TEXT NOT NULL); CREATE TABLE revisions(workflow_id TEXT NOT NULL REFERENCES workflows(id) ON DELETE CASCADE,revision INTEGER NOT NULL,document TEXT NOT NULL,PRIMARY KEY(workflow_id,revision)); PRAGMA user_version=1;')
  db.prepare('INSERT INTO workflows VALUES(?,?)').run(w.id,JSON.stringify(w));db.close()
  const store=new WorkflowStore(path)
- try{store.seed();expect(store.list()).toEqual([w]);expect(store.db.prepare('PRAGMA user_version').get()?.user_version).toBe(3)}finally{store.close();rmSync(dir,{recursive:true,force:true})}
+ try{store.seed();expect(store.list()).toEqual([w]);expect(store.db.prepare('PRAGMA user_version').get()?.user_version).toBe(4)}finally{store.close();rmSync(dir,{recursive:true,force:true})}
  })
  it('rejects a database from a newer application',()=>{
  const dir=mkdtempSync(resolve('.runtime/future-db-')),path=join(dir,'test.sqlite')
@@ -31,9 +31,9 @@ describe('SQLite persistence and migrations',()=>{
  const dir=mkdtempSync(resolve('.runtime/test-db-'));const path=join(dir,'test.sqlite')
  let store=new WorkflowStore(path)
  try{
- expect(store.db.prepare('PRAGMA user_version').get()?.user_version).toBe(3)
+ expect(store.db.prepare('PRAGMA user_version').get()?.user_version).toBe(4)
  const saved=store.save(blankWorkflow());expect(saved.revision).toBe(1)
- expect(()=>store.save({...saved,title:''})).toThrow()
+ expect(()=>store.save({...saved,title:42})).toThrow()
  const next=store.save({...saved,title:'Reopened draft'});expect(next.revision).toBe(2)
  expect(()=>store.save(saved)).toThrow('changed')
  expect(store.db.prepare('SELECT count(*) AS n FROM revisions').get()?.n).toBe(2)

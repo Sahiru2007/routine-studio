@@ -1,6 +1,6 @@
 # Routine Studio
 
-A local desktop application for recording and designing reusable browser workflow drafts. Milestone 1 adds a dedicated Playwright Chromium window, a Manifest V3 recorder extension, a review screen and saving captures as new editable workflows. Milestone 0's library, editor, input references, React Flow visualization, explicit saving and SQLite revisions remain available.
+A local desktop application for recording and configuring reusable browser workflow drafts. Milestone 2 adds target review/provenance, read-only browser inspection, shared input configuration, deliberate visible/text check definitions and actionable validation. Dedicated Chromium/MV3 recording and all earlier library/editor functionality remain available. This app does not execute workflows yet.
 
 Replay/execution, CSV batches, model assistance and installer packaging are not implemented. The original customer-entry example is synthetic and has never been recorded or executed. No account, paid API or model is required.
 
@@ -22,11 +22,14 @@ npm.cmd run typecheck
 npm.cmd test
 npm.cmd run test:desktop
 npm.cmd run test:recording
+npm.cmd run test:configuration
 ```
 
 Desktop checks require an interactive Windows desktop. They drive real Electron/Chromium, the MV3 extension and OS dialogs, using isolated synthetic data under .runtime. Screenshots and JSON evidence appear in artifacts; recorder screenshots are under artifacts/milestone-1.
 
 Default database: E:\projects\routine-studio\.runtime\data\workflows.sqlite. Settings shows the actual path. Keep .runtime to retain saved workflows. An optional ROUTINE_STUDIO_DATA override must point to an absolute E: directory. Dependencies, runtime files and artifacts are ignored by Git.
+
+Close older Routine Studio windows before launching this updated build. Database migration v4 upgrades latest workflow documents to format v2 while preserving IDs, revision numbers, immutable raw recordings and historical revision documents. A copied snapshot of existing local data was migrated in verification; the original was opened read-only. Structural limits reject unsafe documents, while ordinary incomplete configuration stays saveable and visibly labeled incomplete.
 
 See docs/STATUS.md for actual results and limitations, docs/ARCHITECTURE.md for process/storage boundaries, and docs/ROADMAP.md for later milestones. A signed installer and release distribution are not implemented.
 
@@ -64,3 +67,19 @@ npm.cmd run demo
 ```
 
 Standalone demo data is .runtime/demo/customers.json; the app-managed demo uses its data root's demo directory. The directory, customer form, saved page and guide use disposable synthetic data only. The local site cannot control the browser or filesystem outside its own demo file.
+
+## Configure a recorded workflow (Milestone 2)
+
+Follow **record → review targets → configure inputs → add explicit checks → validate/save**. The editor shows a persistent readiness summary; **Review validation** opens the blocking errors and review warnings. Issue buttons select the affected step or focus the affected input without navigating away.
+
+Select a step and scroll its Properties panel to **Preferred target**. Choose a recorded alternative or edit a CSS, exact label, role/name candidate, or stable attribute definition. Original selector/candidate provenance remains separate and immutable. Preferred target is authoritative; fallback CSS remains available for legacy/manual steps. Label/role-name text uses collapsed whitespace and case-sensitive exact matching. Role/name inspection covers ordinary native HTML plus explicit roles/labels; it is not a full accessibility-name implementation. CSS definitions are bounded to 1000 characters and parsed; pseudo-elements, extended engines and complex pseudo-classes are excluded.
+
+**Open inspection browser** opens a dedicated persistent context without navigating to your workflow's page. Manually open the **Required page URL** in its original tab. Then choose **Check target in browser**. The action reports zero/one/multiple top-level matches, highlights up to 20 temporarily and changes no form values, clicks or submissions. Counts include hidden matching elements; they are not visibility/success assertions. Inspector-owned banners/overlays are excluded. Required page matching compares origin, path and query; fragments are ignored. If the page is missing/wrong, the app asks you to open it and performs no navigation. Other tabs, frames and shadow DOM are not inspected. Inspection is blocked while recording is starting, active or stopping. A single match never proves semantic correctness.
+
+For a literal fill, use **Convert literal fill to input**. Rename the input and edit its sample on the left. Bind several fill steps to the same stable input ID using **Value source → Workflow input**. Switching back to Literal uses the current sample as editable text. Input names can change without breaking references. Required means nonblank sample/configured input; optional inputs may have an empty sample. Configure whole-character bounds (0–10000) and Text or simple Email validation. Invalid definitions remain blocking configuration issues. Removing a referenced input is prevented with an explanation; unbind/remap its fill steps first. Samples are persisted locally as plain text: do not enter passwords or other secrets.
+
+Add **assert-visible** deliberately to define a UI confirmation. Configure its target and optionally an exact/contains text condition. Text is case sensitive after collapsing whitespace and trimming; regex is not supported. Planned visibility is a nonzero box, display not none and visibility not hidden/collapse; opacity is not evaluated. These definitions are not executed. A visible UI check does not prove database correctness.
+
+Incomplete URLs, targets, references, input definitions and unsupported/malformed legacy steps produce linked blocking issues. Unsupported legacy step JSON is retained in a safe wrapper until you explicitly replace/remove it. Structural corruption (wrong field types, duplicate IDs, excessive sizes) is rejected rather than silently repaired. **Configuration-ready** means schema/configuration checks passed; execution and target meaning remain untested. Warnings are shown separately. Explicit Save retains incomplete drafts, and unchanged saves create no revision or timestamp update. Recording evidence is never rewritten by these edits.
+
+Milestone 3 is proposed as CSV input mapping/preview, requiring separate authorization. No replay or CSV batches are included here.
