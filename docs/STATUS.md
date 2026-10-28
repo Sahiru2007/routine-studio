@@ -12,7 +12,7 @@ Limits: ordinary visible top-level descriptors only; heuristic sensitive-field e
 
 Milestone 5 is complete and preserved in the repository. Final checks completed on 28 October 2026 (Asia/Colombo): `npm.cmd run typecheck`, 69 focused tests in 9 files, production build, actual assistance, full batch, execution, configuration, recording and desktop suites. All passed. Five assistance/native-close screenshots were inspected. No suite was rerun for the documentation/publication handoff because no relevant code changed.
 
-Known issues remain the documented scope limits above. In addition, visible Milestone 5 identity currently uses a small CSS compatibility override while older long-form JSX text is migrated; this is cosmetic and covered by the production build, but should be simplified during a future UI cleanup. The local Ollama process is not managed by Routine Studio and was stopped after validation. No normal user data migration was added in Milestone 5.
+Known issues remain the documented scope limits above. The local Ollama process is not managed by Routine Studio and was stopped after validation. No normal user data migration was added in Milestone 5. A post-milestone maintenance change moved milestone identity and live local-model status into semantic React markup, removing the temporary CSS text-replacement workaround.
 
 Exact next step: begin the next session by reading `AGENTS.md`, this file and `docs/NEXT_SESSION.md`, then confirm the branch is clean and synchronized. Do not begin packaging or Milestone 6 until the user separately authorizes that scope.
 
