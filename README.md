@@ -1,6 +1,89 @@
 # Routine Studio
 
-## Milestone 7 release candidate
+**A local-first Windows desktop studio for recording, reviewing, and supervising repeatable browser workflows.**
+
+Routine Studio turns demonstrated browser actions into editable workflows. You can review semantic targets, bind values to reusable inputs, add explicit UI checks, run one record under supervision, or map a CSV into a bounded sequential batch. The app keeps the human in control: it does not silently infer success, retry uncertain submissions, or give AI providers browser authority.
+
+[Download the current unsigned prerelease](https://github.com/Sahiru2007/routine-studio/releases/tag/v0.7.0-rc.1) · [Verification evidence](docs/VERIFICATION.md) · [Architecture](docs/ARCHITECTURE.md) · [Current status](docs/STATUS.md)
+
+> [!IMPORTANT]
+> `v0.7.0-rc.1` is an unsigned Windows release candidate. Chromium is an external dependency, and verification was performed on the development machine—not on a clean Windows machine. Review [Known boundaries](#known-boundaries) before using it.
+
+## What it does
+
+| Stage | Capability | Deliberate safety boundary |
+| --- | --- | --- |
+| Record | Capture navigation, native clicks, and ordinary form fills in dedicated Chromium | One top-level tab; passwords and recognized sensitive fields are excluded |
+| Configure | Review recorded target candidates, edit locators, define inputs, and add explicit checks | Recording never invents confirmation checks |
+| Inspect | Count and temporarily highlight zero, one, or multiple target matches | Read-only: no click, fill, submit, or automatic navigation |
+| Run | Review an immutable workflow revision and supervise one execution | Exactly one target match; no silent alternative or automatic retry |
+| Batch | Import, validate, map, review, and sequentially run bounded CSV rows | Explicit approval, concurrency 1, durable uncertain outcomes |
+| Assist (optional) | Request review-only mapping, validation, or target suggestions from Ollama or OpenAI | Off by default; suggestions never execute or modify saved data automatically |
+
+## Screenshots
+
+All screenshots below come from actual Electron verification with disposable synthetic data. They are curated copies—not databases, profiles, logs, or raw test artifacts. See [the screenshot notes](docs/SCREENSHOTS.md) for provenance and what each image does and does not prove.
+
+### Configure a recorded workflow
+
+![Routine Studio workflow editor showing an ordered customer workflow, visual map, validation state, and properties inspector](docs/images/workflow-editor.png)
+
+The editor keeps ordered steps, a visual workflow map, target configuration, inputs, and validation together. “Configuration-ready” means schema and configuration checks passed; it does **not** mean the workflow has been executed successfully.
+
+### Inspect targets without acting
+
+![Read-only target inspection reporting one top-level DOM match](docs/images/target-inspection.png)
+
+Target inspection reports match counts and can highlight matches temporarily. A single match does not prove semantic correctness, and inspection never clicks, fills, submits, or navigates.
+
+### Review durable batch outcomes
+
+![Completed three-row supervised CSV batch with per-row evidence and timeline controls](docs/images/batch-results.png)
+
+Batch history distinguishes completed, definite failure, uncertain, interrupted, stopped, and not-run states. “Completed” means all configured steps finished; the UI explicitly avoids claiming database or business correctness.
+
+### Optional assistance remains review-only
+
+![OpenAI provider settings showing consent, protected key storage controls, explicit tests, and bounded payload preview](docs/images/assistance-settings.png)
+
+Manual recording, editing, execution, and batching work without AI. OpenAI and Ollama are opt-in configuration assistants only. The screenshot uses a loopback mock and contains no API key or live provider response.
+
+## Quick start
+
+### Use the prerelease
+
+1. Open the [`v0.7.0-rc.1` prerelease](https://github.com/Sahiru2007/routine-studio/releases/tag/v0.7.0-rc.1).
+2. Download either the unsigned installer or portable ZIP and verify it against `SHA256SUMS.txt`.
+3. Configure an absolute application-data directory on `E:` and a compatible Playwright Chromium path on `E:`.
+4. Open **Settings & status** and confirm storage and browser readiness.
+5. Use the disposable local demo for your first recording; never demonstrate real secrets.
+
+Windows may show SmartScreen warnings because the binaries are unsigned. The installer preserves application data on uninstall. See [docs/NEXT_SESSION.md](docs/NEXT_SESSION.md) for the exact same-machine acceptance walkthrough and remaining clean-machine checks.
+
+### Run from source
+
+Windows with Node.js 24.22 or later is the verified development environment.
+
+```powershell
+Set-Location -LiteralPath 'E:\projects\routine-studio'
+powershell.exe -ExecutionPolicy Bypass -File scripts/setup.ps1
+npm.cmd run build
+npm.cmd start
+```
+
+`setup.ps1` pins caches, dependencies, temporary files, Chromium, and runtime data to `E:`. Production builds load local assets and do not require a development web server.
+
+## Known boundaries
+
+- Windows-only release candidate; unsigned installer and executable.
+- Same-machine verification is complete, but clean-machine, SmartScreen, antivirus, and broad distribution qualification remain pending.
+- Chromium is required for recording, inspection, and execution and is not bundled. Manual editing remains available when it is missing.
+- One active top-level tab with ordinary native HTML controls is supported. Frames, shadow DOM, file uploads, multiple-tab flows, contenteditable, and arbitrary custom widgets are not claimed.
+- Stored workflow values, samples, datasets, run inputs, and browser profile state are local plaintext. Do not use passwords, payment data, API keys, or other secrets as workflow values.
+- Completed steps and visible UI checks do not establish business or database correctness. Uncertain submissions are never automatically retried.
+- OpenAI assistance requires the user's own key and explicit consent and may incur charges. No live OpenAI request was used to verify this release candidate.
+
+## Current release details
 
 Version `0.7.0-rc.1` adds optional OpenAI API assistance alongside **No AI assistance** and the existing loopback Ollama provider. Recording, editing, inspection, execution, and CSV batches remain fully manual and available without AI. OpenAI use is always user-triggered, review-only, disclosed before opt-in, and never receives browser authority. Automated verification uses a loopback mock only—no real provider requests or credentials.
 
