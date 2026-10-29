@@ -4,7 +4,11 @@
 
 Actual checks after the contract change: 19 focused schema/provider/transport tests in 2 files PASS; typecheck PASS; production build PASS; actual Electron `test:prepare` PASS with four checks. Coverage includes deterministic collision-safe machine naming, unknown/duplicate/ineligible selections, rejection of model-supplied input IDs/names, sensitive/redacted context exclusion, real serialized Ollama/OpenAI request inspection, generated-name review, partial acceptance, stale rejection, atomic unsaved application, explicit revision save, and byte-equivalent raw recording evidence.
 
-The actual serialized provider request contains the versioned schema and safe field context but no literal values, URLs, locators, raw events, provenance, existing input names, or model-controlled machine names. No inference, cloud request, model load/download, browser suggestion action, packaging, commit, or push occurred. V3 remains prepared-not-executed.
+The actual serialized provider request contains the versioned schema and safe field context but no literal values, URLs, locators, raw events, provenance, existing input names, or model-controlled machine names. The later authorized validation pass executed exactly six frozen v3 requests plus three distinct production-adapter walkthrough requests, with no retry. It made no cloud request, download, automatic suggestion action, packaging, commit, or push.
+
+Frozen v3 results: 6/6 application-valid, 16/16 expected conversion selections, 30/40 useful labels, 1/6 useful titles, 12/16 allowed generated names, 0/6 overall usefulness, 7,494 total tokens, and 46.284 seconds adapter duration. Actual walkthroughs recorded through Electron/MV3/Chromium, reviewed proposals, saved explicit checks, executed different values, and independently found exactly one intended demo record with zero extras per case. Two valid proposals each suggested one explicitly fixed field; the selections were rejected. One response invented a step ID and was wholly discarded. Immutable raw recording bytes remained unchanged. Screenshots and full limits are in `MILESTONE_8A_VALIDATION_REPORT.md`.
+
+After screenshot inspection, the only product change was an inline preparation error/old-proposal clearing fix. Nineteen focused tests, typecheck, production build, and five actual mocked Electron checks pass. The Electron regression proves a provider validation error clears an older proposal, shows manual availability inline, preserves the draft/manual inputs, and starts no browser worker.
 
 ## Ollama schema transmission diagnosis
 

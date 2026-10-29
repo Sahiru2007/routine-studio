@@ -28,7 +28,9 @@ Accepted changes are applied together to the unsaved draft only. If the draft ch
 
 Provider-visible preparation context excludes literal values, URLs, locators, raw events, provenance, existing input names, and unrelated evidence. The model cannot bind an existing input; manual shared-input editing remains available in the ordinary editor. Sensitive, hidden, masked, or redacted field labels are not treated as permission to send values.
 
-Milestone 8A is not included in the published `v0.7.0-rc.1` binaries. The baseline and v2 six-request local evaluations are complete and preserved; v2 labels were strong but overall usefulness was 0/6 because conversions and titles remained weak or unsafe. The focused v3 evaluation is [prepared but not executed](docs/OLLAMA_PREPARE_EVALUATION_V3.md). Current source verification uses loopback mocks only; this improvement made no cloud/local inference request or model load.
+Milestone 8A is not included in the published `v0.7.0-rc.1` binaries. Baseline, v2, and the frozen v3 six-request local evaluations are complete and preserved. V3 selected all 16 expected conversions and passed strict application validation 6/6, but weak titles/navigation labels and four non-preferred generated names left overall usefulness at 0/6 under the unchanged strict criteria. Three additional actual Electron/Chromium walkthrough requests produced two valid proposals with one unnecessary fixed-field conversion each and one response rejected for an unknown step ID. Human review rejected mistakes; corrected workflows independently created exactly one intended disposable record each. See the [validation report](docs/MILESTONE_8A_VALIDATION_REPORT.md). These small synthetic results do not establish reliability.
+
+When a provider response is rejected, the Prepare panel clears any older proposal and shows an inline error; manual configuration remains available. Suggestions still start unselected, never save automatically, and never gain browser authority.
 
 ## Screenshots
 

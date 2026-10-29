@@ -1,6 +1,8 @@
-# Next session handoff — after Milestone 8A
+# Next session handoff — after Milestone 8A validation
 
-The focused post-v2 contract improvement is implemented and verified locally. Read `docs/MILESTONE_8A_CONVERSION_AUDIT.md`. Baseline and v2 evidence are immutable; v2 achieved strong labels but 0/6 overall usefulness. V3 is separately prepared in `docs/OLLAMA_PREPARE_EVALUATION_V3.md` with unchanged six goals and 16 conversion expectations. Do not execute it without explicit authorization.
+The focused post-v2 contract improvement and substantial validation pass are complete locally. Read `docs/MILESTONE_8A_VALIDATION_REPORT.md`, `docs/OLLAMA_PREPARE_EVALUATION_V3_RESULTS.md`, and `docs/MILESTONE_8A_CONVERSION_AUDIT.md`. Baseline, v2, and v3 evidence are immutable. V3 improved to 6/6 valid and 16/16 expected conversion selections, but remained 0/6 overall useful under unchanged strict criteria. Three actual walkthrough proposals also required human correction. Do not rerun any of the nine requests.
+
+Recommended next step: a small private user pilot measuring whether review-first suggestions save time despite correction needs. Do not automatically begin a new milestone or broaden suggestion authority. The latest source-only usability fix clears old proposals on provider failure and shows an inline manual-fallback error; it changes no provider request generation.
 
 The baseline schema-transmission defect and completed v2 evaluation are historical evidence. Preserve both result sets unchanged; do not rerun or overwrite them.
 
