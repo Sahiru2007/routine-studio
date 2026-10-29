@@ -1,4 +1,16 @@
-# Milestone 7 — OpenAI assistance release candidate
+# Milestone 8A — Prepare with AI (source working tree)
+
+Milestone 8A is implemented without packaging or publication. A recorded workflow can accept a short user goal and request a strict typed preparation proposal through the existing Ollama/OpenAI assistance manager. The request contains the goal, current title, existing input names, and bounded step ID/type/label/literal-fill metadata; captured literal values are not sent. The response may propose one title, labels for supplied step IDs, and input conversions for supplied literal fill steps only. Unknown/duplicate IDs, nonliteral conversions, malformed names, extra fields, and collisions with existing input names are rejected.
+
+The editor presents explicit before/after rows with every change initially unselected. Accepted changes are applied in one state update to the unsaved draft. An exact draft-snapshot comparison rejects stale proposals. Applying does not save, validate, add checks or steps, edit targets/CSV mappings, or invoke recording/inspection/execution. Explicit Save creates an ordinary revision; immutable recording evidence remains separate.
+
+Actual results: focused assistance/provider tests PASS (15 tests); typecheck PASS; production build PASS; actual Electron loopback-mock verification PASS for value-minimized request data, individual acceptance, unchecked-change preservation, atomic unsaved application, no execution/recording activity, explicit revision save, byte-equivalent raw recording evidence, and stale-proposal rejection; actual configuration/inspection regression PASS (5 checks). Screenshots `artifacts/milestone-8a/01-prepare-proposal-review.png` and `02-prepare-applied-draft.png` were inspected. No OpenAI/Ollama inference, model loading, download, browser workflow action from a suggestion, package build, commit, push, or publication occurred.
+
+Limits: proposal quality was not evaluated; preparation is bounded to 100 steps, and providers see the user goal plus workflow title, existing input names and step labels/types/IDs, but not literal fill values. Shared-input grouping is supported only when the proposal gives the same new input name to multiple literal fills; existing inputs must still be bound manually. The historical `test:assistance` harness terminated without refreshing evidence or printing assertions in this session, so it is not counted as passing; the new `test:prepare`, focused provider tests and actual configuration regression provide the reported coverage. Instruction-based editing, suggested checks, CSV mapping changes, new demos, and packaging are deferred.
+
+Exact next step requires separate authorization: decide whether Milestone 8B should expand instruction-based editing and explicit-check suggestions, while retaining the same typed review/staleness boundaries.
+
+## Historical Milestone 7 — OpenAI assistance release candidate
 
 Milestone 7 implementation is complete and release verification is in progress for `0.7.0-rc.1`. Routine Studio now offers explicit No AI, local Ollama, and OpenAI API assistance choices. Manual recording, configuration, execution, and CSV batching remain available without any provider. OpenAI uses the official JavaScript SDK Responses API with strict structured output, `store:false`, bounded output, no tools, `maxRetries:0`, user-triggered requests, cancellation, and no provider fallback. Suggestions remain review-only and cannot execute or silently alter saved data.
 

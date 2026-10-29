@@ -20,6 +20,7 @@
     "test:batch": "node scripts/batch-test.mjs",
     "test:assistance": "node scripts/assistance-test.mjs",
     "test:openai-assistance": "node scripts/openai-assistance-test.mjs",
+    "test:prepare": "node scripts/prepare-workflow-test.mjs",
     "test:packaged": "node scripts/packaged-test.mjs",
     "demo": "node packages/demo-site/server.ts",
     "demo:reset": "node packages/demo-site/server.ts --reset"

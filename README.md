@@ -20,6 +20,14 @@ Routine Studio turns demonstrated browser actions into editable workflows. You c
 | Batch | Import, validate, map, review, and sequentially run bounded CSV rows | Explicit approval, concurrency 1, durable uncertain outcomes |
 | Assist (optional) | Request review-only mapping, validation, or target suggestions from Ollama or OpenAI | Off by default; suggestions never execute or modify saved data automatically |
 
+## Milestone 8A working-tree feature: Prepare with AI
+
+The current source working tree adds **Prepare with AI** for workflows that retain recording provenance. Enter a short goal, request a bounded proposal, and review a suggested title, labels for existing step IDs, and conversions of existing literal fill steps into named inputs. Every before/after change is individually selectable and nothing is selected or applied automatically.
+
+Accepted changes are applied together to the unsaved draft only. If the draft changes after the request, the proposal is rejected as stale. The model cannot add steps or checks, change targets, edit CSV mappings, save a revision, validate the workflow, or dispatch browser actions. Original recording evidence and saved revisions remain unchanged; ordinary validation and deliberate Save remain authoritative.
+
+Milestone 8A has been verified only with loopback-mocked provider responses and actual Electron UI interactions. It is not included in the published `v0.7.0-rc.1` binaries. No cloud request, Ollama inference, model load, or download was used.
+
 ## Screenshots
 
 All screenshots below come from actual Electron verification with disposable synthetic data. They are curated copies—not databases, profiles, logs, or raw test artifacts. See [the screenshot notes](docs/SCREENSHOTS.md) for provenance and what each image does and does not prove.

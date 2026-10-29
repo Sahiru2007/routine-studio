@@ -1,5 +1,13 @@
 # Architecture
 
+## Milestone 8A — recorded-workflow preparation
+
+`PrepareWorkflow.tsx` owns the ephemeral goal, proposal snapshot, individual acceptance state and one-shot draft update. It enables preparation only when at least one editable step retains recording provenance. `packages/assistance-schema` defines strict `PrepareRequest`, `PrepareResponse` and `PrepareSelection` contracts, validates every returned step ID against the supplied request, permits conversions only for supplied literal fills, rejects duplicate/unknown references and existing-name collisions, and applies accepted changes through one pure draft transformation.
+
+The request deliberately omits literal fill values, locators, URLs, recording events and history. It contains only the short goal, current title, existing input names, and at most 100 step ID/type/label/literal-fill flags. The existing assistance manager serializes/cancels the provider request and uses strict structured output for OpenAI or JSON mode for loopback Ollama. Its prompt forbids new steps, checks, selectors, commands and browser actions; preparation output is independently bounded to 3,000 tokens and 32 KiB.
+
+Staleness is enforced in the renderer by comparing the current draft byte-for-byte with the exact snapshot used to create the proposal. Accepted changes update React draft state once; they do not call save or any browser IPC. Ordinary workflow validation and the existing explicit Save path remain authoritative. Saving creates a normal revision while `WorkflowStore` continues preserving immutable target provenance and the separate raw recording document.
+
 ## Milestone 7 assistance providers
 
 Electron main owns a single serialized `Assistance` manager behind the validated preload bridge. Provider adapters share the same strict commands and post-response supplied-ID validation. `none` dispatches nothing; Ollama remains loopback-only; OpenAI uses the official SDK Responses API with strict JSON schema, `store:false`, no tools, bounded time/output, `maxRetries:0`, and an `AbortSignal`. Provider changes and credential mutation are blocked while a request is active; there is no automatic provider fallback.

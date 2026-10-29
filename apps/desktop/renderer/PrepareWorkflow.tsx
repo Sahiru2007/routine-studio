@@ -1,0 +1,27 @@
+import React,{useMemo,useState} from 'react'
+import {applyPrepareSelection,makePrepareRequest,type PrepareResponse} from '../../../packages/assistance-schema'
+import type {Workflow} from '../../../packages/workflow-schema'
+import './prepare.css'
+
+type Proposal={base:string;value:PrepareResponse}
+export function PrepareWorkflow({draft,onChange,onError}:{draft:Workflow;onChange:(workflow:Workflow)=>void;onError:(message:string)=>void}){
+ const [goal,setGoal]=useState('Prepare this recorded customer-entry workflow for reusable data entry.')
+ const [proposal,setProposal]=useState<Proposal|null>(null),[busy,setBusy]=useState(false),[notice,setNotice]=useState('')
+ const [acceptTitle,setAcceptTitle]=useState(false),[labels,setLabels]=useState<string[]>([]),[conversions,setConversions]=useState<string[]>([])
+ const recorded=useMemo(()=>draft.steps.some(step=>step.type!=='navigate'&&step.type!=='unsupported'&&!!step.target?.provenance),[draft.steps])
+ async function prepare(){setBusy(true);setNotice('');onError('');try{const base=JSON.stringify(draft),request=makePrepareRequest(draft,goal),response=await window.studio.assistanceRun({kind:'prepare',request});if(response.kind!=='prepare')throw Error('Unexpected assistance response.');setProposal({base,value:response.value});setAcceptTitle(false);setLabels([]);setConversions([]);setNotice('Proposal ready. Review and accept individual changes; nothing has been applied.')}catch(error){onError((error as Error).message)}finally{setBusy(false)}}
+ function toggle(list:string[],id:string,set:(next:string[])=>void){set(list.includes(id)?list.filter(value=>value!==id):[...list,id])}
+ function apply(){if(!proposal)return;if(JSON.stringify(draft)!==proposal.base){setNotice('This proposal is stale because the draft changed. Request a fresh preparation before applying anything.');return}try{const next=applyPrepareSelection(draft,proposal.value,{title:acceptTitle,stepIds:labels,conversionStepIds:conversions});onChange(next);setProposal(null);setAcceptTitle(false);setLabels([]);setConversions([]);setNotice('Accepted changes were applied together to the unsaved draft. Save deliberately after ordinary validation.')}catch(error){setNotice((error as Error).message)}}
+ const accepted=Number(acceptTitle)+labels.length+conversions.length
+ return <section className="prepare-panel" aria-label="Prepare workflow with AI"><div className="prepare-heading"><div><h2>Prepare with AI</h2><p>Propose a title, step labels, and literal-fill input conversions. Suggestions cannot add checks, steps, targets, navigation, or browser actions.</p></div>{proposal&&<button onClick={()=>{setProposal(null);setNotice('Proposal discarded. The draft was not changed.')}}>Discard proposal</button>}</div>
+ <label>User goal<textarea aria-label="Preparation goal" maxLength={500} value={goal} onChange={event=>setGoal(event.target.value)} /></label>
+ {!recorded&&<p role="status" className="prepare-warning">Available only when the draft retains recorded target provenance.</p>}
+ <div className="prepare-actions"><button className="primary" disabled={busy||!recorded||!goal.trim()} onClick={()=>void prepare()}>{busy?'Preparing…':'Prepare recorded workflow'}</button>{busy&&<button onClick={()=>void window.studio.assistanceCancel()}>Cancel request</button>}</div>
+ {notice&&<p role="status" aria-label="Preparation status" className="prepare-notice">{notice}</p>}
+ {proposal&&<div className="proposal-review"><h3>Review proposed changes</h3><p>Every change starts unselected. Before/after values are shown below. Input samples remain local plaintext and use the current literal value.</p>
+ <label className="proposal-change"><input type="checkbox" aria-label="Accept proposed workflow title" checked={acceptTitle} onChange={event=>setAcceptTitle(event.target.checked)}/><span><strong>Workflow title</strong><del>{draft.title||'(empty)'}</del><ins>{proposal.value.title}</ins></span></label>
+ {proposal.value.stepLabels.map(change=>{const step=draft.steps.find(item=>item.id===change.stepId);return <label className="proposal-change" key={'label-'+change.stepId}><input type="checkbox" aria-label={'Accept proposed label for '+(step?.label??change.stepId)} checked={labels.includes(change.stepId)} onChange={()=>toggle(labels,change.stepId,setLabels)}/><span><strong>Step label · {step?.type}</strong><del>{step?.label}</del><ins>{change.label}</ins></span></label>})}
+ {proposal.value.inputConversions.map(change=>{const step=draft.steps.find(item=>item.id===change.stepId);const literal=step?.type==='fill'&&step.value.kind==='literal'?step.value.text:'';return <label className="proposal-change" key={'input-'+change.stepId}><input type="checkbox" aria-label={'Accept input conversion for '+(step?.label??change.stepId)} checked={conversions.includes(change.stepId)} onChange={()=>toggle(conversions,change.stepId,setConversions)}/><span><strong>Convert literal fill · {step?.label}</strong><del>Literal value: {literal}</del><ins>Workflow input: {change.inputName}</ins></span></label>})}
+ <button className="primary" disabled={!accepted} onClick={apply}>Apply {accepted} accepted change{accepted===1?'':'s'} to unsaved draft</button><p className="help">Application is atomic. The saved revision and immutable original recording evidence remain unchanged until you explicitly save a new workflow revision. Ordinary validation remains authoritative.</p></div>}
+ </section>
+}

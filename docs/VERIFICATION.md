@@ -1,4 +1,22 @@
-# Milestone 7 verification (current)
+# Milestone 8A verification (current source working tree)
+
+Commands actually run:
+
+```powershell
+npm.cmd test -- packages/assistance-schema/assistance.test.ts packages/assistance-schema/providers.test.ts
+npm.cmd run typecheck
+npm.cmd run build
+npm.cmd run test:prepare
+npm.cmd run test:configuration
+```
+
+Results: 15 focused assistance/provider tests PASS, including mocked Ollama and OpenAI preparation responses; typecheck PASS; production build PASS; actual Electron mock-provider flow PASS; actual configuration/inspection regression PASS (5 checks). `test:prepare` seeds a validated synthetic recording of the existing customer-entry demo in isolated E: storage, opens it in the actual Electron editor, submits a short goal to a loopback Ollama-compatible mock, reviews nine before/after proposal rows, accepts only four, and confirms the title, one label and two input conversions change together in the unsaved draft while unchecked changes and the saved workflow remain unchanged.
+
+The Electron check also asserts that the provider prompt contains the user goal but none of the captured name/email/company literal values; recording stays idle; no execution worker starts; no explicit check is generated; explicit Save creates exactly one revision; the separate raw recording JSON remains byte-for-byte equivalent; and a subsequent draft edit causes stale proposal rejection before application. Screenshots: `artifacts/milestone-8a/01-prepare-proposal-review.png` and `02-prepare-applied-draft.png`.
+
+No cloud request, local inference, model load/download, managed Chromium action from a suggestion, broad regression suite, packaging, commit, push or publication was performed. The historical `npm.cmd run test:assistance` harness terminated without refreshing its evidence or printing its assertions in this session and is therefore not reported as passing. Model quality, live-provider compatibility for this new schema, screen-reader coverage and clean-machine behavior remain untested.
+
+## Historical Milestone 7 verification
 
 Verified on the same Windows machine with synthetic data and a loopback mock only: `npm.cmd run typecheck`; 74 tests in 10 files; production build; and `npm.cmd run test:openai-assistance`. The actual Electron test saved a fake key through Windows DPAPI, confirmed the credential file and rendered UI contained no plaintext key, previewed the exact bounded payload with zero requests, exercised distinct credential and structured compatibility requests against `/v1/models` and `/v1/responses`, checked `store:false`, strict schema, no tools, token accounting, removal/no fallback, No AI mode, manual persistence and full restart. Screenshot `artifacts/milestone-7/01-openai-settings-mocked.png` was inspected.
 

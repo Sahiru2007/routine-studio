@@ -1,4 +1,12 @@
-# Next session handoff — Milestone 7 release candidate
+# Next session handoff — after Milestone 8A
+
+Milestone 8A source work is complete and intentionally uncommitted. Start with `docs/STATUS.md` and `docs/VERIFICATION.md`. The new path is `PrepareWorkflow.tsx` → narrow `assistanceRun({kind:'prepare'})` IPC → `assistance-manager.ts` → strict contracts and atomic transformation in `packages/assistance-schema/index.ts`. Focused actual-Electron evidence is produced by `npm.cmd run test:prepare` under ignored `artifacts/milestone-8a` and isolated `.runtime/prepare-workflow-test-*` data.
+
+Do not treat Milestone 8A as part of the published `v0.7.0-rc.1` binaries. No package was rebuilt. The exact deferred scope is instruction-based workflow editing, suggested explicit checks, CSV mapping changes, new demos and packaging. A future milestone must be separately authorized and must preserve strict typed proposals, individual review, stale rejection, ordinary validation and zero browser authority.
+
+Storage remains E:-only. Do not use the normal database for tests, and do not make live OpenAI/Ollama requests unless a future instruction explicitly authorizes them. The next safe verification command after relevant code changes is `npm.cmd run test:prepare`; repeat broader suites only when their boundaries are affected.
+
+## Historical Milestone 7 release handoff
 
 Current target: `0.7.0-rc.1`. Preserve all Milestone 0–7 data and evidence. OpenAI and Ollama verification must remain mocked unless a future user explicitly authorizes a bounded live smoke test with their own credential and accepts possible charges. Manual operation requires no AI.
 
