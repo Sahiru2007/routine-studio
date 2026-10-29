@@ -28,6 +28,8 @@ Accepted changes are applied together to the unsaved draft only. If the draft ch
 
 Milestone 8A has been verified only with loopback-mocked provider responses and actual Electron UI interactions. It is not included in the published `v0.7.0-rc.1` binaries. No cloud request, Ollama inference, model load, or download was used.
 
+The legacy assistance regression is now fail-closed: every run replaces old evidence with a run-scoped lifecycle record, and only fresh completed evidence with all expected checks can pass. A [six-request local Ollama usefulness evaluation](docs/OLLAMA_PREPARE_EVALUATION.md) is frozen but has not been executed.
+
 ## Screenshots
 
 All screenshots below come from actual Electron verification with disposable synthetic data. They are curated copies—not databases, profiles, logs, or raw test artifacts. See [the screenshot notes](docs/SCREENSHOTS.md) for provenance and what each image does and does not prove.

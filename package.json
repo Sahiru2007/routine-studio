@@ -18,7 +18,7 @@
     "test:execution": "node scripts/execution-test.mjs",
     "test:csv": "node scripts/batch-test.mjs --prepare-only",
     "test:batch": "node scripts/batch-test.mjs",
-    "test:assistance": "node scripts/assistance-test.mjs",
+    "test:assistance": "node scripts/assistance-test-runner.mjs",
     "test:openai-assistance": "node scripts/openai-assistance-test.mjs",
     "test:prepare": "node scripts/prepare-workflow-test.mjs",
     "test:packaged": "node scripts/packaged-test.mjs",

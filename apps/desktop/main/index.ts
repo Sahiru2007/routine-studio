@@ -1,6 +1,6 @@
 import { app,BrowserWindow,ipcMain,dialog,session } from 'electron'
 import { join,resolve } from 'node:path'
-import { existsSync,mkdirSync } from 'node:fs'
+import { appendFileSync,existsSync,mkdirSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { WorkflowStore } from './store'
 import { IdSchema } from '../../../packages/workflow-schema'
@@ -34,7 +34,9 @@ app.whenReady().then(()=>{
  recorder=new Recorder(root,dataPath,store)
  runner=new Runner(root,dataPath,store,recorder)
  batches=new Batches(store,runner)
- assistance=new Assistance({store,credentials:new SecureCredentialStore(dataPath)})
+ const diagnosticPath=process.env.ROUTINE_STUDIO_SYNTHETIC_EVAL==='1'?process.env.ROUTINE_STUDIO_ASSISTANCE_DIAGNOSTICS:undefined
+ const onRejectedOutput=diagnosticPath&&/^E:[\\/]/i.test(diagnosticPath)&&/[\\/]artifacts[\\/]/i.test(diagnosticPath)?(entry:unknown)=>appendFileSync(diagnosticPath,JSON.stringify(entry)+'\n',{encoding:'utf8'}):undefined
+ assistance=new Assistance({store,credentials:new SecureCredentialStore(dataPath),...(onRejectedOutput?{onRejectedOutput}:{})})
  if(process.env.ROUTINE_STUDIO_TEST==='1')Object.assign(globalThis,{studioTestBatches:batches})
  if(process.env.ROUTINE_STUDIO_TEST==='1')Object.assign(globalThis,{studioTestRunner:runner})
  if(process.env.ROUTINE_STUDIO_TEST==='1')Object.assign(globalThis,{studioTestRecorder:recorder})

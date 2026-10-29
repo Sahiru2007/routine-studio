@@ -1,5 +1,19 @@
 # Milestone 8A verification (current source working tree)
 
+## Ollama schema transmission diagnosis
+
+Read-only tracing showed the failed six-request baseline sent `format: "json"`, not the strict schema returned by the adapter's schema builder. The prompt referred generically to a requested schema but did not contain it. The strict application validator correctly required `title`, `stepLabels`, and `inputConversions`, yet Ollama never received those requirements through its structured-output mechanism. Existing mocks verified minimized prompt data and a successful UI proposal, but not the serialized outbound Ollama request.
+
+The corrected adapter sends the full schema in `format` and embeds the same serialization in the prompt. Focused transport tests assert top-level and nested required fields, `additionalProperties: false`, prompt/schema identity, and absence of the old string JSON mode. Other regressions prove `prompt_eval_count`/`eval_count` survive later schema validation and malformed-content failures, while opt-in diagnostics redact sensitive-looking data. Production diagnostics remain disabled unless an E: artifacts path and explicit synthetic-evaluation flag are both configured.
+
+Actual post-fix checks: 18 focused provider/transport/schema tests in 2 files PASS; typecheck PASS; production build PASS; actual Electron `test:prepare` PASS with four checks, including the new outbound Ollama schema assertions. No Ollama/OpenAI inference, model load, cloud request, download, packaging, commit, or push occurred.
+
+## Assistance harness stabilization
+
+Reproduction stopped at `checking-mapping-suggestions`: Playwright could not find the obsolete **Suggest mappings locally** accessible name. The current UI exposes **Suggest mappings**. The end-only evidence writer therefore never replaced the old artifact. After adding lifecycle evidence, the next run honestly exposed a second obsolete assertion for the offline error; current behavior reports `Local model returned HTTP 503.`. Both selectors were corrected to the actual accessible UI. The offline assertion still proves manual availability by checking **Validate & preview** remains enabled and the saved mapping remains unchanged.
+
+`scripts/assistance-test-runner.mjs` now writes a unique starting sentinel, imposes a 120-second limit, waits for the child exit, and verifies that the artifact is newer than this invocation, has `status: completed`, four checks and no renderer errors. `assistance-test.mjs` records `running`, `completed`, or `failed` with run ID, timestamps, phase and bounded failure details. `scripts/assistance-evidence.test.mjs` proves stale, older, running, failed, timed-out, nonzero-child, missing-check and renderer-error evidence is rejected.
+
 Commands actually run:
 
 ```powershell
@@ -14,7 +28,9 @@ Results: 15 focused assistance/provider tests PASS, including mocked Ollama and 
 
 The Electron check also asserts that the provider prompt contains the user goal but none of the captured name/email/company literal values; recording stays idle; no execution worker starts; no explicit check is generated; explicit Save creates exactly one revision; the separate raw recording JSON remains byte-for-byte equivalent; and a subsequent draft edit causes stale proposal rejection before application. Screenshots: `artifacts/milestone-8a/01-prepare-proposal-review.png` and `02-prepare-applied-draft.png`.
 
-No cloud request, local inference, model load/download, managed Chromium action from a suggestion, broad regression suite, packaging, commit, push or publication was performed. The historical `npm.cmd run test:assistance` harness terminated without refreshing its evidence or printing its assertions in this session and is therefore not reported as passing. Model quality, live-provider compatibility for this new schema, screen-reader coverage and clean-machine behavior remain untested.
+Stabilization rerun results: 24 focused evidence/provider/schema tests PASS; corrected `npm.cmd run test:assistance` PASS with fresh schema-v2 completed evidence and four actual Electron checks; `test:prepare` PASS with four actual Electron checks; typecheck/build PASS; configuration PASS with five actual Electron checks. No cloud request, local inference, model load/download, managed Chromium action from a suggestion, broad regression suite, packaging, commit, push or publication was performed. Model quality, live-provider compatibility for this new schema, screen-reader coverage and clean-machine behavior remain untested.
+
+The separately authorized local Ollama quality evaluation subsequently verified the frozen fixture SHA-256 `39971908DCD261CBB801E9046433CC6777B7F1E0932E8D064B0DE4ED40200047` and made exactly six ordered, non-retried requests to the existing `qwen3:8b-q4_K_M`. All six reached terminal schema failure: unsupported `steps`, missing `stepLabels`/`inputConversions`, plus object-shaped `inputConversions` in request 5. Durations were 10.837, 4.935, 6.870, 6.931, 7.188, and 7.013 seconds. Returned usage was unavailable. No proposal reached semantic review or application, no browser action occurred, and no cloud request/model download was made. Full scoring limits and correction notes are in `docs/OLLAMA_PREPARE_EVALUATION_RESULTS.md`; raw evidence remains ignored under `artifacts/milestone-8a`.
 
 ## Historical Milestone 7 verification
 

@@ -1,5 +1,11 @@
 # Next session handoff — after Milestone 8A
 
+The Ollama schema-transmission defect behind the six failed baseline requests is fixed locally. Preserve the baseline result unchanged. The separately versioned follow-up is prepared, not executed: read `docs/OLLAMA_PREPARE_EVALUATION_V2.md` and verify its manifest before requesting any inference authorization. Do not reuse or overwrite the baseline artifact.
+
+Milestone 8A stabilization is complete locally and intentionally uncommitted. The historical assistance harness is no longer allowed to pass on stale or incomplete evidence. Its current evidence contract is implemented by `scripts/assistance-test-runner.mjs`, `assistance-test.mjs`, and `assistance-evidence.mjs`; the last corrected run completed all four Electron checks with zero renderer errors.
+
+The separately authorized local-quality evaluation in `docs/OLLAMA_PREPARE_EVALUATION.md` is complete. The fixture hash matched, and exactly six requests ran once against the existing `qwen3:8b-q4_K_M`; every response failed the strict proposal schema. Do not rerun weak or failed cases. Preserve `docs/OLLAMA_PREPARE_EVALUATION_RESULTS.md` and the ignored raw result in `artifacts/milestone-8a`. A future change should first decide whether rejected raw output and usage can be retained safely for diagnostics and why this model emitted the obsolete/wrong `steps` shape; that is new work and requires separate authorization.
+
 Milestone 8A source work is complete and intentionally uncommitted. Start with `docs/STATUS.md` and `docs/VERIFICATION.md`. The new path is `PrepareWorkflow.tsx` → narrow `assistanceRun({kind:'prepare'})` IPC → `assistance-manager.ts` → strict contracts and atomic transformation in `packages/assistance-schema/index.ts`. Focused actual-Electron evidence is produced by `npm.cmd run test:prepare` under ignored `artifacts/milestone-8a` and isolated `.runtime/prepare-workflow-test-*` data.
 
 Do not treat Milestone 8A as part of the published `v0.7.0-rc.1` binaries. No package was rebuilt. The exact deferred scope is instruction-based workflow editing, suggested explicit checks, CSV mapping changes, new demos and packaging. A future milestone must be separately authorized and must preserve strict typed proposals, individual review, stale rejection, ordinary validation and zero browser authority.
