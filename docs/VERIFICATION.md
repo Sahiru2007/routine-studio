@@ -1,5 +1,11 @@
 # Milestone 8A verification (current source working tree)
 
+## Focused post-v2 conversion contract
+
+Actual checks after the contract change: 19 focused schema/provider/transport tests in 2 files PASS; typecheck PASS; production build PASS; actual Electron `test:prepare` PASS with four checks. Coverage includes deterministic collision-safe machine naming, unknown/duplicate/ineligible selections, rejection of model-supplied input IDs/names, sensitive/redacted context exclusion, real serialized Ollama/OpenAI request inspection, generated-name review, partial acceptance, stale rejection, atomic unsaved application, explicit revision save, and byte-equivalent raw recording evidence.
+
+The actual serialized provider request contains the versioned schema and safe field context but no literal values, URLs, locators, raw events, provenance, existing input names, or model-controlled machine names. No inference, cloud request, model load/download, browser suggestion action, packaging, commit, or push occurred. V3 remains prepared-not-executed.
+
 ## Ollama schema transmission diagnosis
 
 Read-only tracing showed the failed six-request baseline sent `format: "json"`, not the strict schema returned by the adapter's schema builder. The prompt referred generically to a requested schema but did not contain it. The strict application validator correctly required `title`, `stepLabels`, and `inputConversions`, yet Ollama never received those requirements through its structured-output mechanism. Existing mocks verified minimized prompt data and a successful UI proposal, but not the serialized outbound Ollama request.

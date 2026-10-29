@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "evaluationVersion": "milestone-8a-ollama-v3",
+  "status": "prepared-not-executed",
+  "sourceFixture": "fixtures/assistance/milestone-8a-ollama-evaluation.json",
+  "sourceFixtureSha256": "39971908DCD261CBB801E9046433CC6777B7F1E0932E8D064B0DE4ED40200047",
+  "requestCount": 6,
+  "model": "qwen3:8b-q4_K_M",
+  "proposalContractVersion": 2,
+  "treatment": [
+    "safe field context",
+    "explicit eligible-field conversion instruction",
+    "model proposes human field labels only",
+    "application generates input IDs and machine names"
+  ],
+  "automaticRetries": false,
+  "requiredConversionCount": 16,
+  "resultPath": "artifacts/milestone-8a/ollama-evaluation-v3-results.json",
+  "rejectedOutputPath": "artifacts/milestone-8a/ollama-evaluation-v3-rejected.jsonl"
+}

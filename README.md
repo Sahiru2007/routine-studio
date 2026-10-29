@@ -22,13 +22,13 @@ Routine Studio turns demonstrated browser actions into editable workflows. You c
 
 ## Milestone 8A working-tree feature: Prepare with AI
 
-The current source working tree adds **Prepare with AI** for workflows that retain recording provenance. Enter a short goal, request a bounded proposal, and review a suggested title, labels for existing step IDs, and conversions of existing literal fill steps into named inputs. Every before/after change is individually selectable and nothing is selected or applied automatically.
+The current source working tree adds **Prepare with AI** for workflows that retain recording provenance. Enter a short goal, request a bounded proposal, and review a suggested title, labels for existing step IDs, and selections of eligible literal fills to convert into new inputs. The model supplies a human field label; application code generates and displays the valid unique machine name and creates the stable input ID only after acceptance. Every change is individually selectable and nothing is selected or applied automatically.
 
 Accepted changes are applied together to the unsaved draft only. If the draft changes after the request, the proposal is rejected as stale. The model cannot add steps or checks, change targets, edit CSV mappings, save a revision, validate the workflow, or dispatch browser actions. Original recording evidence and saved revisions remain unchanged; ordinary validation and deliberate Save remain authoritative.
 
-Milestone 8A has been verified only with loopback-mocked provider responses and actual Electron UI interactions. It is not included in the published `v0.7.0-rc.1` binaries. No cloud request, Ollama inference, model load, or download was used.
+Provider-visible preparation context excludes literal values, URLs, locators, raw events, provenance, existing input names, and unrelated evidence. The model cannot bind an existing input; manual shared-input editing remains available in the ordinary editor. Sensitive, hidden, masked, or redacted field labels are not treated as permission to send values.
 
-The legacy assistance regression is now fail-closed: every run replaces old evidence with a run-scoped lifecycle record, and only fresh completed evidence with all expected checks can pass. A [six-request local Ollama usefulness evaluation](docs/OLLAMA_PREPARE_EVALUATION.md) is frozen but has not been executed.
+Milestone 8A is not included in the published `v0.7.0-rc.1` binaries. The baseline and v2 six-request local evaluations are complete and preserved; v2 labels were strong but overall usefulness was 0/6 because conversions and titles remained weak or unsafe. The focused v3 evaluation is [prepared but not executed](docs/OLLAMA_PREPARE_EVALUATION_V3.md). Current source verification uses loopback mocks only; this improvement made no cloud/local inference request or model load.
 
 ## Screenshots
 

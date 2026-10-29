@@ -1,6 +1,8 @@
 # Next session handoff — after Milestone 8A
 
-The Ollama schema-transmission defect behind the six failed baseline requests is fixed locally. Preserve the baseline result unchanged. The separately versioned follow-up is prepared, not executed: read `docs/OLLAMA_PREPARE_EVALUATION_V2.md` and verify its manifest before requesting any inference authorization. Do not reuse or overwrite the baseline artifact.
+The focused post-v2 contract improvement is implemented and verified locally. Read `docs/MILESTONE_8A_CONVERSION_AUDIT.md`. Baseline and v2 evidence are immutable; v2 achieved strong labels but 0/6 overall usefulness. V3 is separately prepared in `docs/OLLAMA_PREPARE_EVALUATION_V3.md` with unchanged six goals and 16 conversion expectations. Do not execute it without explicit authorization.
+
+The baseline schema-transmission defect and completed v2 evaluation are historical evidence. Preserve both result sets unchanged; do not rerun or overwrite them.
 
 Milestone 8A stabilization is complete locally and intentionally uncommitted. The historical assistance harness is no longer allowed to pass on stale or incomplete evidence. Its current evidence contract is implemented by `scripts/assistance-test-runner.mjs`, `assistance-test.mjs`, and `assistance-evidence.mjs`; the last corrected run completed all four Electron checks with zero renderer errors.
 
