@@ -1,6 +1,6 @@
 {
   "name": "routine-studio",
-  "version": "0.7.0-rc.1",
+  "version": "0.8.0-rc.1",
   "private": true,
   "type": "module",
   "main": "out/main/index.js",

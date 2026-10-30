@@ -1,4 +1,10 @@
-# Milestone 8A — Prepare with AI (validated source working tree)
+# Release status — v0.8.0-rc.1
+
+Release preparation is authorized for the exact verified source commit. The candidate includes the completed Milestone 8A Prepare with AI source functionality, preserves all manual recording/configuration/execution/CSV behavior, and makes no live model requests during release verification. It is an unsigned Windows x64 prerelease with external Chromium and E:-only application storage. Same-machine checks must not be described as clean-machine qualification.
+
+The planned assets are `Routine-Studio-Setup-0.8.0-rc.1-unsigned.exe`, `Routine-Studio-0.8.0-rc.1-win-x64.zip`, and `SHA256SUMS.txt`. Final hashes, exact source commit, packaged results, and GitHub release state are recorded in `WEBSITE_DOWNLOAD_HANDOFF.md` after verification.
+
+# Milestone 8A — Prepare with AI (validated source)
 
 The substantial validation/usability pass completed on 29 October 2026. Frozen v3 dispatched exactly six requests: 6/6 application-valid, 16/16 expected conversion selections, 30/40 useful labels, 1/6 useful titles, 12/16 frozen-name matches, and 0/6 overall usefulness under unchanged criteria. Three distinct actual Electron/Chromium walkthroughs dispatched exactly three more requests: two valid proposals each unnecessarily converted an explicitly fixed field, while one response referenced an unknown step and was strictly discarded. After individual rejection/acceptance and explicit manual correction, all three workflows ran with different synthetic inputs; independent demo inspection found exactly one intended record and zero extras in each case. Raw recording documents remained unchanged. V3 retained 7,494 tokens and 46.284 seconds; the walkthrough harness did not retain provider accounting/durations, so usage coverage is 6/9 requests. See `OLLAMA_PREPARE_EVALUATION_V3_RESULTS.md` and `MILESTONE_8A_VALIDATION_REPORT.md`.
 

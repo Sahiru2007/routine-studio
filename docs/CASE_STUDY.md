@@ -6,7 +6,7 @@ This repository is a modified, intentionally basic portfolio version of the fina
 
 Authorship note: the product design and engineering are Sahiru's work. This case-study presentation and copy were prepared from actual project assets with AI assistance; no screenshot, evaluation result, or product capability was fabricated for the presentation.
 
-> Release boundary: the published unsigned `v0.7.0-rc.1` contains recording, configuration, inspection, supervised single-record execution, CSV batches, and optional review-only Ollama/OpenAI assistance. **Prepare with AI** is newer source functionality and is not in that prerelease.
+> Release boundary: the published unsigned `v0.8.0-rc.1` contains recording, configuration, inspection, supervised single-record execution, CSV batches, optional review-only Ollama/OpenAI assistance, and experimental **Prepare with AI**. Same-machine verification is not clean-machine qualification.
 
 ## The problem
 
@@ -85,7 +85,7 @@ For a recorded draft, a user can enter a short goal and request a proposal for o
 
 The model chooses only supplied step IDs and human field labels. Application code—not the model—generates stable IDs and valid collision-safe machine names. Every change starts unselected. Accepted changes apply atomically to the unsaved draft, and a changed draft invalidates an older proposal.
 
-This feature is newer than `v0.7.0-rc.1`. Mocked integration checks verify serialization and UI behavior; a separate actual local-model evaluation measured proposal quality.
+This feature is included experimentally in `v0.8.0-rc.1`. Mocked integration checks verify serialization and UI behavior; a separate actual local-model evaluation measured proposal quality.
 
 ![Actual local-model Prepare with AI proposal review; all suggestions begin unselected](images/prepare-review.png)
 
@@ -120,13 +120,13 @@ See [the full validation report](MILESTONE_8A_VALIDATION_REPORT.md) and [frozen 
 
 ## Release status and limitations
 
-- `v0.7.0-rc.1` is an unsigned Windows release candidate.
+- `v0.8.0-rc.1` is an unsigned Windows x64 release candidate.
 - Chromium is an external dependency and is not bundled.
 - Verification was performed on the development machine, not a clean Windows machine.
 - One ordinary top-level HTML tab is supported; frames, shadow DOM, arbitrary widgets, file uploads, and multi-tab flows are not claimed.
 - Workflow values, samples, datasets, and run inputs are local plaintext and must not contain secrets.
 - Clean-machine, SmartScreen, antivirus, and broad distribution qualification remain pending.
-- Prepare with AI remains source-only and demonstrated uneven proposal quality in a small synthetic evaluation.
+- Prepare with AI remains experimental and demonstrated uneven proposal quality in a small synthetic evaluation.
 
 ## Next step
 

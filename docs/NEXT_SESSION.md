@@ -1,4 +1,12 @@
-# Next session handoff — after Milestone 8A validation
+# Next session handoff — v0.8.0-rc.1 release verification
+
+The immediate task is to verify and publish the unsigned Windows x64 `v0.8.0-rc.1` prerelease from one exact source commit. Use isolated E: application data and the existing external E: Playwright Chromium. Make no real OpenAI/Ollama requests. If any material packaged check fails, retain a draft release and document the blocker instead of publishing.
+
+Required final evidence: typecheck/build/tests, loopback-mocked provider settings, direct packaged launch, persistence across restart, real recording, packaged CSV import and a small synthetic batch with independent demo-state audit, worker/resource readiness, exact asset hashes, CI result, and clean working tree. Same-machine verification is not clean-machine qualification.
+
+After publication, the next release-quality step is clean Windows x64 qualification covering SmartScreen/antivirus, prerequisites, interactive install destination, Add/Remove Programs behavior, upgrade/uninstall retention, and external Chromium setup. Do not call that work complete based on this same-machine run.
+
+## Historical Milestone 8A handoff
 
 The focused post-v2 contract improvement and substantial validation pass are complete locally. Read `docs/MILESTONE_8A_VALIDATION_REPORT.md`, `docs/OLLAMA_PREPARE_EVALUATION_V3_RESULTS.md`, and `docs/MILESTONE_8A_CONVERSION_AUDIT.md`. Baseline, v2, and v3 evidence are immutable. V3 improved to 6/6 valid and 16/16 expected conversion selections, but remained 0/6 overall useful under unchanged strict criteria. Three actual walkthrough proposals also required human correction. Do not rerun any of the nine requests.
 

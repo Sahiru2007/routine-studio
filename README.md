@@ -4,10 +4,25 @@
 
 Routine Studio turns demonstrated browser actions into editable workflows. You can review semantic targets, bind values to reusable inputs, add explicit UI checks, run one record under supervision, or map a CSV into a bounded sequential batch. The app keeps the human in control: it does not silently infer success, retry uncertain submissions, or give AI providers browser authority.
 
-[Download the current unsigned prerelease](https://github.com/Sahiru2007/routine-studio/releases/tag/v0.7.0-rc.1) · [Engineering case study](docs/CASE_STUDY.md) · [Verification evidence](docs/VERIFICATION.md) · [Architecture](docs/ARCHITECTURE.md) · [Current status](docs/STATUS.md)
+[Engineering case study](docs/CASE_STUDY.md) · [Verification evidence](docs/VERIFICATION.md) · [Architecture](docs/ARCHITECTURE.md) · [Current status](docs/STATUS.md)
+
+## Download for Windows — prerelease
+
+**v0.8.0-rc.1 · Windows x64 · unsigned**
+
+- [Download the installer](https://github.com/Sahiru2007/routine-studio/releases/download/v0.8.0-rc.1/Routine-Studio-Setup-0.8.0-rc.1-unsigned.exe)
+- [Download the unpacked application ZIP](https://github.com/Sahiru2007/routine-studio/releases/download/v0.8.0-rc.1/Routine-Studio-0.8.0-rc.1-win-x64.zip) — Chromium is still external, so this is not fully self-contained
+- [Verify SHA-256 checksums](https://github.com/Sahiru2007/routine-studio/releases/download/v0.8.0-rc.1/SHA256SUMS.txt)
+- [Read the full release notes](https://github.com/Sahiru2007/routine-studio/releases/tag/v0.8.0-rc.1) and [installation guide](docs/INSTALLATION.md)
+
+![Routine Studio workflow editor showing an ordered customer workflow, visual map, validation state, and properties inspector](docs/images/workflow-editor.png)
+
+This prerelease supports Windows x64 only; there is no macOS build. It is unsigned and may be blocked by Windows or organizational security policy—do not bypass those protections. Recording, inspection, and execution require a compatible external Playwright Chromium installation on E:. Application data must also remain on E:. Ollama and OpenAI assistance are optional; manual operation needs neither. **Prepare with AI is included as an experimental, review-only feature** and never receives browser authority.
+
+Getting started: install to an E: destination (or extract the ZIP), configure `ROUTINE_STUDIO_DATA` and `ROUTINE_STUDIO_BROWSER_PATH`, launch Routine Studio, then confirm **Settings & status** reports writable storage and browser readiness. See [Installation](docs/INSTALLATION.md) for exact commands, data retention, and startup troubleshooting.
 
 > [!IMPORTANT]
-> `v0.7.0-rc.1` is an unsigned Windows release candidate. Chromium is an external dependency, and verification was performed on the development machine—not on a clean Windows machine. Review [Known boundaries](#known-boundaries) before using it.
+> Verification was performed on the development machine with isolated E: data, not on a clean Windows machine. Review [Known boundaries](#known-boundaries) before use.
 
 ## What it does
 
@@ -20,7 +35,7 @@ Routine Studio turns demonstrated browser actions into editable workflows. You c
 | Batch | Import, validate, map, review, and sequentially run bounded CSV rows | Explicit approval, concurrency 1, durable uncertain outcomes |
 | Assist (optional) | Request review-only mapping, validation, or target suggestions from Ollama or OpenAI | Off by default; suggestions never execute or modify saved data automatically |
 
-## Milestone 8A working-tree feature: Prepare with AI
+## Experimental Prepare with AI
 
 The current source working tree adds **Prepare with AI** for workflows that retain recording provenance. Enter a short goal, request a bounded proposal, and review a suggested title, labels for existing step IDs, and selections of eligible literal fills to convert into new inputs. The model supplies a human field label; application code generates and displays the valid unique machine name and creates the stable input ID only after acceptance. Every change is individually selectable and nothing is selected or applied automatically.
 
@@ -28,7 +43,7 @@ Accepted changes are applied together to the unsaved draft only. If the draft ch
 
 Provider-visible preparation context excludes literal values, URLs, locators, raw events, provenance, existing input names, and unrelated evidence. The model cannot bind an existing input; manual shared-input editing remains available in the ordinary editor. Sensitive, hidden, masked, or redacted field labels are not treated as permission to send values.
 
-Milestone 8A is not included in the published `v0.7.0-rc.1` binaries. Baseline, v2, and the frozen v3 six-request local evaluations are complete and preserved. V3 selected all 16 expected conversions and passed strict application validation 6/6, but weak titles/navigation labels and four non-preferred generated names left overall usefulness at 0/6 under the unchanged strict criteria. Three additional actual Electron/Chromium walkthrough requests produced two valid proposals with one unnecessary fixed-field conversion each and one response rejected for an unknown step ID. Human review rejected mistakes; corrected workflows independently created exactly one intended disposable record each. See the [validation report](docs/MILESTONE_8A_VALIDATION_REPORT.md). These small synthetic results do not establish reliability.
+Prepare with AI is included in `v0.8.0-rc.1`. Baseline, v2, and the frozen v3 six-request local evaluations are complete and preserved. V3 selected all 16 expected conversions and passed strict application validation 6/6, but weak titles/navigation labels and four non-preferred generated names left overall usefulness at 0/6 under the unchanged strict criteria. Three additional actual Electron/Chromium walkthrough requests produced two valid proposals with one unnecessary fixed-field conversion each and one response rejected for an unknown step ID. Human review rejected mistakes; corrected workflows independently created exactly one intended disposable record each. See the [validation report](docs/MILESTONE_8A_VALIDATION_REPORT.md). These small synthetic results do not establish reliability.
 
 When a provider response is rejected, the Prepare panel clears any older proposal and shows an inline error; manual configuration remains available. Suggestions still start unselected, never save automatically, and never gain browser authority.
 
@@ -64,13 +79,13 @@ Manual recording, editing, execution, and batching work without AI. OpenAI and O
 
 ### Use the prerelease
 
-1. Open the [`v0.7.0-rc.1` prerelease](https://github.com/Sahiru2007/routine-studio/releases/tag/v0.7.0-rc.1).
+1. Open the [`v0.8.0-rc.1` prerelease](https://github.com/Sahiru2007/routine-studio/releases/tag/v0.8.0-rc.1).
 2. Download either the unsigned installer or portable ZIP and verify it against `SHA256SUMS.txt`.
 3. Configure an absolute application-data directory on `E:` and a compatible Playwright Chromium path on `E:`.
 4. Open **Settings & status** and confirm storage and browser readiness.
 5. Use the disposable local demo for your first recording; never demonstrate real secrets.
 
-Windows may show SmartScreen warnings because the binaries are unsigned. The installer preserves application data on uninstall. See [docs/NEXT_SESSION.md](docs/NEXT_SESSION.md) for the exact same-machine acceptance walkthrough and remaining clean-machine checks.
+Windows may show SmartScreen warnings because the binaries are unsigned. Follow your Windows or organizational security policy; do not disable protections. The installer preserves application data on uninstall. See [Installation](docs/INSTALLATION.md) for the acceptance walkthrough and remaining clean-machine checks.
 
 ### Run from source
 
@@ -97,11 +112,11 @@ npm.cmd start
 
 ## Current release details
 
-Version `0.7.0-rc.1` adds optional OpenAI API assistance alongside **No AI assistance** and the existing loopback Ollama provider. Recording, editing, inspection, execution, and CSV batches remain fully manual and available without AI. OpenAI use is always user-triggered, review-only, disclosed before opt-in, and never receives browser authority. Automated verification uses a loopback mock only—no real provider requests or credentials.
+Version `0.8.0-rc.1` adds experimental Prepare with AI to the optional OpenAI/Ollama review layer. Recording, editing, inspection, execution, and CSV batches remain fully manual and available without AI. Provider use is always user-triggered, review-only, disclosed before opt-in, and never receives browser authority. Release verification uses loopback mocks only—no real provider requests or credentials.
 
 In **Settings & status**, choose a provider, review the exact example payload, and save the disclosure consent. OpenAI keys may remain session-only or be persisted using Windows DPAPI; there is no plaintext fallback and keys are never returned to the renderer. Credential and compatibility tests are separate explicit actions and may incur charges against the user's API account. Requests use strict structured Responses API output, `store:false`, no tools, bounded time/output, no automatic retry, and no fallback to another provider. `store:false` is not a claim of zero retention.
 
-The release includes `Routine-Studio-Setup-0.7.0-rc.1-unsigned.exe`, `Routine-Studio-0.7.0-rc.1-win-x64.zip`, and `SHA256SUMS.txt`. Chromium remains an external dependency. The installer and executable are unsigned. Same-machine verification is not clean-machine qualification; SmartScreen, antivirus, and broad Windows distribution behavior remain pending.
+The release includes `Routine-Studio-Setup-0.8.0-rc.1-unsigned.exe`, `Routine-Studio-0.8.0-rc.1-win-x64.zip`, and `SHA256SUMS.txt`. Chromium remains an external dependency. The installer and executable are unsigned. Same-machine verification is not clean-machine qualification; SmartScreen, antivirus, and broad Windows distribution behavior remain pending.
 
 ## Historical Milestone 6B unsigned Windows installer candidate
 

@@ -38,7 +38,7 @@ Source evidence: `artifacts/milestone-7/01-openai-settings-mocked.png`.
 
 `docs/images/prepare-review.png` shows an actual source-only Milestone 8A proposal returned by the local `qwen3:8b-q4_K_M` model. Every checkbox is initially clear. The proposal incorrectly included a fixed Company field; the walkthrough rejected that conversion before applying the useful selections.
 
-This demonstrates the real review interface and one unedited local-model response. It is not part of published `v0.7.0-rc.1`, does not establish model reliability, and does not show automatic application or browser authority.
+This demonstrates the real review interface and one unedited local-model response. The feature is included experimentally in `v0.8.0-rc.1`; the image does not establish model reliability and does not show automatic application or browser authority.
 
 Source evidence: `artifacts/milestone-8a/walkthrough/a-01-proposal.png`.
 
