@@ -4,7 +4,7 @@
 
 Routine Studio turns demonstrated browser actions into editable workflows. You can review semantic targets, bind values to reusable inputs, add explicit UI checks, run one record under supervision, or map a CSV into a bounded sequential batch. The app keeps the human in control: it does not silently infer success, retry uncertain submissions, or give AI providers browser authority.
 
-[Download the current unsigned prerelease](https://github.com/Sahiru2007/routine-studio/releases/tag/v0.7.0-rc.1) · [Verification evidence](docs/VERIFICATION.md) · [Architecture](docs/ARCHITECTURE.md) · [Current status](docs/STATUS.md)
+[Download the current unsigned prerelease](https://github.com/Sahiru2007/routine-studio/releases/tag/v0.7.0-rc.1) · [Engineering case study](docs/CASE_STUDY.md) · [Verification evidence](docs/VERIFICATION.md) · [Architecture](docs/ARCHITECTURE.md) · [Current status](docs/STATUS.md)
 
 > [!IMPORTANT]
 > `v0.7.0-rc.1` is an unsigned Windows release candidate. Chromium is an external dependency, and verification was performed on the development machine—not on a clean Windows machine. Review [Known boundaries](#known-boundaries) before using it.

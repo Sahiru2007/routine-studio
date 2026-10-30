@@ -34,6 +34,26 @@ The scene was exercised against a loopback mock. It contains no API key and does
 
 Source evidence: `artifacts/milestone-7/01-openai-settings-mocked.png`.
 
+## Prepare proposal review
+
+`docs/images/prepare-review.png` shows an actual source-only Milestone 8A proposal returned by the local `qwen3:8b-q4_K_M` model. Every checkbox is initially clear. The proposal incorrectly included a fixed Company field; the walkthrough rejected that conversion before applying the useful selections.
+
+This demonstrates the real review interface and one unedited local-model response. It is not part of published `v0.7.0-rc.1`, does not establish model reliability, and does not show automatic application or browser authority.
+
+Source evidence: `artifacts/milestone-8a/walkthrough/a-01-proposal.png`.
+
+## CSV mapping preview
+
+`docs/images/csv-mapping.png` shows the actual Electron CSV mapping and preview interface with synthetic values. Preview performs no browser actions.
+
+Source evidence: `artifacts/milestone-4/01-mapping-preview.png`.
+
+## Exception detail
+
+`docs/images/exception-detail.png` shows actual durable batch exception evidence for a configured assertion failure. The interface keeps the failed result visible and does not silently retry it.
+
+Source evidence: `artifacts/milestone-4/08-exception-detail.png`.
+
 ## Privacy and maintenance
 
 - No screenshot contains a real customer, credential, API key, everyday browser profile, cookie, or production URL.
