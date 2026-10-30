@@ -2,7 +2,9 @@
 
 Release preparation is authorized for the exact verified source commit. The candidate includes the completed Milestone 8A Prepare with AI source functionality, preserves all manual recording/configuration/execution/CSV behavior, and makes no live model requests during release verification. It is an unsigned Windows x64 prerelease with external Chromium and E:-only application storage. Same-machine checks must not be described as clean-machine qualification.
 
-The planned assets are `Routine-Studio-Setup-0.8.0-rc.1-unsigned.exe`, `Routine-Studio-0.8.0-rc.1-win-x64.zip`, and `SHA256SUMS.txt`. Final hashes, exact source commit, packaged results, and GitHub release state are recorded in `WEBSITE_DOWNLOAD_HANDOFF.md` after verification.
+The assets `Routine-Studio-Setup-0.8.0-rc.1-unsigned.exe`, `Routine-Studio-0.8.0-rc.1-win-x64.zip`, and `SHA256SUMS.txt` are attached to a GitHub **draft prerelease**. Exact source commit, sizes, hashes, checks, URLs, and the installer blocker are recorded in `WEBSITE_DOWNLOAD_HANDOFF.md`.
+
+Current result: 90/90 unit tests, typecheck, production build, focused mocked Prepare/Ollama/OpenAI Electron checks, CI, archive/resource inspection, and the unpacked packaged smoke passed. The first packaged run honestly stopped after visible Chromium was externally closed during row 2 and a foreign synthetic record appeared; a fresh isolated rerun completed exactly three intended rows and export. The current installer could not be executed: it exited code 2 before installation from two fresh E: destinations. The already-published `v0.7.0-rc.1` installer now produces the same result in the same harness, indicating a current machine/policy limitation rather than proving a new payload defect. The blocker remains material because current install/uninstall/reinstall behavior is unverified, so publication is withheld.
 
 # Milestone 8A — Prepare with AI (validated source)
 

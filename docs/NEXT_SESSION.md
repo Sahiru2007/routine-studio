@@ -1,10 +1,10 @@
 # Next session handoff — v0.8.0-rc.1 release verification
 
-The immediate task is to verify and publish the unsigned Windows x64 `v0.8.0-rc.1` prerelease from one exact source commit. Use isolated E: application data and the existing external E: Playwright Chromium. Make no real OpenAI/Ollama requests. If any material packaged check fails, retain a draft release and document the blocker instead of publishing.
+The unsigned Windows x64 `v0.8.0-rc.1` artifacts are attached to a draft prerelease from exact source commit `132d4b420d8f8082eb11f3bdd2b42baec4b6a164`. The unpacked candidate and CI passed, but installer execution exits code 2 before installation on the current machine; the older published installer behaves the same. Do not publish the draft until a separate permitted Windows x64 environment verifies the current installer.
 
 Required final evidence: typecheck/build/tests, loopback-mocked provider settings, direct packaged launch, persistence across restart, real recording, packaged CSV import and a small synthetic batch with independent demo-state audit, worker/resource readiness, exact asset hashes, CI result, and clean working tree. Same-machine verification is not clean-machine qualification.
 
-After publication, the next release-quality step is clean Windows x64 qualification covering SmartScreen/antivirus, prerequisites, interactive install destination, Add/Remove Programs behavior, upgrade/uninstall retention, and external Chromium setup. Do not call that work complete based on this same-machine run.
+Exact next step: download the three draft assets as an authenticated repository owner on a separate permitted Windows x64 environment, verify `SHA256SUMS.txt`, then test interactive E: destination selection, direct launch, restart persistence, uninstall retention, reinstall recovery, SmartScreen/antivirus behavior, prerequisites, Add/Remove Programs behavior, and external Chromium setup. If these checks pass without changing the tagged artifacts, publish the existing prerelease draft. Do not rebuild or replace same-version assets silently, and do not call this clean-machine work complete based on the current same-machine run.
 
 ## Historical Milestone 8A handoff
 

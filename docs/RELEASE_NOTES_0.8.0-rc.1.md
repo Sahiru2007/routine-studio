@@ -2,6 +2,10 @@
 
 This unsigned Windows x64 prerelease brings the experimental **Prepare with AI** review flow into the packaged application while preserving the existing local-first recording, target review, supervised execution, and CSV batch workflow.
 
+## Draft blocker
+
+This release is intentionally still a GitHub draft. The unpacked application passed direct launch, persistence/restart, real extension recording, packaged CSV import, an actual three-row Chromium batch with an independent demo-state audit, export, missing-dependency guidance, and resource/worker checks. However, both the newly built installer and the previously published `v0.7.0-rc.1` installer now exit with code 2 before installation under the present machine's Windows/NSIS policy. Because the current installer could not be installed, restarted, uninstalled, and reinstalled in this release run, the prerelease has not been published. A separate permitted Windows x64 environment must complete that check first.
+
 ## Included
 
 - Record navigation, native clicks, and ordinary form fills in dedicated Playwright Chromium.

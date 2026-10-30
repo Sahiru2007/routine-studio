@@ -2,6 +2,8 @@
 
 Routine Studio `v0.8.0-rc.1` is an unsigned Windows x64 prerelease. It has not completed clean-machine, SmartScreen, antivirus, or broad Windows distribution qualification. There is no macOS build.
 
+> **Current availability:** `v0.8.0-rc.1` is still a GitHub draft because installer execution is blocked under the present verification machine's Windows/NSIS policy. The links below are reserved versioned URLs and are not available anonymously until the existing draft passes installer qualification and is published. See [Website download handoff](WEBSITE_DOWNLOAD_HANDOFF.md).
+
 ## Downloads
 
 - Installer: [`Routine-Studio-Setup-0.8.0-rc.1-unsigned.exe`](https://github.com/Sahiru2007/routine-studio/releases/download/v0.8.0-rc.1/Routine-Studio-Setup-0.8.0-rc.1-unsigned.exe)

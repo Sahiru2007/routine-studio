@@ -10,10 +10,13 @@ Routine Studio turns demonstrated browser actions into editable workflows. You c
 
 **v0.8.0-rc.1 · Windows x64 · unsigned**
 
-- [Download the installer](https://github.com/Sahiru2007/routine-studio/releases/download/v0.8.0-rc.1/Routine-Studio-Setup-0.8.0-rc.1-unsigned.exe)
-- [Download the unpacked application ZIP](https://github.com/Sahiru2007/routine-studio/releases/download/v0.8.0-rc.1/Routine-Studio-0.8.0-rc.1-win-x64.zip) — Chromium is still external, so this is not fully self-contained
-- [Verify SHA-256 checksums](https://github.com/Sahiru2007/routine-studio/releases/download/v0.8.0-rc.1/SHA256SUMS.txt)
-- [Read the full release notes](https://github.com/Sahiru2007/routine-studio/releases/tag/v0.8.0-rc.1) and [installation guide](docs/INSTALLATION.md)
+> [!WARNING]
+> This release is currently a GitHub **draft prerelease** because the new installer could not be executed under the present machine's Windows/NSIS policy. The unpacked application passed the full same-machine smoke, but anonymous download links below will not become available until installer qualification passes and the draft is deliberately published.
+
+- [Installer link reserved for publication](https://github.com/Sahiru2007/routine-studio/releases/download/v0.8.0-rc.1/Routine-Studio-Setup-0.8.0-rc.1-unsigned.exe)
+- [Unpacked application ZIP link reserved for publication](https://github.com/Sahiru2007/routine-studio/releases/download/v0.8.0-rc.1/Routine-Studio-0.8.0-rc.1-win-x64.zip) — Chromium is still external, so this is not fully self-contained
+- [Checksums link reserved for publication](https://github.com/Sahiru2007/routine-studio/releases/download/v0.8.0-rc.1/SHA256SUMS.txt)
+- [Read the installation guide](docs/INSTALLATION.md) and [current release handoff](docs/WEBSITE_DOWNLOAD_HANDOFF.md)
 
 ![Routine Studio workflow editor showing an ordered customer workflow, visual map, validation state, and properties inspector](docs/images/workflow-editor.png)
 
