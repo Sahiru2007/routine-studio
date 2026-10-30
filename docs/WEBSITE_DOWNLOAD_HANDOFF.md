@@ -10,7 +10,7 @@ Checked 30 October 2026. The GitHub repository is **public**, but this release i
 - Tagged source commit: `132d4b420d8f8082eb11f3bdd2b42baec4b6a164`
 - Prerelease: yes
 - Draft: yes
-- Authenticated draft page: <https://github.com/Sahiru2007/routine-studio/releases/tag/untagged-225863eb256b5538434a>
+- Authenticated draft page: <https://github.com/Sahiru2007/routine-studio/releases/tag/untagged-4118bfd8adc5c83986e5>
 - Versioned release page after publication: <https://github.com/Sahiru2007/routine-studio/releases/tag/v0.8.0-rc.1>
 - CI: <https://github.com/Sahiru2007/routine-studio/actions/runs/41105370756>
 
@@ -26,9 +26,9 @@ Do not use `/releases/latest`: GitHub does not treat prereleases as the stable l
 
 GitHub's uploaded-asset digests match the two local binary hashes. Current authenticated draft asset URLs use GitHub's temporary draft slug:
 
-- <https://github.com/Sahiru2007/routine-studio/releases/download/untagged-225863eb256b5538434a/Routine-Studio-Setup-0.8.0-rc.1-unsigned.exe>
-- <https://github.com/Sahiru2007/routine-studio/releases/download/untagged-225863eb256b5538434a/Routine-Studio-0.8.0-rc.1-win-x64.zip>
-- <https://github.com/Sahiru2007/routine-studio/releases/download/untagged-225863eb256b5538434a/SHA256SUMS.txt>
+- <https://github.com/Sahiru2007/routine-studio/releases/download/untagged-4118bfd8adc5c83986e5/Routine-Studio-Setup-0.8.0-rc.1-unsigned.exe>
+- <https://github.com/Sahiru2007/routine-studio/releases/download/untagged-4118bfd8adc5c83986e5/Routine-Studio-0.8.0-rc.1-win-x64.zip>
+- <https://github.com/Sahiru2007/routine-studio/releases/download/untagged-4118bfd8adc5c83986e5/SHA256SUMS.txt>
 
 After the existing draft is published, use these exact versioned public URLs:
 
