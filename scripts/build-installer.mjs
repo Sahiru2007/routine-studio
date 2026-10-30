@@ -24,9 +24,9 @@ await build({
   npmRebuild:false,
   publish:null,
   directories:{output},
-  files:['out/**/*','fixtures/csv/packaged-customers.csv','package.json','node_modules/**/*','!node_modules/.cache/**/*','!**/*.map','!**/.env*','!**/*.log'],
-  win:{target:['nsis'],signAndEditExecutable:false,artifactName:'Routine-Studio-Setup-${version}-unsigned.${ext}'},
-  nsis:{oneClick:false,perMachine:false,allowElevation:false,allowToChangeInstallationDirectory:true,createDesktopShortcut:false,createStartMenuShortcut:false,runAfterFinish:false,deleteAppDataOnUninstall:false,artifactName:'Routine-Studio-Setup-${version}-unsigned.${ext}'}
+  files:['out/**/*','build/icon.png','fixtures/csv/packaged-customers.csv','package.json','node_modules/**/*','!node_modules/.cache/**/*','!**/*.map','!**/.env*','!**/*.log'],
+  win:{target:['nsis'],icon:'build/icon.ico',legalTrademarks:'Routine Studio',signAndEditExecutable:true,artifactName:'Routine-Studio-Setup-${version}-unsigned.${ext}'},
+  nsis:{oneClick:false,perMachine:false,allowElevation:false,allowToChangeInstallationDirectory:true,createDesktopShortcut:true,createStartMenuShortcut:true,shortcutName:'Routine Studio',menuCategory:false,runAfterFinish:true,deleteAppDataOnUninstall:false,installerIcon:'build/icon.ico',uninstallerIcon:'build/icon.ico',installerHeaderIcon:'build/icon.ico',uninstallDisplayName:'Routine Studio ${version}',include:'build/installer.nsh',artifactName:'Routine-Studio-Setup-${version}-unsigned.${ext}'}
  }
 })
 console.log('Unsigned assisted installer: '+output)

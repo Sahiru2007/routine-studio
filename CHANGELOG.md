@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.8.0-rc.2 — 2026-10-31
+
+- Apply the established Routine Studio website mark to the executable, Electron window, installer, uninstaller, shortcuts, and Installed apps registration.
+- Add a reproducible transparent multi-resolution Windows ICO with 16–256px frames.
+- Add assisted per-user Start menu registration, a default-checked optional desktop shortcut, and the standard optional launch-on-finish action.
+- Add product description, version, publisher, copyright, and stable AppUserModelID metadata.
+- Preserve the existing application identity and E:-only payload/data behavior while retaining application data through upgrade and uninstall.
+
+No workflow or assistance feature behavior changed. The candidate remains unsigned and depends on external compatible Chromium.
+
 ## 0.8.0-rc.1 — 2026-10-30
 
 - Add experimental **Prepare with AI** proposals for titles, existing-step labels, and eligible literal-fill conversions with individual review and atomic application to an unsaved draft.

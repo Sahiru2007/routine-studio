@@ -1,4 +1,14 @@
-# Release status — v0.8.0-rc.1
+# Windows branding candidate — v0.8.0-rc.2
+
+The local unsigned `v0.8.0-rc.2` installer uses the established Routine Studio website icon, not the personal portfolio icon. Branding is embedded in the executable, Electron window, installer, uninstaller, desktop shortcut, Start menu shortcut, and Installed apps icon. Product metadata identifies Routine Studio `0.8.0-rc.2` and publisher `Sahiru Bodahewa`.
+
+Actual isolated lifecycle PASS: installed `v0.8.0-rc.1` per-user into an E: path containing spaces; upgraded in place to `v0.8.0-rc.2`; retained a synthetic workflow; created exactly one desktop shortcut, one Start menu shortcut, and one uninstall entry; both shortcuts opened the installed application; uninstall removed binaries, shortcuts, and registration while preserving the E: database; reinstall reopened retained data. The user subsequently confirmed the application was installed and working. Typecheck and production build passed. The attempted additional Windows Search/Installed apps UI capture was interrupted and is not claimed; registry/shortcut checks alone do not prove Search indexing.
+
+Installer: `artifacts/release/0.8.0-rc.2/installer/Routine-Studio-Setup-0.8.0-rc.2-unsigned.exe` (123,340,320 bytes), SHA-256 `9C80B52556B5427695ED5EF73093A71EEC56703B92BE1190E710AC85CA674D95`, Authenticode `NotSigned`. Installed review executable: `E:\projects\routine-studio\.runtime\Routine Studio Branding RC2 Installed With Spaces\Routine Studio.exe`. Evidence remains ignored under `artifacts/windows-branding-rc2`.
+
+No application feature changed beyond installer/Windows branding and integration. The existing `v0.8.0-rc.1` GitHub draft assets were not replaced, and `v0.8.0-rc.2` is not published by this handoff.
+
+# Historical release status — v0.8.0-rc.1
 
 Release preparation is authorized for the exact verified source commit. The candidate includes the completed Milestone 8A Prepare with AI source functionality, preserves all manual recording/configuration/execution/CSV behavior, and makes no live model requests during release verification. It is an unsigned Windows x64 prerelease with external Chromium and E:-only application storage. Same-machine checks must not be described as clean-machine qualification.
 

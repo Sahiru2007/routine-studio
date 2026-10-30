@@ -21,6 +21,7 @@ const paths=await packager({
  overwrite:true,
  prune:true,
  electronVersion:'45.0.0',
+ icon:resolve(root,'build','icon.ico'),
  ignore:[
   /^\/(?:\.git|\.runtime|artifacts|apps|packages|scripts|docs)(?:\/|$)/,
   /^\/(?:AGENTS\.md|electron\.vite\.config\.ts|tsconfig\.json)$/,

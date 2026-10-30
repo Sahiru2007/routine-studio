@@ -1,5 +1,17 @@
 # Routine Studio installation
 
+## Local branded candidate
+
+`v0.8.0-rc.2` is currently a local unsigned candidate. It adds the established Routine Studio icon, product/publisher metadata, a Start menu shortcut, a default-checked optional desktop shortcut, optional launch on completion, and a working per-user uninstall registration. The installer remains assisted and must be directed to E:. Windows-managed shortcuts and registration use their normal small per-user locations on C:.
+
+- Installer: `E:\projects\routine-studio\artifacts\release\0.8.0-rc.2\installer\Routine-Studio-Setup-0.8.0-rc.2-unsigned.exe`
+- SHA-256: `9C80B52556B5427695ED5EF73093A71EEC56703B92BE1190E710AC85CA674D95`
+- Installed executable used for review: `E:\projects\routine-studio\.runtime\Routine Studio Branding RC2 Installed With Spaces\Routine Studio.exe`
+- Desktop shortcut: `C:\Users\Sahiru Bodahewa\Desktop\Routine Studio.lnk`
+- Start menu shortcut: `C:\Users\Sahiru Bodahewa\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Routine Studio.lnk`
+
+Upgrades use the stable `io.github.sahiru2007.routine-studio` identity and retain external E: application data. Uninstall removes application binaries, its shortcuts, and its registration while preserving workflows, recordings, datasets, credentials, and history. A previously copied/unregistered application directory is not automatically removed; close it, verify its data path, and remove only that old application directory manually after the registered installation works. Unsupported downgrades remain unguaranteed.
+
 Routine Studio `v0.8.0-rc.1` is an unsigned Windows x64 prerelease. It has not completed clean-machine, SmartScreen, antivirus, or broad Windows distribution qualification. There is no macOS build.
 
 > **Current availability:** `v0.8.0-rc.1` is still a GitHub draft because installer execution is blocked under the present verification machine's Windows/NSIS policy. The links below are reserved versioned URLs and are not available anonymously until the existing draft passes installer qualification and is published. See [Website download handoff](WEBSITE_DOWNLOAD_HANDOFF.md).

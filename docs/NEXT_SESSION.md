@@ -1,4 +1,10 @@
-# Next session handoff — v0.8.0-rc.1 release verification
+# Next session handoff — after v0.8.0-rc.2 Windows branding
+
+The user confirmed the branded application is installed and working and requested no further testing. Source is ready to push; do not rerun Windows UI automation unless separately requested. The local candidate installer is `artifacts/release/0.8.0-rc.2/installer/Routine-Studio-Setup-0.8.0-rc.2-unsigned.exe`, SHA-256 `9C80B52556B5427695ED5EF73093A71EEC56703B92BE1190E710AC85CA674D95`.
+
+The next release action, only when separately authorized, is to review the ignored branding screenshots, optionally verify actual Start Search indexing and the Installed apps UI, build the matching unpacked ZIP/checksum manifest from an exact commit, and create a new `v0.8.0-rc.2` prerelease. Do not replace `v0.8.0-rc.1` assets. The installed test application and synthetic retained database are isolated under `.runtime`; normal user data was not used.
+
+## Historical v0.8.0-rc.1 handoff
 
 The unsigned Windows x64 `v0.8.0-rc.1` artifacts are attached to a draft prerelease from exact source commit `132d4b420d8f8082eb11f3bdd2b42baec4b6a164`. The unpacked candidate and CI passed, but installer execution exits code 2 before installation on the current machine; the older published installer behaves the same. Do not publish the draft until a separate permitted Windows x64 environment verifies the current installer.
 

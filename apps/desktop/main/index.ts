@@ -14,6 +14,7 @@ import {SecureCredentialStore} from './credential-store'
 const root=resolve(app.getAppPath())
 const dataPath=resolve(process.env.ROUTINE_STUDIO_DATA || (app.isPackaged?'E:\\Routine Studio Data':join(root,'.runtime','data')))
 const browserPath=resolve(process.env.ROUTINE_STUDIO_BROWSER_PATH||process.env.PLAYWRIGHT_BROWSERS_PATH||'E:\\AI\\Caches\\ms-playwright')
+if(process.platform==='win32')app.setAppUserModelId('io.github.sahiru2007.routine-studio')
 if(!/^E:[\\/]/i.test(dataPath))throw Error('Routine Studio application data must be configured on E: with ROUTINE_STUDIO_DATA. No C: fallback is allowed.')
 if(!/^E:[\\/]/i.test(browserPath))throw Error('Routine Studio Chromium storage must be configured on E: with ROUTINE_STUDIO_BROWSER_PATH.')
 try{mkdirSync(dataPath,{recursive:true});for(const name of ['temp','cache','exports'])mkdirSync(join(dataPath,name),{recursive:true})}catch(error){throw Error('Routine Studio cannot create or write its configured E: data directory: '+dataPath+'. '+(error instanceof Error?error.message:''))}
@@ -40,7 +41,7 @@ app.whenReady().then(()=>{
  if(process.env.ROUTINE_STUDIO_TEST==='1')Object.assign(globalThis,{studioTestBatches:batches})
  if(process.env.ROUTINE_STUDIO_TEST==='1')Object.assign(globalThis,{studioTestRunner:runner})
  if(process.env.ROUTINE_STUDIO_TEST==='1')Object.assign(globalThis,{studioTestRecorder:recorder})
- const win=new BrowserWindow({width:1480,height:940,minWidth:1060,minHeight:700,backgroundColor:'#111419',title:'Routine Studio',webPreferences:{preload:join(fileURLToPath(new URL('..',import.meta.url)),'preload/index.cjs'),sandbox:true,contextIsolation:true,nodeIntegration:false}})
+ const win=new BrowserWindow({width:1480,height:940,minWidth:1060,minHeight:700,backgroundColor:'#111419',title:'Routine Studio',icon:join(root,'build','icon.png'),webPreferences:{preload:join(fileURLToPath(new URL('..',import.meta.url)),'preload/index.cjs'),sandbox:true,contextIsolation:true,nodeIntegration:false}})
  win.setMenuBarVisibility(false)
  const data=new DataStore(root,dataPath,store)
  const dev=process.env.ELECTRON_RENDERER_URL

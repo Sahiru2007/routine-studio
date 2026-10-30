@@ -1,10 +1,16 @@
 {
   "name": "routine-studio",
-  "version": "0.8.0-rc.1",
+  "version": "0.8.0-rc.2",
+  "description": "A local-first Windows desktop studio for recording, reviewing, and supervising repeatable browser workflows.",
+  "author": {
+    "name": "Sahiru Bodahewa"
+  },
+  "copyright": "Copyright © 2026 Sahiru Bodahewa",
   "private": true,
   "type": "module",
   "main": "out/main/index.js",
   "scripts": {
+    "icons:build": "node scripts/generate-windows-icon.mjs",
     "dev": "node scripts/run.mjs dev",
     "build": "node scripts/build-extension.mjs && electron-vite build",
     "package:win": "node scripts/package-win.mjs",
